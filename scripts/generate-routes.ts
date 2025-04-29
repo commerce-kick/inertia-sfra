@@ -1,4 +1,4 @@
-import sfccRoutesGenerator from "../vite-routes-plugin.ts";
+import sfccRoutesGenerator from "../plugins/vite-routes-plugin.ts";
 
 // Create an instance of the plugin
 const plugin = sfccRoutesGenerator({
