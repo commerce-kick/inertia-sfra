@@ -1,0 +1,7 @@
+cartridges/**/cartridge/static/
+coverage/
+doc/
+bin/
+tmp/
+.vscode/
+codecept.conf.js

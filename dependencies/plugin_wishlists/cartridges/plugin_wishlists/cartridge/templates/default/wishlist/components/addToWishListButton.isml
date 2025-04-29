@@ -1,0 +1,3 @@
+<button type="submit" class="btn btn-block btn-outline-primary add-to-wish-list" data-href="${URLUtils.url('Wishlist-AddProduct')}">
+    <i class="fa fa-heart"></i> <span>${Resource.msg('button.add_to_wishlist.txt', 'wishlist', null)}</span>
+</button>

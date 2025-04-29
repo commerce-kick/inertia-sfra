@@ -1,0 +1,29 @@
+<div class="card account-gift-registry-item data-id=${item.productList.ID}">
+    <div class="row">
+        <!--- gift registry name--->
+        <div class="col-4">
+            <a href="${URLUtils.url('GiftRegistry-Show', 'id', item.productList.ID)}">${item.productList.name}</a>
+        </div>
+
+        <!--- gift registry event date--->
+        <div class="line-item-event-date col-3">
+            <p><isprint value="${item.productList.eventInfo.date}" style="DATE_SHORT"/></p>
+        </div>
+
+        <!--- gift registry city --->
+        <div class="line-item-city-state col-3">
+            <p>${item.productList.eventInfo.city}</p>
+        </div>
+
+        <!--- remove gift registry icon--->
+        <button type="button" class="remove-btn remove-gift-registry btn btn-light"
+                data-toggle="modal"
+                data-target="#removeGiftRegistryModal"
+                data-id="${item.productList.ID}"
+                data-name="${item.productList.name}"
+                data-url="${URLUtils.url('GiftRegistry-RemoveList','id', item.productList.ID)}"
+                aria-label="remove">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+</div>

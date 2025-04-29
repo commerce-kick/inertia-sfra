@@ -1,0 +1,28 @@
+/* stylelint-disable selector-class-pattern */
+.page-designer-reference {
+    .experience-einstein-einsteinCarousel,
+    .experience-einstein-einsteinCarouselProduct,
+    .experience-einstein-einsteinCarouselCategory {
+        .experience-einstein-einsteinCarousel {
+            .hidden-indicators-template {
+                display: none;
+            }
+        }
+
+        .experience-einstein-einsteinCarousel.hide-indicators {
+            .carousel-control-prev,
+            .carousel-control-next {
+                display: none;
+            }
+
+            .pd-carousel-indicators {
+                display: none;
+            }
+
+            .hidden-indicators-template {
+                display: none;
+            }
+        }
+    }
+}
+/* stylelint-enable selector-class-pattern */

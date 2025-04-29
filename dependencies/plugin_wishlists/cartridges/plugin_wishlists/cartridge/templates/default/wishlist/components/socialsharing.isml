@@ -1,0 +1,48 @@
+<isif condition="${shareLinks}">
+    <isset name="publicUrl" value="${encodeURIComponent(URLUtils.abs('Wishlist-ShowOthers', 'id', pdict.wishlist.UUID))}" scope="page"/>
+    <isset name="shareUrl" value="${URLUtils.https('Wishlist-ShowOthers', 'id', pdict.wishlist.UUID)}" scope="page"/>
+    <isset name="escapedTitle" value="${encodeURIComponent(Resource.msg('wl.email.subject.wishlist', 'wishlist', null))}" scope="page"/>
+    <div class="col-12 wl-social-sharing text-center">
+	<span class="wl-social-sharing-text">
+	    ${Resource.msg('wl.socialshare.label', 'wishlist', null)}
+	</span>
+        <a  class="share-icons"
+            title="${Resource.msg('wl.socialshare.facebook.label', 'wishlist', null)}"
+            data-share="facebook"
+            href="https://www.facebook.com/sharer/sharer.php?u=${publicUrl}"
+            target="_blank">
+            <i class="fa fa-facebook"></i>
+            <span class="d-none">
+	        ${Resource.msg('wl.socialshare.facebook', 'wishlist', null)}
+	    </span>
+        </a>
+        <a class="share-icons" title="${Resource.msg('wl.socialshare.twitter.label', 'wishlist', null)}" data-share="twitter" href="https://twitter.com/intent/tweet/?url=${publicUrl}&text=${escapedTitle}" target="_blank">
+            <i class="fa fa-twitter"></i>
+            <span class="d-none">
+	        ${Resource.msg('wl.socialshare.twitter', 'wishlist', null)}
+	    </span>
+        </a>
+        <a class="share-icons" title="${Resource.msg('wl.socialshare.pinterest.label', 'wishlist', null)}" data-share="pinterest" href="https://www.pinterest.com/pin/create/button/?url=${publicUrl}&description=${escapedTitle}" target="_blank">
+            <i class="fa fa-pinterest"></i>
+            <span class="d-none">
+	        ${Resource.msg('wl.socialshare.pinterest', 'wishlist', null)}
+	    </span>
+        </a>
+        <a class="share-icons" title="${Resource.msg('wl.socialshare.email.label', 'wishlist', null)}" data-share="email" href="mailto:?subject=${escapedTitle}&body=${publicUrl}" target="_blank">
+            <i class="fa fa-envelope"></i>
+            <span class="d-none">
+	        ${Resource.msg('wl.socialshare.email', 'wishlist', null)}
+	    </span>
+        </a>
+        <button class="share-icons share-icons-copy-link-btn" data-url="${shareUrl}" id="copyShareUrlBtn" aria-label="${Resource.msg('wl.socialshare.link.label', 'wishlist', null)}">
+            <i class="fa fa-link"></i>
+        </button>
+    </div>
+    <div class="copy-link-message d-none">
+        <div class="alert alert-success text-center" role="alert">
+            ${Resource.msg('wl.socialshare.link.msg', 'wishlist', null)}
+        </div>
+    </div>
+</isif>
+
+

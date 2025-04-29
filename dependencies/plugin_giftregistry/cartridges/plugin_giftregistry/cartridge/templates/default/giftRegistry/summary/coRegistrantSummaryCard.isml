@@ -1,0 +1,32 @@
+<div class="card co-registrant-summary registry-card-display-info ${ pdict.giftRegistryModel.coRegistrant ? '' : 'no-co-registrant'}">
+    <div class="card-header">
+        <h2 class="pull-left registry-info-header">${Resource.msg('heading.co.registrant.information', 'giftRegistry', null)}</h2>
+        <isif condition="${!pdict.giftRegistryModel.coRegistrant}">
+            <button type="button" class="edit-button event-add-button pull-right ${pdict.showEditForm ? 'edit-gr-link' : ''}"
+            aria-label="${Resource.msg('eventinfo.add.link', 'giftRegistry', null)} ${Resource.msg('heading.co.registrant.information', 'giftRegistry', null)}">
+                ${Resource.msg('eventinfo.add.link', 'giftRegistry', null)}
+            </button>
+        </isif>
+        <button class="edit-button event-edit-button pull-right ${pdict.showEditForm ? 'edit-gr-link' : ''}"
+                aria-label="${Resource.msg('eventinfo.edit.link', 'giftRegistry', null)} ${Resource.msg('heading.co.registrant.information', 'giftRegistry', null)}">
+                ${Resource.msg('eventinfo.edit.link', 'giftRegistry', null)}
+        </button>
+    </div>
+    <div class="card-body">
+        <div class="event-summary">
+            <isinclude template="giftRegistry/summary/coRegistrantSummaryContent" />
+        </div>
+        <isif condition="${pdict.showEditForm}">
+            <div class="edit-form d-none">
+                <isset name="registrantForm" value="${pdict.form.giftRegistryEvent.coRegistrant}" scope="page"/>
+                <isset name="isRegistrantForm" value="${false}" scope="page" />
+                <form class="coRegistrant-edit-form">
+                    <input type="hidden" class="eventFormType" name="eventFormType" value="coRegistrant"/>
+                    <input type="hidden" name="${pdict.csrf.tokenName}" value="${pdict.csrf.token}"/>
+                    <isinclude template="giftRegistry/forms/registrantForm" />
+                </form>
+                <isinclude template="giftRegistry/forms/editButtons" />
+            </div>
+        </isif>
+    </div>
+</div>

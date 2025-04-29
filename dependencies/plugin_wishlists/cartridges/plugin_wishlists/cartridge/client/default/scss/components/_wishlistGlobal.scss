@@ -1,0 +1,62 @@
+@import "variables";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/mixins/breakpoints";
+
+.add-to-wishlist-messages {
+    transform: translate(-50%, -50%);
+    position: fixed;
+    top: 15%;
+    left: 50%;
+}
+
+.add-to-wishlist-alert {
+    animation: fade 5s linear forwards;
+    box-shadow: 1px 1px 5px grey;
+    padding: 1em;
+
+    @keyframes fade {
+        0% {
+            opacity: 0;
+        }
+
+        10% {
+            opacity: 1;
+        }
+
+        90% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0;
+        }
+    }
+
+    &.show {
+        display: block;
+    }
+}
+
+// stylelint complains about kebab case for this class name,
+// but we can't change the name because it is used across other plugins
+// prettier-ignore
+.wishlistTile {  /* stylelint-disable-line */
+    position: absolute;
+    top: 8px;
+    right: 16px;
+
+    i {
+        &.fa-heart-o {
+            color: rgba(0, 0, 0, 0.7);
+        }
+
+        &.fa-circle {
+            color: rgba(255, 255, 255, 0.7);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+    }
+
+    .fa-heart {
+        color: black;
+    }
+}

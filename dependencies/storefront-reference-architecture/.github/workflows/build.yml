@@ -1,0 +1,9 @@
+name: Build
+
+on: push
+
+jobs:
+    deploy-build:
+        uses: ./.github/workflows/plugin-build.yml
+        with:
+            NODE_VERSION: 18.16

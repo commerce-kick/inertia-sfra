@@ -1,0 +1,49 @@
+{
+  "name": "plugin_giftregistry",
+  "version": "7.0.1",
+  "description": "New overlay cartridge",
+  "main": "index.js",
+  "scripts": {
+    "lint": "sgmf-scripts --lint js && sgmf-scripts --lint css && prettier **/*.scss --check",
+    "upload": "sgmf-scripts --upload -- ",
+    "uploadCartridge": "sgmf-scripts --uploadCartridge plugin_giftregistry",
+    "compile:js": "sgmf-scripts --compile js",
+    "compile:scss": "sgmf-scripts --compile css",
+    "build": "npm run compile:js && npm run compile:scss",
+    "test": "sgmf-scripts --test test/unit/**/*.js",
+    "cover": "sgmf-scripts --cover test/unit/**/*.js",
+    "test:integration": "sgmf-scripts --integration 'test/integration/**/*.js'"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.14",
+    "chai": "^4.3.6",
+    "chai-subset": "^1.6.0",
+    "css-loader": "^6.0.0",
+    "css-minimizer-webpack-plugin": "^5.0.1",
+    "eslint": "^8.56.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.0",
+    "mini-css-extract-plugin": "^2.7.6",
+    "mocha": "^10.0.0",
+    "nyc": "^15.1.0",
+    "postcss-loader": "^7.0.0",
+    "prettier": "^3.1.1",
+    "proxyquire": "1.7.4",
+    "request-promise": "^4.2.4",
+    "sass": "^1.69.7",
+    "sass-loader": "^13.3.2",
+    "sgmf-scripts": "^3.0.0",
+    "sinon": "^17.0.1",
+    "stylelint": "^15.4.0",
+    "stylelint-config-standard-scss": "^11.0.0",
+    "webpack-remove-empty-scripts": "^1.0.4"
+  },
+  "browserslist": [
+    "last 2 versions",
+    "ie >= 10"
+  ],
+  "paths": {
+    "base": "../storefront-reference-architecture/cartridges/app_storefront_base/"
+  }
+}

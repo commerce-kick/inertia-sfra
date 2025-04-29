@@ -1,0 +1,19 @@
+<label>${Resource.msg('label.quantity.desired', 'giftRegistry', null)}</label>
+<select class="quantity-select custom-select form-control">
+    <isloop items="${product.quantities}" var="quantity" status="loopState">
+        <isif condition="${pdict.disabledAttribute && (loopState.count < pdict.purchasedQuantity)}">
+            <option value="${quantity.value}"
+                    ${product.productType !== 'bundle' ? 'data-url=' + quantity.url : ''} 
+                    disabled
+            >
+                ${quantity.value}
+        <iselse/>
+            <option value="${quantity.value}"
+                    ${product.productType !== 'bundle' ? 'data-url=' + quantity.url : ''} 
+                    ${quantity.selected ? 'selected' : ''}
+            >
+                ${quantity.value}
+            </option>
+        </isif>
+    </isloop>
+</select>

@@ -1,0 +1,26 @@
+<isif condition="${pdict.name === null}">
+    <div class="user hidden-md-down">
+        <a href="${URLUtils.https('Login-Show')}">
+            <i class="fa fa-sign-in" aria-hidden="true"></i>
+            <span class="user-message">${Resource.msg('link.header.login', 'account', null)}</span>
+        </a>
+        <a href="${URLUtils.https('Wishlist-Show')}">
+            <i class="fa fa-heart" aria-hidden="true"></i>
+            <span class="user-message">${Resource.msg('link.wishlist.login', 'account', null)}</span>
+        </a>
+    </div>
+    <iselse/>
+    <div class="user hidden-md-down" tabindex="0">
+        <i class="fa fa-sign-in" aria-hidden="true"></i>
+        <span class="user-message">${pdict.name}</span>
+        <div class="popover popover-bottom">
+            <a href="${URLUtils.https('Account-Show')}">${Resource.msg('link.header.myaccount', 'account', null)}</a>
+            <a href="${URLUtils.url('Order-History')}">${Resource.msg('label.myorders', 'account', null)}</a>
+            <a href="${URLUtils.https('Wishlist-Show')}" class="test-wishlist-link">
+                <i class="fa fa-heart" aria-hidden="true"></i>
+                ${Resource.msg('link.wishlist.myaccount', 'account', null)}
+            </a>
+            <a href="${URLUtils.url('Login-Logout')}">${Resource.msg('link.header.logout', 'account', null)}</a>
+        </div>
+    </div>
+</isif>

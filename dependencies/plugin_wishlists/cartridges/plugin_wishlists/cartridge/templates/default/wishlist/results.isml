@@ -1,0 +1,71 @@
+<isdecorate template="common/layout/page">
+    <isscript>
+        var assets = require('*/cartridge/scripts/assets.js');
+        assets.addCss('/css/wishlist.css');
+        assets.addJs('/js/wishlist.js');
+        assets.addCss('/css/login.css');
+    </isscript>
+    <div class="hero slant-down login-banner">
+        <h1 class="page-title">
+            ${Resource.msg('txt.banner.wishlist.search', 'wishlist', null)}
+        </h1>
+    </div>
+    <div class="container">
+        <!---Breadcrumbs--->
+        <isinclude template="components/breadcrumbs/pageBreadcrumbs"/>
+        <div class="row justify-content-center ">
+            <div class="col-10 col-lg-6">
+                <div class="row">
+                    <div class="text-left col-6">
+                        <h4>
+                            ${Resource.msg('txt.heading.wl.search.results', 'wishlist', null)}
+                        </h4>
+                    </div>
+                    <div class="text-right col-6">
+                        <p id="result-count">
+                            ${Resource.msgf('txt.heading.wl.search.results.count', 'wishlist', null, pdict.results.total)}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="card col-10 col-lg-6">
+                <div class="wl-hits">
+                    <isloop items="${pdict.results.hits}" var="hit">
+                        <!--- START: if any changes are made here they need to be done in the ajax response as well --->
+                        <div class="row wl-hit">
+                            <div class="text-left col-6">
+                                ${hit.firstName} ${hit.lastName}
+                            </div>
+                            <div class="text-right col-6">
+                                <a href="${hit.url}" title="${hit.urlTitle}" data-id="${hit.id}">
+                                    ${hit.urlText}
+                                </a>
+                            </div>
+                        </div>
+                        <!--- END: if any changes are made here they need to be done in the ajax response as well --->
+                    </isloop>
+                </div>
+                <div class="row">
+                    <div class="find-another-wl text-center col-12">
+                        <isif condition="${pdict.results.showMore}">
+                            <button type="button" class="btn btn-block btn-primary more-wl-results"
+                                data-url="${URLUtils.url('Wishlist-MoreResults')}"
+                                data-search-fname="${pdict.results.firstName}"
+                                data-search-lname="${pdict.results.lastName}"
+                                data-page-number="${pdict.results.pageNumber}"
+                                aria-label="more">
+                                ${Resource.msg('text.link.show.more.results.wl', 'wishlist', null)}
+                            </button>
+                        </isif>
+                        <br />
+                        <a href="${URLUtils.url('Wishlist-Search')}">
+                            ${Resource.msg('text.link.find.another.wl', 'wishlist', null)}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</isdecorate>

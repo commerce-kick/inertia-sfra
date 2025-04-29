@@ -1,0 +1,27 @@
+<div class="card">
+    <div class="card-header clearfix">
+        <h2 class="pull-left">${Resource.msg('label.wishlist','account',null)}</h2>
+        <isif condition="${pdict.account.wishlist && pdict.account.wishlist.length > 0}">
+            <a href="${URLUtils.url('Wishlist-Show')}" class="pull-right">${Resource.msg('link.viewall','account',null)}</a>
+        </isif>
+    </div>
+    <div class="card-body card-info-group">
+        <isif condition="${pdict.account.wishlist && pdict.account.wishlist.length > 0}">
+            <!---product cards--->
+            <isloop items="${pdict.account.wishlist}" var="item">
+                <isinclude template="account/wishlist/listCard"/>
+            </isloop>
+        <iselse>
+            <div class="text-center empty-wishlist-msg">
+                ${Resource.msg('wishlist.empty.text','wishlist',null)}
+            </div>
+        </iselse>
+        </isif>
+    </div>
+    <isif condition="${pdict.account.wishlist && pdict.account.wishlist.length > 0}">
+        <div class="card-footer card-footer-border text-center">
+            <isset name="shareLinks" value="${pdict.socialLinks}" scope="page"/>
+            <isinclude template="wishlist/components/socialsharing" />
+        </div>
+    </isif>
+</div>

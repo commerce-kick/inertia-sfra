@@ -1,0 +1,1 @@
+<span class="event-date-summary"><isprint value="${pdict.giftRegistryModel.eventInfo.date || ''}" formatter="dd-MM-yyyy"/></span>

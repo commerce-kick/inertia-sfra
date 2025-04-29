@@ -1,0 +1,8 @@
+<div class="row">
+    <isinclude template="product/components/availability" />
+</div>
+<div class="row">
+    <div class="col">
+        <isinclude template="wishlist/components/addToWishListButton" />
+    </div>
+</div>

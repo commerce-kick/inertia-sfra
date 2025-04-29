@@ -1,0 +1,12 @@
+<!-- Availability -->
+<div class="availability row product-availability" data-ready-to-order="${product.readyToOrder}" data-available="${product.available}">
+    <isinclude template="product/components/availability" />
+</div>
+
+<isif condition="${!isQuickView}">
+    <div class="row">
+        <div class="col">
+            <isinclude template="giftRegistry/components/addToRegistryButton" />
+        </div>
+    </div>
+</isif>

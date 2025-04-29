@@ -1,0 +1,24 @@
+<div class="card event-info-summary registry-card-display-info">
+    <div class="card-header">
+        <h2 class="pull-left registry-info-header">${Resource.msg('heading.event.information', 'giftRegistry', null)}</h2>
+            <button type="button" class="edit-button event-edit-button event-edit-button pull-right ${pdict.showEditForm ? 'edit-gr-link' : ''}"
+            aria-label="${Resource.msg('action.edit.step', 'giftRegistry', null)} ${Resource.msg('heading.event.information', 'giftRegistry', null)}">
+                ${Resource.msg('action.edit.step', 'giftRegistry', null)}
+            </button>
+    </div>
+    <div class="card-body">
+        <div class="event-summary">
+            <isinclude template="giftRegistry/summary/eventSummaryCardContent" />
+        </div>
+        <isif condition="${pdict.showEditForm}">
+            <div class="edit-form d-none">
+                <form class="event-summary-edit-form">
+                    <input type="hidden" class="eventFormType" name="eventFormType" value="event"/>
+                    <input type="hidden" name="${pdict.csrf.tokenName}" value="${pdict.csrf.token}"/>
+                    <isinclude template="giftRegistry/forms/eventForm" />
+                </form>
+                <isinclude template="giftRegistry/forms/editButtons" />
+            </div>
+        </isif>
+    </div>
+</div>

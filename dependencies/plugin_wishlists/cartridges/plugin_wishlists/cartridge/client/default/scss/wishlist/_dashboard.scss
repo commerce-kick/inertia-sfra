@@ -1,0 +1,40 @@
+@import "variables";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/mixins/breakpoints";
+@import "../components/wishlistSocial";
+
+.account-wishlist-item {
+    border-bottom: 1px dashed $grey3;
+    border-left: 0 none;
+    border-right: 0 none;
+    border-top: 0 none;
+    margin-right: 0.15rem;
+    margin-left: 0.15rem;
+
+    .line-item-header {
+        margin-bottom: 0.1rem;
+    }
+
+    .account-wl-attributes {
+        padding-left: 0;
+    }
+
+    .account-wl-image {
+        padding-right: 1rem;
+    }
+}
+
+.account-wishlist-item:last-child {
+    border: 0 none;
+}
+
+.account-wishlist-item .remove-from-wishlist {
+    color: $grey4;
+    font-size: 1.65em;
+    padding: 0;
+    position: absolute;
+    border: none;
+    background-color: $white;
+    top: -0.625rem;
+    right: 1.25rem;
+}

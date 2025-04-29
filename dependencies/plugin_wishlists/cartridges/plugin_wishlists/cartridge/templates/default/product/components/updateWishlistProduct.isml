@@ -1,0 +1,13 @@
+<div class="row wishlist-item-update-button-block">
+<div class="col-sm-12">
+    <input type="hidden" class="update-wishlist-url" value="${pdict.updateWishlistUrl}"
+           data-uuid="${pdict.uuid}">
+    <button class="btn-update-wishlist-product update-cart-product-global btn btn-primary"
+            data-pid="${product.id}"
+            ${!product.readyToOrder || !product.available ? "disabled" : ""}
+            data-error-msg="${Resource.msg('wishlist.updatewishlist.failure.msg', 'wishlist', null)}">
+        <i class="fa fa-shopping-bag"></i>
+        ${Resource.msg('button.update', 'common', null)}
+    </button>
+</div>
+</div>

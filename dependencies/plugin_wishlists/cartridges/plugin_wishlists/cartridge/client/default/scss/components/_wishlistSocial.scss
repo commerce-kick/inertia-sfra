@@ -1,0 +1,40 @@
+@import "variables";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/mixins/breakpoints";
+@import "~base/components/toastMessage";
+
+.wl-social-sharing {
+    color: $grey6;
+    font-size: 1.75em;
+
+    @include media-breakpoint-down(sm) {
+        font-size: 1.25em;
+    }
+
+    .share-icons {
+        text-decoration: none;
+
+        i {
+            color: $grey6;
+        }
+    }
+
+    .share-icons-copy-link-btn {
+        background: none;
+        border: none;
+        padding-left: 0;
+    }
+
+    .fa-link {
+        cursor: pointer;
+    }
+}
+
+.wl-social-sharing-text {
+    font-size: 0.85em;
+    font-weight: 200;
+}
+
+.copy-link-message {
+    @include toast-message();
+}

@@ -1,0 +1,5 @@
+<isif condition="${pdict.updateCartUrl}">
+    <isinclude template="product/components/updateCartProduct" />
+<iselse>
+    <isinclude template="product/components/updateGiftRegistryProduct" />
+</isif>

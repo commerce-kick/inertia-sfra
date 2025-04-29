@@ -1,0 +1,142 @@
+<fieldset class="event-shipping-form ${address.htmlName} gr-edit-form">
+    <div class="form-group ${address.addressId.mandatory === true ? 'required' : ''}">
+        <label class="form-control-label" for="${address.htmlName}">
+            <isprint value="${address.addressId.label}" encoding="htmlcontent" />
+        </label>
+        <input
+            type="text"
+            class="form-control addressID"
+            id="${address.htmlName}"
+            value="${pdict.showEditForm ? address.addressId.htmlValue : ''}"
+            <isprint value="${ pdict.showEditForm ? address.addressId.attributes : ''}" encoding="off" />
+            <isif condition="${!postEventaddress}">
+                name="dwfrm_giftRegistry_giftRegistryShippingAddress_preEventShippingAddress_addressId"
+            <iselse/>
+                name="dwfrm_giftRegistry_giftRegistryShippingAddress_postEventShippingAddress_addressId"
+            </isif>
+        >
+        <div class="invalid-feedback"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group ${address.firstName.mandatory === true ? 'required' : ''}">
+                <label class="form-control-label" for="${address.firstName.htmlName}">
+                    <isprint value="${address.firstName.label}" encoding="htmlcontent" />
+                </label>
+                <input
+                    type="text"
+                    class="form-control firstName"
+                    id="${address.firstName.htmlName}"
+                    <isprint value="${address.firstName.attributes}" encoding="off" />
+                    autocomplete="given-name"
+                >
+                <div class="invalid-feedback"></div>
+            </div>
+        </div>
+
+        <div class="col-6">
+            <div class="form-group ${address.lastName.mandatory === true ? 'required' : ''}">
+                <label class="form-control-label" for="${address.lastName.htmlName}">
+                    <isprint value="${address.lastName.label}" encoding="htmlcontent" />
+                </label>
+                <input type="text" class="form-control lastName" id="${address.lastName.htmlName}"
+                    <isprint value="${address.lastName.attributes}" encoding="off" />
+                    autocomplete="family-name"
+                >
+                <div class="invalid-feedback"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group ${address.address1.mandatory === true ? 'required' : ''}">
+        <label class="form-control-label" for="${address.address1.htmlName}">
+            <isprint value="${address.address1.label}" encoding="htmlcontent" />
+        </label>
+        <input type="text" class="form-control address1" id="${address.address1.htmlName}"
+            <isprint value="${address.address1.attributes}" encoding="off" />
+            autocomplete="address-line1"
+        >
+        <div class="invalid-feedback"></div>
+    </div>
+
+    <div class="form-group ${address.address2.mandatory === true ? 'required' : ''}">
+        <label class="form-control-label" for="${address.address2.htmlName}">
+            <isprint value="${address.address2.label}" encoding="htmlcontent" />
+        </label>
+        <input type="text" class="form-control address2" id="${address.address2.htmlName}"
+            <isprint value="${address.address2.attributes}" encoding="off" />
+            autocomplete="address-line2"
+        >
+        <div class="invalid-feedback"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group ${address.country.mandatory === true ? 'required' : ''}">
+                <label class="form-control-label" for="${address.country.htmlName}">
+                    <isprint value="${address.country.label}" encoding="htmlcontent" />
+                </label>
+                <select class="form-control country" id="${address.country.htmlName}" <isprint value="${address.country.attributes}" encoding="off" /> autocomplete="country">
+                    <isloop items=${address.country.options} var="country">
+                        <option id="${country.id}" value="${country.htmlValue}" <isif condition="${country.selected}">selected</isif>>
+                            ${country.label}
+                        </option>
+                    </isloop>
+                </select>
+                <div class="invalid-feedback"></div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group ${address.states.stateCode.mandatory === true ? 'required' : ''}">
+                <label class="form-control-label" for="${address.states.stateCode.htmlName}">
+                    <isprint value="${address.states.stateCode.label}" encoding="htmlcontent" />
+                </label>
+                <input class="form-control stateCode" id="${address.states.stateCode.htmlName}"
+                    <isprint value="${address.states.stateCode.attributes}" encoding="off" />
+                    autocomplete="region">
+                </input>
+                <div class="invalid-feedback"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group ${address.city.mandatory === true ? 'required' : ''}">
+                <label class="form-control-label" for="${address.city.htmlName}">
+                    <isprint value="${address.city.label}" encoding="htmlcontent" />
+                </label>
+                <input type="text" class="form-control city_address" id="${address.city.htmlName}"
+                    <isprint value="${address.city.attributes}" encoding="off" />
+                    autocomplete="address-level2"
+                >
+                <div class="invalid-feedback"></div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group ${address.postalCode.mandatory === true ? 'required' : ''}">
+                <label class="form-control-label" for="${address.postalCode.htmlName}">
+                    <isprint value="${address.postalCode.label}" encoding="htmlcontent" />
+                </label>
+                <input type="text" class="form-control postalCode" id="${address.postalCode.htmlName}"
+                    <isprint value="${address.postalCode.attributes}" encoding="off" />
+                    autocomplete="postal-code"
+                >
+                <div class="invalid-feedback"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group ${address.phone.mandatory === true ? 'required' : ''}">
+        <label class="form-control-label" for="${address.phone.htmlName}">
+            <isprint value="${address.phone.label}" encoding="htmlcontent" />
+        </label>
+        <input type="text" class="form-control phone_address" id="${address.phone.htmlName}"
+            <isprint value="${address.phone.attributes}" encoding="off" />
+            autocomplete="tel"
+        >
+        <div class="invalid-feedback"></div>
+    </div>
+    <input id="${postEventaddress ? 'post_' : ''}address_saved" class="address-saved form-control" type="hidden" value="new" name="${postEventaddress ? 'post_' : ''}address_saved"/>
+</fieldset>

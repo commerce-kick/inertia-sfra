@@ -1,0 +1,14 @@
+<div class="col-sm-6 product-card-price">
+        <div class="row">
+            <!---item unit price --->
+            <div class="col-5">
+                <p class="line-item-price-info">${Resource.msg('label.each.item.price','cart',null)}</p>
+                <isset name="price" value="${item.priceObj}" scope="page"/>                             
+                <isinclude template="/product/components/pricing/main" />
+            </div>
+            <!--- quantity --->
+            <div class="col-5 line-item-quantity">
+                <isinclude template="wishlist/components/productCardQuantitySelector" />
+            </div>
+        </div>
+</div>

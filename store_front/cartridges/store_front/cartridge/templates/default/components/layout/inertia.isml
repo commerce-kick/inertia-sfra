@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="${pdict.csrf.token}">
+
+    <isif condition="${pdict.meta}">
+        <isloop items="${pdict.meta}" var="metaTag">
+            <isprint value="${metaTag}" encoding="off" />
+        </isloop>
+    </isif>
+    
+    <isinclude url="${URLUtils.url('Inertia-Head', 'component', pdict.page.component)}" />
+</head>
+
+<body>
+    <div id="app" data-page="${JSON.stringify(pdict.page)}"></div>
+</body>
+
+</html>

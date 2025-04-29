@@ -1,0 +1,28 @@
+<div class="row">
+    <span class="address-tittle-summary">${pdict.giftRegistryModel.postEventShippingAddress.name || ''}</span>
+</div>
+
+<div class="row">
+    <span class="fname">${pdict.giftRegistryModel.postEventShippingAddress.firstName || ''}</span>
+    <span class="lname">${pdict.giftRegistryModel.postEventShippingAddress.lastName || ''}</span>
+</div>
+
+<div class="row">
+    <span class="summary-addr-1">${pdict.giftRegistryModel.postEventShippingAddress.address1 || ''}</span>
+</div>
+
+<isif condition="${pdict.giftRegistryModel.postEventShippingAddress.address2}">
+    <div class="row">
+        <span class="summary-addr-2">${pdict.giftRegistryModel.postEventShippingAddress.address2 || ''}</span>
+    </div>
+</isif>
+
+<div class="row">
+    <span class="city">${pdict.giftRegistryModel.postEventShippingAddress.city || ''}</span>
+    <span class="state">${pdict.giftRegistryModel.postEventShippingAddress.stateCode || ''}</span>
+    <span class="zip">${pdict.giftRegistryModel.postEventShippingAddress.postalCode || ''}</span>
+</div>
+
+<div class="row">
+    <span class="phone">${pdict.giftRegistryModel.postEventShippingAddress.phone || ''}</span>
+</div>

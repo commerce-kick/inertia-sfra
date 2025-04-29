@@ -1,0 +1,30 @@
+<isif condition="${pdict.wishlist.items.length > 0}">
+    <!---product cards--->
+    <div class="wishlistItemCards" data-error-msg="${Resource.msg('wishlist.remove.error','wishlist',null)}">
+        <isloop items="${pdict.wishlist.items}" var="item">
+            <isif condition=${(pdict.wishlist.publicView && item.publicItem) || (!pdict.wishlist.publicView)}>
+                <isif condition="${!!item.bundle}">
+                    <isinclude template="wishlist/productCard/wishlistBundleCard" />
+                <iselse/>
+                    <isinclude template="wishlist/components/wishlistProductCard" />
+                </isif>
+            </isif>
+        </isloop>
+        <isif condition="${pdict.wishlist.showMore}">
+             <div class="my-account col-12">
+                <button type="button" class="btn btn-block btn-primary btn-outline-primary more-wl-items" >
+                    ${Resource.msg('text.link.show.more.results.wl', 'wishlist', null)}
+                </button>
+            </div>
+        </isif>
+        <span class="wishlistItemCardsData" data-uuid="${pdict.wishlist.UUID}" data-href="${URLUtils.url('Wishlist-MoreList')}" data-page-number="${pdict.wishlist.pageNumber || 1}"  data-public-view=${pdict.wishlist.publicView}></span>
+    </div>
+    <div>
+        <isset name="shareLinks" value="${pdict.socialLinks}" scope="page"/>
+        <isinclude template="wishlist/components/socialsharing" />
+    </div>
+<iselse>
+    <div class="col-12 text-center">
+        <p>${Resource.msg('wishlist.empty.text','wishlist',null)}</p>
+    </div>
+</isif>

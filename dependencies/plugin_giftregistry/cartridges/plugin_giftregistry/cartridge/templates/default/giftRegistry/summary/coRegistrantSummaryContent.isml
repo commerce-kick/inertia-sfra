@@ -1,0 +1,19 @@
+<div class="row">
+    <span class="summary-label">${Resource.msg('label.registrant.role', 'giftRegistry', null)}</span>
+    <span class="registrant-role-summary">${pdict.giftRegistryModel.coRegistrant.role || ''}</span>
+</div>
+
+<div class="row">
+    <span class="summary-label">${Resource.msg('label.registrant.first.name', 'giftRegistry', null)}</span>
+    <span class="registrant-first-name-summary">${pdict.giftRegistryModel.coRegistrant.firstName || ''}</span>
+</div>
+
+<div class="row">
+    <span class="summary-label">${Resource.msg('label.registrant.last.name', 'giftRegistry', null)}</span>
+    <span class="registrant-last-name-summary">${pdict.giftRegistryModel.coRegistrant.lastName || ''}</span>
+</div>
+
+<div class="row">
+    <span class="summary-label">${Resource.msg('label.registrant.email', 'giftRegistry', null)}</span>
+    <span class="registrant-email-summary">${pdict.giftRegistryModel.coRegistrant.email || ''}</span>
+</div>

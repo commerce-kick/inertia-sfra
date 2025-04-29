@@ -1,0 +1,19 @@
+<div class="card-body">
+    <div class="row date-row">
+        <div class="col-6 registry-label">
+            ${Resource.msg('label.event.date', 'giftRegistry', null)}
+        </div>
+        <div class="col-6 registry-data">
+            <isprint value="${registry.eventDate}" style="DATE_SHORT"/>
+        </div>
+    </div>
+
+    <div class="row location-row">
+        <div class="col-6 registry-label">
+            ${Resource.msg('label.event.location', 'giftRegistry', null)}
+        </div>
+        <div class="col-6 registry-data">
+            ${registry.eventCity} ${registry.eventState}
+        </div>
+    </div>
+</div>

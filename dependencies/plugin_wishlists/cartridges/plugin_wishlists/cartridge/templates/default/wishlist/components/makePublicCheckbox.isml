@@ -1,0 +1,8 @@
+<isif condition="${pdict.publicOption}">
+    <div class="custom-control custom-checkbox wishlist-hide">
+        <input ${!item.publicItem ? 'checked="checked"' : ''} class="custom-control-input" type="checkbox" value="true" id="isPublic-${item.UUID}" name="isPublic-${item.UUID}"  data-id="${item.UUID}" />
+        <label for="isPublic-${item.UUID}" class="custom-control-label wishlist-item-checkbox">
+            ${Resource.msg('checkbox.makePublic', 'wishlist', null)}
+        </label>
+    </div>
+</isif>

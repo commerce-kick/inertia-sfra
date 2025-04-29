@@ -1,0 +1,54 @@
+<isdecorate template="common/layout/page">
+    <isscript>
+        var assets = require('*/cartridge/scripts/assets.js');
+        assets.addCss('/css/wishlist.css');
+        assets.addJs('/js/wishlist.js');
+        assets.addCss('/css/login.css');
+    </isscript>
+    <div class="hero slant-down login-banner">
+        <h1 class="page-title">${Resource.msg('txt.banner.wishlist.search', 'wishlist', null)}</h1>
+    </div>
+    <div class="container">
+        <!---Breadcrumbs--->
+        <isinclude template="components/breadcrumbs/pageBreadcrumbs"/>
+        <div class="row justify-content-center ">
+            <div class="col-10 col-lg-6">
+                <h4>${Resource.msg('txt.heading.wishlist.search', 'wishlist', null)}</h4>
+                <p class="page-title">${Resource.msg('txt.desc.wishlist.search', 'wishlist', null)}</p>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="card col-10 col-lg-6">
+                <form action="${pdict.actionUrl}" id="wishlist-search" method="POST" name="wishlist-search">
+                    <div class="form-group wishlist-error-search" data-error-msg="${Resource.msg('wishlist.search.error.msg', 'wishlist', null)}">
+                        <div class="" role="alert">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control-label" for="wishlist-search-first-name">
+                            ${Resource.msg('label.input.wishlist.search.first.name', 'wishlist', null)}
+                        </label>
+                        <input type="text" id="wishlist-search-first-name" class="form-control" name="searchFirstName">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control-label" for="wishlist-search-last-name">
+                            ${Resource.msg('label.input.wishlist.search.last.name', 'wishlist', null)}
+                        </label>
+                        <input type="text" id="wishlist-search-last-name" class="form-control" name="searchLastName">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control-label" for="wishlist-search-password">
+                                ${Resource.msg('label.input.wishlist.search.email', 'wishlist', null)}
+                        </label>
+                        <input type="email" id="wishlist-search-email" class="form-control" name="searchEmail">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <input type="hidden" name="${pdict.csrf.tokenName}" value="${pdict.csrf.token}"/>
+                    <button type="submit" class="btn btn-block btn-primary">${Resource.msg('button.search.wishlist', 'wishlist', null)}</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</isdecorate>

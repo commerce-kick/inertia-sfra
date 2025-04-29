@@ -1,0 +1,20 @@
+<option
+        data-uuid="${customerAddress.UUID || ''}"
+        data-address-title="${customerAddress.address.ID || ''}"
+        data-first-name="${customerAddress.address.firstName || ''}" data-last-name="${customerAddress.address.lastName || ''}"
+        data-address1="${customerAddress.address.address1 || ''}" data-address2="${customerAddress.address.address2 || ''}"
+        data-city="${customerAddress.address.city || ''}" data-state-code="${customerAddress.address.stateCode ||''}"
+        data-country-code="${customerAddress.address.countryCode.value ||''}" data-postal-code="${customerAddress.address.postalCode ||''}"
+        data-phone="${customerAddress.address.phone || ''}"
+        value="${customerAddress.address.ID || ''}"
+<isif condition="${address.addressId.htmlValue === customerAddress.address.ID}">Selected</isif>
+>
+    ${customerAddress.address.ID || ''} - ${customerAddress.address.firstName || ''}
+    ${customerAddress.address.lastName || ''}
+    ${customerAddress.address.address1 || ''}
+    ${customerAddress.address.address2 || ''}
+    ${customerAddress.address.postalCode || ''}
+    ${customerAddress.address.city || ''}
+    ${!customerAddress.address.city || ','}
+    ${customerAddress.address.stateCode || ''}
+</option>

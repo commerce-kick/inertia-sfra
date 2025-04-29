@@ -1,0 +1,49 @@
+{
+    "include": {
+        "data": "./test/acceptance/metadata.json",
+        "pluginWishlists": "./test/acceptance/pages/pluginWishlists.page.js"
+    },
+    "gherkin_steps": [
+        "./test/acceptance/steps/testSuites/wishlistsPath.steps.js"
+    ],
+    "login": {
+        "loginPage": "/on/demandware.store/Sites-RefArch-Site/en_US/Account-Show?registration=false",
+        "email": "wluser1@demandware.com",
+        "password": "Test123!"
+    },
+    "product": {
+        "name": "Elbow Sleeve Ribbed Sweater",
+        "pid": "701642890119M",
+        "size": "Size: L"
+    },
+    "wishlists": {
+        "wishlistText": "Wishlist",
+        "wishlistShowURL": "/on/demandware.store/Sites-RefArch-Site/en_US/Wishlist-Show",
+        "homePage": "/on/demandware.store/Sites-RefArch-Site/en_US/Home-Show",
+        "addedToWishlistMsg": "The product has been added to your wishlist",
+        "addedToCartMsg": "Product added to cart",
+        "emptyWishlistMsg": "This list is empty.",
+        "wishlistStatusMsg": "The status of this list has been updated.",
+        "itemStatusMsg": "The status of this item has been updated."
+    },
+    "productTile": {
+        "pid": "750518699578M",
+        "name": "Black Single Pleat Athletic Fit Wool Suit"
+    },
+    "pdp": {
+        "url": "/on/demandware.store/Sites-RefArch-Site/en_US/Product-Show?pid=25518101M",
+        "name": "Long Sleeve Embellished Boat Neck Top",
+        "size": "M",
+        "color": "Begonia Pink",
+        "pid": "701642823889M",
+        "sizeUpdated": "L",
+        "itemAttSizeUpdted": "Size: L",
+        "pidNew": "701642823872M"
+    },
+    "pdp2": {
+        "url": "/on/demandware.store/Sites-RefArch-Site/en_US/Product-Show?pid=25592990M",
+        "size": "4",
+        "name": "1 Button Jacket",
+        "pid": "701644050238M"
+    }
+}

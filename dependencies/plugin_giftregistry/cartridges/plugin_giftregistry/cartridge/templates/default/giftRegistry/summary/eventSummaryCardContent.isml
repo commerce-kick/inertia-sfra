@@ -1,0 +1,26 @@
+<div class="row">
+    <span class="summary-label">${Resource.msg('label.event.name', 'giftRegistry', null)}</span>
+    <span class="event-name-summary">${pdict.giftRegistryModel.name || ''}</span>
+</div>
+
+<div class="row">   
+    <span class="summary-label">${Resource.msg('label.event.date', 'giftRegistry', null)}</span>
+    <isinclude  template="giftRegistry/summary/eventDate" />
+</div>
+
+<div class="row">
+    <span class="summary-label">${Resource.msg('label.event.country', 'giftRegistry', null)}</span>
+    <span class="event-country-summary">${pdict.giftRegistryModel.eventInfo.country || ''}</span>
+</div>
+
+<div class="row">
+    <isif condition="${pdict.giftRegistryModel.eventInfo.state}">
+        <span class="summary-label">${Resource.msg('label.event.state', 'giftRegistry', null)} </span>
+        <span class="event-state-summary">${pdict.giftRegistryModel.eventInfo.state || ''}</span>
+    </isif>
+</div>
+
+<div class="row">
+    <span class="summary-label">${Resource.msg('label.event.city', 'giftRegistry', null)}</span>
+    <span class="event-city-summary">${pdict.giftRegistryModel.eventInfo.city || ''}</span>
+</div>

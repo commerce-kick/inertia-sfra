@@ -1,0 +1,23 @@
+<div class="row">
+    <span class="address-tittle-summary">${pdict.giftRegistryModel.preEventShippingAddress.name || ''}</span>
+</div>
+
+<div class="row">
+    <span class="lname">${pdict.giftRegistryModel.preEventShippingAddress.lastName || ''}</span>
+    <span class="fname">${pdict.giftRegistryModel.preEventShippingAddress.firstName || ''}</span>
+</div>
+
+<div class="row">
+    <span class="state">${pdict.giftRegistryModel.preEventShippingAddress.stateCode || ''}</span>
+    <span class="city">${pdict.giftRegistryModel.preEventShippingAddress.city || ''}</span>
+</div>
+
+<div class="row">
+    <span class="summary-addr-1">${pdict.giftRegistryModel.preEventShippingAddress.address1 || ''}</span>
+    <span class="summary-addr-2">${pdict.giftRegistryModel.preEventShippingAddress.address2 || ''}</span>
+    <span class="zip">${pdict.giftRegistryModel.preEventShippingAddress.postalCode || ''}</span>
+</div>
+
+<div class="row">
+    <span class="phone">${pdict.giftRegistryModel.preEventShippingAddress.phone || ''}</span>
+</div>

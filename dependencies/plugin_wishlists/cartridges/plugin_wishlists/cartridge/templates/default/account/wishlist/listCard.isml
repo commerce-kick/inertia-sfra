@@ -1,0 +1,51 @@
+<div class="account-wishlist-item card">
+    <div class="line-item-header row">
+        <!--- product name--->
+        <div class="line-item-name col-10">
+            ${item.name}
+        </div>
+        <!--- remove wishlist icon--->
+        <div class="col-2 hidden-xs-down"> <!---hide xs--->
+            <button type="button" class="remove-btn remove-from-wishlist btn btn-light"
+                data-url="${URLUtils.url('Wishlist-RemoveProductAccount','pid', item.pid)}"
+                <isif condition="${item.variantAttributes}">
+                aria-label="${Resource.msgf('wishlist.remove.item.variant', 'wishlist', null, item.name, item.variantAttributes)}">
+                <iselse>
+                aria-label="${Resource.msgf('wishlist.remove.item', 'wishlist', null, item.name)}">
+                </isif>
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4 account-wl-image">
+            <img class="product-image img-fluid" src="${item.imageObj.small[0].url}" alt="${item.imageObj.small[0].alt}" title="${item.imageObj.small[0].title}">
+        </div>
+        <div class="col-8 account-wl-attributes">
+            <isloop items="${item.variationAttributes}" var="attribute">
+                <isloop items="${attribute.values}" var="eachValue">
+                    <isif condition="${!!eachValue.selected}" />
+                        <p class="line-item-attributes">${attribute.displayName}: ${eachValue.displayValue}</p>
+                    </isif>
+                 </isloop>
+             </isloop>
+             <isif condition="${item.options}" />
+                 <isloop items="${item.options}" var="option">
+                     <isif condition="${!!option}" />
+                         <p class="line-item-attributes">${option.displayName}:${option.displayValue}</p>
+                     </isif>
+                 </isloop>
+             </isif>
+             <div class="line-item-availability availability-${item.UUID}">
+                 <isloop items="${item.availability.messages}" var="message">
+                     <p class="line-item-attributes">${message}</p>
+                 </isloop>
+                 <isif condition="${item.availability.inStockDate}">
+                     <p class="line-item-attributes line-item-instock-date">
+                         ${item.availability.inStockDate}
+                     </p>
+                 </isif>
+             </div>
+         </div>
+    </div>
+</div>

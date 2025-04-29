@@ -1,0 +1,29 @@
+<div class="card product-info uuid-${item.UUID} pid-${item.pid}">
+    <!--- name and remove buttons --->
+    <isinclude template="wishlist/components/wishlistProductCardHeader" />
+
+    <div class="bundle-includes">${Resource.msg('msg.bundle.includes','cart',null)}</div>
+
+    <!--- individual bundled line items --->
+    <isinclude template="wishlist/productCard/wishlistProductCardBundledItems" />
+    <div class="row bundle-card-footer">
+        <div class="col-lg-5 d-flex flex-column align-items-lg-center justify-content-lg-center bundle-misc">
+            <div class="line-item-availability availability-${item.UUID}">
+                <isloop items="${item.availability.messages}" var="message">
+                    ${message}
+                </isloop>
+                <isif condition="${item.availability.inStockDate}">
+                    <div class="line-item-instock-date">
+                        ${item.availability.inStockDate}
+                    </div>
+                </isif>
+            </div>
+        </div>
+        <isinclude template="wishlist/components/productListItemProductPrice" />
+    </div>
+    <div class="row">
+        <div class="col-12"><hr class="wishlist-line-item-divider line-dotted"> </div>
+        <isinclude template="wishlist/components/makePublicCheckbox" />
+        <isinclude template="wishlist/components/addToCartButton" />
+    </div>
+</div>
