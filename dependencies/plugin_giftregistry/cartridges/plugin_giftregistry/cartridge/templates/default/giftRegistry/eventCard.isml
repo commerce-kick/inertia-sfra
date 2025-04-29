@@ -1,0 +1,10 @@
+<div class="col col-sm-6">
+    <div class="card event-info-card">
+        <div class="card-header">
+            <h2 class="pull-left registry-info-header-empty">${Resource.msg('heading.event.information', 'giftRegistry', null)}</h2>
+        </div>
+        <div class="card-body">
+            <isinclude template="giftRegistry/forms/eventForm" />
+        </div>
+    </div>
+</div>

@@ -1,0 +1,9 @@
+name: Build
+
+on: push
+
+jobs:
+    deploy-build:
+        uses: SalesforceCommerceCloud/storefront-reference-architecture/.github/workflows/plugin-test.yml@integration
+        with:
+            NODE_VERSION: 18.19

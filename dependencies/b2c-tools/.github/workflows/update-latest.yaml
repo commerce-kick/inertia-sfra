@@ -1,0 +1,19 @@
+# workflow to set latest branch to release tag on release publish
+---
+name: Update Latest Branch
+
+on:
+  release:
+    types: [ released ]
+
+jobs:
+  update-latest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Set latest branch to release tag
+        run: |
+          git checkout -B latest ${{ github.ref }}
+          git push origin latest --force

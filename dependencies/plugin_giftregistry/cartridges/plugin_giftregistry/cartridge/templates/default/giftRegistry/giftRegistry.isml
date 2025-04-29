@@ -1,0 +1,85 @@
+<isdecorate template="common/layout/page">
+    <isscript>
+        var assets = require('*/cartridge/scripts/assets.js');
+        assets.addJs('/js/giftRegistry.js');
+        assets.addCss('/css/giftRegistry.css');
+    </isscript>
+    <div class="hero slant-down gift-registry-banner">
+        <h1 class="page-title">${Resource.msg('title.gift.registry.page', 'giftRegistry', null)}</h1>
+    </div>
+    <div class="container gift-registry-landing-page">
+        <isinclude template="giftRegistry/components/giftRegistryBreadcrumbs"/>
+        <div class="row justify-content-center">
+            <isif condition="${pdict.giftRegistryModel}">
+                <div class="col col-sm-6">
+                    <div class="gift-registry-form-nav" aria-multiselectable="false">
+                        <isif condition="${!pdict.giftRegistryModel.publicView}">
+                            <ul class="nav nav-tabs nav-fill gift-registry-event-formation-Tabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <a id="eventInfoTabButton" class="nav-link active event-name" data-toggle="tab" href="#eventInfo" role="tab" aria-setsize="2" aria-posinset="1" aria-selected="true"  aria-controls="#eventInfo">
+                                        ${pdict.giftRegistryModel.name}
+                                    </a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a id="eventRegistryTabButton" class="nav-link" data-toggle="tab" href="#registryInfo" role="tab" aria-setsize="2" aria-posinset="2" aria-selected="false"  aria-controls="#registryInfo">
+                                        ${Resource.msg('heading.registry.information', 'giftRegistry', null)}
+                                    </a>
+                                </li>
+                            </ul>
+                        </isif>
+                        <div class="tab-content">
+                            <div id="eventInfo" class="tab-pane active" role="tabpanel" aria-labelledby="eventInfoTabButton">
+                                <isif condition="${!pdict.giftRegistryModel.publicView}">
+                                    <div class="row event-info-header">
+                                        <div class="col-8">
+                                            <input ${pdict.giftRegistryModel.publicList ? 'checked="checked"' : ''}
+                                                class="form-check-input giftregistry-form-check-input"
+                                                type="checkbox"
+                                                value=""
+                                                id="makePublic"
+                                                name="makePublic"
+                                                data-id="${pdict.giftRegistryModel.ID}"
+                                                data-url="${pdict.makePublicURL}">
+                                            <label class="form-check-label make-list-public" for="makePublic">
+                                                ${Resource.msg('checkbox.make.public', 'giftRegistry', null)}
+                                            </label>
+                                        </div>
+                                        <div class="col-4">
+                                            <button type="button" class="btn btn-outline-primary clear-list-btn float-right ${pdict.giftRegistryModel.items.length === 0 ? 'd-none' : ' '}"
+                                                data-toggle="modal"
+                                                data-target="#clearGiftRegistryItemsModal"
+                                                data-id="${pdict.giftRegistryModel.ID}"
+                                                data-name="${pdict.giftRegistryModel.name}"
+                                                data-url="${URLUtils.url('GiftRegistry-ClearList','id', pdict.giftRegistryModel.ID)}">
+                                                ${Resource.msg('button.clear.list', 'giftRegistry', null)}
+                                            </button>
+                                        </div>
+                                    </div>
+                                <iselse/>
+                                    <isinclude  template="giftRegistry/components/publicHeader" />
+                                </isif>
+                                    <div class="row justify-content-center add-items-to-gift-registry ${pdict.giftRegistryModel.items.length === 0 ? '' : 'd-none'}">
+                                        <a href="${URLUtils.url('Home-Show')}">${Resource.msg('link.addItems.giftRegistry', 'giftRegistry', null)}</a>
+                                    </div>
+                                    <isinclude template="giftRegistry/components/itemList" />
+                            </div>
+                            <isif condition="${!pdict.giftRegistryModel.publicView}">
+                                <div id="registryInfo" class="tab-pane row registryInfo" role="tabpanel" data-edit-url="${pdict.editRegistryUrl}" data-id="${pdict.giftRegistryModel.ID}" aria-labelledby="eventRegistryTabButton">
+                                    <isinclude template="giftRegistry/summary/eventSummaryCard" />
+                                    <isinclude template="giftRegistry/summary/registrantSummaryCard" />
+                                    <isinclude template="giftRegistry/summary/coRegistrantSummaryCard" />
+                                    <isinclude template="giftRegistry/summary/preEventShippingSummaryCard">
+                                    <isinclude template="giftRegistry/summary/postEventShippingSummaryCard" />
+                                </div>
+                            <iselse/>
+                                <div class="tab-pane row registryInfo" data-id="${pdict.giftRegistryModel.ID}"></div>
+                            </isif>
+                        </div>
+                    </div>
+                </div>
+            <iselse/>
+                ${Resource.msg('giftregistry.not.viewable.text', 'giftRegistry', null)}
+            </isif>
+        </div>
+    </div>
+</isdecorate>

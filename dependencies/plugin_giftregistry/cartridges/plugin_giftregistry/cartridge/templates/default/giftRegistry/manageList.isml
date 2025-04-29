@@ -1,0 +1,21 @@
+<isdecorate template="common/layout/page">
+    <isscript>
+        var assets = require('*/cartridge/scripts/assets.js');
+        assets.addCss('/css/giftRegistry.css');
+        assets.addCss('/css/account/dashboard.css');
+        assets.addJs('/js/giftRegistry.js');
+    </isscript>
+    <div class="hero slant-down gift-registry-banner">
+        <h1 class="page-title">${Resource.msg('title.gift.registry.page', 'giftRegistry', null)}</h1>
+    </div>
+    <div class="container">
+        <!---Breadcrumbs--->
+        <isinclude template="components/breadcrumbs/pageBreadcrumbs"/>
+        <div class="row justify-content-center ">
+            <div class="col col-sm-9 col-md-7">
+                <isinclude template="giftRegistry/manageListCards">
+            </div>
+            <isinclude template="giftRegistry/removeGiftRegistryModal"/>
+        </div>
+    </div>
+</isdecorate>

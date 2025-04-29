@@ -1,0 +1,24 @@
+<div class="col col-sm-6">
+    <div class="card registrant-info-card">
+        <div class="card-header">
+            <h2 class="pull-left registry-info-header-empty">${Resource.msg('heading.registrant.information', 'giftRegistry', null)}</h2>
+        </div>
+        <div class="card-body">
+            <isset name="registrantForm" value="${pdict.form.giftRegistryEvent.registrant}" scope="page"/>
+            <isset name="isRegistrantForm" value="${true}" scope="page" />
+            <isinclude template="giftRegistry/forms/registrantForm" />
+
+            <div class="form-group">
+                <div class="custom-control custom-checkbox">
+                    <input class="custom-control-input hasCoRegistrant" type="checkbox" id="hasCoRegistrant"
+                        <isprint value="${pdict.form.coRegistrantCheck.attributes}" encoding="off" />
+                    >
+                    <label for="hasCoRegistrant" class="custom-control-label">
+                        ${Resource.msg('field.add.co.registrant', 'giftRegistry', null)}
+                    </label>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

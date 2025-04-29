@@ -1,0 +1,32 @@
+# This is a sample build configuration for JavaScript.
+# Check our guides at https://confluence.atlassian.com/x/14UWN for more examples.
+# Only use spaces to indent your .yml configuration.
+# -----
+# You can specify a custom docker image from Docker Hub as your build environment.
+image: node:6.9.4
+
+pipelines:
+  default:
+    - step:
+        caches:
+          - node
+        script: # Modify the commands below to build your repository.
+          # - git clone git@bitbucket.org:demandware/mobile-first-reference-architecture.git
+          # - cd ./mobile-first-reference-architecture
+          #- git checkout integration
+          #- npm install
+          #- npm run compile:js
+          #- npm run compile:scss
+          #- npm run compile:fonts
+          #- node node_modules/.bin/dwupload --hostname ${HOSTNAME} --username ${USERNAME} --password "${PASSWORD}" --cartridge cartridges/app_storefront_base
+          #- node node_modules/.bin/dwupload --hostname ${HOSTNAME} --username ${USERNAME} --password "${PASSWORD}" --cartridge cartridges/modules
+          #- cd ../
+          - git clone git@bitbucket.org:demandware/lib_productlist.git
+          - cd lib_productlist
+          - npm install
+          - npm run lint
+          - npm test
+          #- npm run compile:js
+          # - npm run compile:scss
+          #- node node_modules/.bin/dwupload --hostname ${HOSTNAME} --username ${USERNAME} --password "${PASSWORD}" --cartridge cartridges/lib_productlist
+          # - npm run test:integration -- --baseUrl https://${HOSTNAME}/on/demandware.store/Sites-MobileFirst-Site/en_US "test/integration/*"

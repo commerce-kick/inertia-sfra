@@ -1,0 +1,5 @@
+<isif condition="${pdict.giftRegistryList && pdict.giftRegistryList.length > 0}">
+    <isloop items="${pdict.giftRegistryList}" var="item">
+        <isinclude template="account/giftRegistry/listCard"/>
+    </isloop>
+</isif>

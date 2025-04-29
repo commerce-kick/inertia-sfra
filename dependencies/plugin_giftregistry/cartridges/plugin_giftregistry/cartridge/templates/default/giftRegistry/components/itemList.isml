@@ -1,0 +1,27 @@
+<isif condition="${pdict.fullPageRequest}"><div class="gr-item-cards row justify-content-center" data-error-msg="${Resource.msg('removeGiftRegistry.item.failure.msg','giftRegistry',null)}"></isif>
+    <isloop items="${pdict.giftRegistryModel.items}" var="item" status="loopState">
+        <isif condition=${(pdict.giftRegistryModel.publicView && item.publicItem) || (!pdict.giftRegistryModel.publicView)}>
+            <isinclude template="giftRegistry/components/itemCard" />
+        </isif>
+        <isif condition="${loopState.last}">
+            <isif condition="${pdict.showMoreButton}">
+                <div class="footer gift-registry-footer-border text-center more-btn-wrapper"> <!--- add 100% on button and remove the wrapper --->
+                    <button
+                        class="btn btn-outline-primary more-gr-list-items"
+                        data-url="${pdict.moreItemsUrl}"
+                        data-page-size="<isprint value="${pdict.pageSize}" formatter="#"/>"
+                        data-page-number="<isprint value="${pdict.pageNumber}" formatter="#"/>"
+                        data-public="false",
+                        data-total="<isprint value="${pdict.totalNumber}" formatter="#"/>"
+                    >
+                        ${Resource.msg('button.giftregistry.show.more','giftRegistry',null)}
+                    </button>
+                </div>
+            </isif>
+        </isif>
+    </isloop>
+    <isif condition="${pdict.fullPageRequest}">
+        <isinclude template="giftRegistry/removeGiftRegistryItemModal" />
+        <isinclude template="giftRegistry/clearGiftRegistryItemsModal" />
+    </isif>
+<isif condition="${pdict.fullPageRequest}"></div></isif>

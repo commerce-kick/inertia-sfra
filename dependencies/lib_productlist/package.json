@@ -1,0 +1,27 @@
+{
+  "name": "lib_productlist",
+  "version": "7.0.1",
+  "description": "overlay cartridge to be used with wishlist and gift registry cartridges",
+  "main": "index.js",
+  "scripts": {
+    "cover": "sgmf-scripts --cover test/unit/**/*.js",
+    "test": "sgmf-scripts --test test/unit/**/*.js",
+    "lint": "sgmf-scripts --lint js",
+    "upload": "sgmf-scripts --upload -- ",
+    "uploadCartridge": "sgmf-scripts --uploadCartridge lib_productlist",
+    "build": "echo \"Nothing to compile lib_productlist\""
+  },
+  "devDependencies": {
+    "chai": "^4.3.6",
+    "eslint": "^8.56.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.29.0",
+    "mocha": "^10.0.0",
+    "nyc": "^15.1.0",
+    "properties-parser": "^0.3.1",
+    "proxyquire": "1.7.4",
+    "sgmf-scripts": "^3.0.0",
+    "sinon": "^17.0.1"
+  },
+  "dependencies": {}
+}

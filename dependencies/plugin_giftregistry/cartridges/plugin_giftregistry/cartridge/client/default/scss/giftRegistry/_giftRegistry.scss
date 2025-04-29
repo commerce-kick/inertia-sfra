@@ -1,0 +1,367 @@
+@import "~base/variables";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/mixins/breakpoints";
+@import "~base/components/toastMessage";
+
+.action-buttons {
+    margin-bottom: 1rem;
+}
+
+.gift-registry-banner {
+    background-image: url("../images/giftRegistry.jpg");
+    background-position-y: 69%;
+}
+
+.summary-label,
+.registry-label {
+    font-weight: 500;
+}
+
+.edit-button,
+.view-gr {
+    cursor: pointer;
+    color: $primary;
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+// prettier-ignore
+.failedAttempt {  /* stylelint-disable-line */
+    color: $red;
+    text-align: center;
+}
+
+// prettier-ignore
+#eventInfo {  /* stylelint-disable-line */
+    .event-info-header {
+        padding-top: 1.5em;
+    }
+}
+
+// prettier-ignore
+#registryInfo {  /* stylelint-disable-line */
+    margin-left: 0.15em;
+    margin-right: 0.15em;
+}
+
+input.make-list-public {
+    margin-left: 0;
+}
+
+label.make-list-public {
+    margin-left: 1.25rem;
+}
+
+.card-header {
+    .registry-info-header-empty {
+        font-size: 1.5rem;
+        margin-bottom: 0;
+    }
+
+    .registry-info-header {
+        font-weight: bold;
+        font-size: 1.5rem;
+    }
+
+    .edit-button {
+        background: none;
+        border: none;
+    }
+}
+
+// prettier-ignore
+@mixin registryInfoFont { /* stylelint-disable-line */
+    margin-left: 0.7em;
+    font-weight: 500;
+}
+
+.registry-card-display-info {
+    span {
+        @include registryInfoFont;
+    }
+}
+
+.giftregistry-messages {
+    @include toast-message;
+}
+
+.giftregistry-alert {
+    @include toast-alert;
+}
+
+.no-registry {
+    margin: 2rem auto;
+}
+
+.create-registry {
+    margin-bottom: 2rem;
+}
+
+.public-header {
+    font-weight: 600;
+}
+
+.public-header-date {
+    margin-bottom: 0;
+}
+
+.giftregistry-form-check-input {
+    margin-left: 0;
+}
+
+.gift-registry-quantity-desired-sm {
+    margin-top: 0.938em;
+    margin-right: 25%;
+    padding-right: 6em;
+
+    label {
+        display: block;
+    }
+}
+
+.gr-item-cards {
+    padding-top: 1em;
+    margin-left: 0.3em;
+    margin-right: 0.3em;
+
+    .product-info {
+        margin-bottom: 1em;
+        padding: 0.625em;
+
+        @include media-breakpoint-up(md) {
+            height: auto;
+        }
+
+        .gr-item-checkbox,
+        .gr-desired-purchased {
+            @include media-breakpoint-down(md) {
+                font-size: 0.938em;
+            }
+        }
+
+        .gr-desired-purchased {
+            padding-left: 0;
+
+            i {
+                color: $green;
+            }
+        }
+
+        .public-item {
+            label {
+                padding-left: 0.5em;
+            }
+        }
+
+        .product-info-row {
+            margin-left: -0.6em;
+            margin-right: -0.6em;
+            padding-top: 0.4em;
+        }
+
+        button.gr-add-to-cart {
+            float: right;
+            margin-right: 0;
+
+            @include media-breakpoint-up(md) {
+                margin-right: 0.9em;
+            }
+
+            @include media-breakpoint-down(xs) {
+                width: 100%;
+            }
+        }
+
+        .product-card-price {
+            .price {
+                width: 8em;
+            }
+        }
+
+        .line-item-quantity {
+            text-align: right;
+            padding-right: 0.938em;
+
+            @include media-breakpoint-up(md) {
+                padding-right: 3.333em;
+            }
+
+            select {
+                width: 4em;
+            }
+        }
+
+        .remove-btn {
+            color: $slightly-darker-gray;
+            font-size: 1.625em;
+            padding: 0;
+            position: absolute;
+            top: 0;
+            right: 0.25rem;
+            border: none;
+            background-color: $white;
+
+            @include media-breakpoint-up(lg) {
+                top: 0;
+                bottom: 0;
+                right: -0.625rem;
+                margin-top: -0.625rem;
+                margin-bottom: -0.625rem;
+            }
+        }
+
+        .remove-btn-lg {
+            border: none;
+            border-radius: 0;
+            font-size: 1.625em;
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            padding-left: 0.3125rem;
+            padding-right: 0.3125rem;
+            z-index: 1;
+        }
+
+        .line-item-price-info {
+            margin-bottom: 0;
+        }
+    }
+}
+
+.manage-gift-registry-header h4 {
+    font-weight: bold;
+}
+
+.gift-registry-not-found div {
+    margin-top: 6rem;
+    padding-bottom: 4rem;
+}
+
+.gift-registry-not-found-footer {
+    padding-bottom: 2rem;
+}
+
+.gift-registry-footer-border {
+    .btn-outline-primary {
+        width: 100%;
+    }
+
+    .more-btn-border {
+        border-top: 1px dashed $grey3;
+        padding-top: 1.5em;
+        margin-left: 1.5em;
+        margin-right: 1.5em;
+    }
+}
+
+.more-btn-wrapper {
+    width: 100%;
+}
+
+.gift-registry-to-remove {
+    font-weight: bold;
+}
+
+// prettier-ignore
+.empty-giftRegistrylist-msg {  /* stylelint-disable-line */
+    padding-top: 5rem;
+    padding-bottom: 3rem;
+}
+
+.gift-registry-item-update-button-block {
+    text-align: center;
+
+    @include media-breakpoint-only(xs) {
+        padding-bottom: 1.625em;
+
+        .btn {
+            width: 98%;
+            margin: 1%;
+            display: block;
+        }
+    }
+}
+
+.gift-registry-quantity-desired {
+    padding: 0;
+}
+
+.no-co-registrant,
+.no-post-event-address {
+    .event-edit-button,
+    .event-summary,
+    .card-body {
+        display: none;
+    }
+}
+
+.add-co-registrant,
+.add-post-event-address {
+    .edit-button {
+        display: none;
+    }
+}
+
+.gr-landing-links {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    text-align: center;
+    text-decoration: underline;
+    color: $blue;
+}
+
+.advanced-search-toggle {
+    color: $blue;
+    cursor: pointer;
+}
+
+.gr-search-results-count {
+    text-align: center;
+}
+
+.gr-search-results {
+    margin-left: 0;
+    margin-right: 0;
+
+    .card {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .gift-registry-footer-border {
+        width: 100%;
+    }
+}
+
+.no-results-div {
+    text-align: center;
+    padding-top: 1.5rem;
+}
+
+.clear-list-btn {
+    margin-right: 0.6rem;
+}
+
+.add-items-to-gift-registry {
+    padding-top: 2rem;
+}
+
+.gift-registry-item-to-clear {
+    font-weight: bold;
+}
+
+.gift-registry-item-to-remove {
+    font-weight: bold;
+}
+
+.gift-registry-search-heading {
+    font-size: 1.5rem;
+}
+
+.gift-registry-modal-header {
+    font-size: 1.5rem;
+}

@@ -1,0 +1,144 @@
+<isif condition="${item.bundle}">
+
+<iselse/>
+    <div class="card product-info uuid-${item.UUID} col-12">
+        <div class="line-item-header" >
+            <!--- item name --->
+            <div class="line-item-name">
+                ${item.name}
+            </div>
+            <isif condition="${!pdict.giftRegistryModel.publicView}">
+                <!--- delete giftregistry item button --->
+                <div class="d-lg-none">
+                    <button type="button" class="remove-btn remove-item-from-gift-registry btn btn-light"
+                        data-toggle="modal"
+                        data-target="#removeGiftRegistryItemModal"
+                        data-url="${URLUtils.url('GiftRegistry-RemoveProduct','pid', item.pid, 'id', pdict.giftRegistryModel.ID, 'UUID', item.UUID)}"
+                        data-name="${item.name}"
+                        aria-label="remove">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="hidden-md-down">
+                    <button type="button" class="remove-btn-lg remove-item-from-gift-registry btn btn-light"
+                        data-toggle="modal"
+                        data-name="${item.name}"
+                        data-target="#removeGiftRegistryItemModal"
+                        data-url="${URLUtils.url('GiftRegistry-RemoveProduct','pid', item.pid, 'id', pdict.giftRegistryModel.ID, 'UUID', item.UUID)}"
+                        aria-label="remove">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+             </isif>
+        </div>
+        <div class="row product-info-row" >
+            <div class="col-lg-12 d-flex flex-row">
+                <!--- image --->
+                <div class="item-image">
+                    <img class="product-image" src="${item.imageObj.small[0].url}" alt="${item.imageObj.small[0].alt}" title="${item.imageObj.small[0].title}">
+                </div>
+                <!--- attributes --->
+                <div class="item-attributes d-flex flex-column">
+                    <isloop items="${item.variationAttributes}" var="attribute">
+                        <isloop items="${attribute.values}" var="eachValue">
+                            <isif condition="${!!eachValue.selected}" />
+                               <p class="line-item-attributes">${attribute.displayName}: ${eachValue.displayValue}</p>
+                            </isif>
+                        </isloop>
+                    </isloop>
+                    <isif condition="${item.options}" />
+                        <isloop items="${item.options}" var="option">
+                            <isif condition="${!!option}" />
+                                <p class="line-item-attributes">${option.displayName}:${option.displayValue}</p>
+                            </isif>
+                        </isloop>
+                    </isif>
+                    <!--- availability --->
+                    <div class="line-item-availability availability-${item.UUID}">
+                        <isloop items="${item.availability.messages}" var="message">
+                            <p class="line-item-attributes">${message}</p>
+                        </isloop>
+                        <isif condition="${item.availability.inStockDate}">
+                            <p class="line-item-attributes line-item-instock-date">
+                                ${item.availability.inStockDate}
+                            </p>
+                        </isif>
+                    </div>
+                    <isif condition=${!pdict.giftRegistryModel.publicView}>
+                        <!--- edit link --->
+                        <div class="edit-gr-item">
+                            <a href="${item.getProductUrl}"
+                               class="edit"
+                               data-toggle="modal" data-target="#editGiftRegistryProductModal"
+                               title="${Resource.msg('link.edit.item','cart',null)}">${Resource.msg('link.edit.item','giftRegistry',null)}
+                            </a>
+                        </div>
+                    </isif>
+                </div>
+            </div>
+        </div>
+        <div class="row product-info-row" >
+            <div class="col-12 line-dotted"></div>
+        </div>
+        <div class="row product-card-price product-info-row" >
+            <!---item unit price --->
+            <div class="col-6">
+                <p class="line-item-price-info">${Resource.msg('label.each.item.price','cart',null)}</p>
+                <isset name="price" value="${item.priceObj}" scope="page"/>
+                <isinclude template="/product/components/pricing/main" />
+            </div>
+            <!--- quantity --->
+            <div class="col-6 line-item-quantity">
+                <div>
+                    <label class="line-item-pricing-info quantity-label" for="quantity">${Resource.msg('field.select.quantity','giftRegistry',null)}</label>
+                </div>
+                <div>
+                    <select class="form-control quantity custom-select"
+                        data-uuid="${item.UUID}"
+                        data-pid="${item.pid}"
+                        data-action="${pdict.actionUrls.updateQuantityUrl}"
+                        data-pre-select-qty="${item.qty}"
+                        id="quantity"
+                        name="quantity"
+                    >
+                        <isloop begin="${item.minOrderQuantity}" end="${item.desiredQuantity}" status="status">
+                            <isif condition="${item.qty === status.index}">
+                                <option selected>${status.index}</option>
+                            <iselse/>
+                                <option>${status.index}</option>
+                            </isif>
+                        </isloop>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row product-info-row" >
+            <div class="col-12 line-dotted"></div>
+        </div>
+        <div class="row product-info-row" >
+            <div class="col-md-7 col-6 custom-checkbox gr-make-item-public">
+                <!--- quantity desired / purchased --->
+                <div class="col-12 gr-desired-purchased">
+                    <isif condition="${item.purchasedQuantity >= item.desiredQuantity}"><i class="fa fa-check-circle"></i></isif>
+                    ${Resource.msgf('giftregistry.quantity.purchased.desired.label','giftRegistry', null, item.purchasedQuantity, item.desiredQuantity)}
+                </div>
+                <!--- Item public checkbox --->
+                <isif condition="${!pdict.giftRegistryModel.publicView}">
+                    <div class="col-12 public-item control custom-checkbox giftregistry-hide">
+                        <input ${!item.publicItem ? 'checked="checked"' : ''} class="custom-control-input" type="checkbox" value="true" id="isPublic-${item.UUID}" name="isPublic-${item.UUID}" data-id="${item.UUID}">
+                        <label for="isPublic-${item.UUID}" class="custom-control-label giftregistry-item-checkbox">
+                            ${Resource.msg('checkbox.makePublic', 'giftRegistry', null)}
+                        </label>
+                    </div>
+                </isif>
+            </div>
+            <div class="col-md-5 col-6">
+                <!--- add to cart --->
+                <button class="add-to-cart gr-add-to-cart btn btn-primary" data-pid="${item.UUID}" data-list-id="${pdict.giftRegistryModel.ID}" data-url="${pdict.addToCartURL}">
+                    <i class="fa fa-shopping-bag"></i>
+                    ${Resource.msg('button.addtocart', 'common', null)}
+                </button>
+            </div>
+        </div>
+    </div>
+</isif>

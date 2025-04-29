@@ -1,0 +1,29 @@
+<isset name="postEventaddress" value="${false}" scope="page"/>
+<div class="col col-sm-6">
+    <div class="card pre-event-shipping-card">
+        <div class="card-header">
+            <h2 class="pull-left registry-info-header-empty">${Resource.msg('heading.pre.event.shipping', 'giftRegistry', null)}</h2>
+        </div>
+        <div class="card-body">
+            <isset name="registryShippingAddress" value="${pdict.form.giftRegistryShippingAddress.preEventShippingAddress}" scope="page"/>
+            <isset name="address" value="${pdict.form.giftRegistryShippingAddress.preEventShippingAddress}" scope="page"/>
+            
+            <isif condition="${pdict.addressSelector.addresses.customerAddresses.length > 0}">
+                <isinclude template="giftRegistry/components/addressSelector" />
+            </isif>
+            <isinclude template="giftRegistry/forms/addressForm" />
+
+            <div class="form-group">
+                <div class="custom-control custom-checkbox">
+                    <input class="custom-control-input hasPostShippingAddress" type="checkbox" id="hasPostShippingAddress"
+                        <isprint value="${pdict.form.postShippingCheck.attributes}" encoding="off" />
+                    >
+                    <label for="hasPostShippingAddress" class="custom-control-label">
+                        ${Resource.msg('field.add.post.shipping.address', 'giftRegistry', null)}
+                    </label>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

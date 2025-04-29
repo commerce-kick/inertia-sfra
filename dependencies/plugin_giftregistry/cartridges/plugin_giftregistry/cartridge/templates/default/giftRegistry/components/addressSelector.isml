@@ -1,0 +1,11 @@
+<div class="form-group">
+    <label class="form-control-label" for="${postEventaddress ? 'post_': ''}grAddressSelector">${Resource.msg('select.label.from.address', 'forms', null)}</label>
+    <select id="${postEventaddress ? 'post_': ''}grAddressSelector" class="form-control custom-select grAddressSelector" name="${postEventaddress ? 'post_': ''}grAddressSelector">
+        <option value="new" data-uuid="">
+            ${Resource.msg('option.shipping.selector.none', 'giftRegistry', null)}
+        </option>
+        <isloop items="${pdict.addressSelector.addresses.customerAddresses}" var="customerAddress">
+            <isinclude template="/giftRegistry/components/addressSelectorOption" />
+        </isloop>
+    </select>
+</div>

@@ -1,0 +1,15 @@
+node_modules/
+
+cartridges/plugin_giftregistry/cartridge/static/*/css/
+cartridges/plugin_giftregistry/cartridge/static/*/js/
+cartridges/plugin_giftregistry/cartridge/static/*/fonts/
+
+coverage/
+npm-debug.log
+cartridges.zip
+.idea/
+dw.json
+.DS_Store
+tmp/
+/.vscode
+test/integration/config.json

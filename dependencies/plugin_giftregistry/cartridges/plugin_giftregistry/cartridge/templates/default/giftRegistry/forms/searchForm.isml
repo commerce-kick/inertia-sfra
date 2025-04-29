@@ -1,0 +1,141 @@
+ <div class="card">
+    <div class="card-header">
+        <h2 class="gift-registry-search-heading">${Resource.msg('heading.search.gr.form', 'forms', null)}</h2>
+    </div>
+
+    <div class="card-body">
+        <form class="search-for-gr" method="POST" name="search-for-gr">
+            <p>${Resource.msg('header.form.search.gr.text', 'forms', null)}</p>
+
+            <div class="form-group required">
+                <label class="form-control-label" for="searchFirstName">
+                    ${Resource.msg('field.registrant.first.name', 'giftRegistry', null)}
+                </label>
+                <input
+                    type="text"
+                    required
+                    class="form-control search-first-name"
+                    id="searchFirstName"
+                    name="searchFirstName"
+                    data-missing-msg="${Resource.msg('error.registrant.missing.field', 'giftRegistry', null)}">
+                <div class="invalid-feedback"></div>
+            </div>
+
+            <div class="form-group required">
+                <label class="form-control-label" for="searchLastName">
+                    ${Resource.msg('field.registrant.last.name', 'giftRegistry', null)}
+                </label>
+                <input
+                    type="text"
+                    required
+                    class="form-control search-last-name"
+                    id="searchLastName"
+                    name="searchLastName"
+                    data-missing-msg="${Resource.msg('error.registrant.missing.field', 'giftRegistry', null)}">
+                <div class="invalid-feedback"></div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-control-label" for="searchEventMonth">
+                    ${Resource.msg('field.event.month', 'giftRegistry', null)}
+                </label>
+                <input
+                    type="number"
+                    class="form-control"
+                    id="searchEventMonth"
+                    min="1"
+                    max="12"
+                    name="searchEventMonth">
+            </div>
+
+            <div class="form-group">
+                <label class="form-control-label" for="searchEventYear">
+                    ${Resource.msg('field.event.year', 'giftRegistry', null)}
+                </label>
+                <input
+                    type="number"
+                    class="form-control"
+                    id="searchEventYear"
+                    name="searchEventYear">
+            </div>
+            <button class="form-group advanced-search-toggle js-toggler" type="button" aria-controls="advanced-search-content" aria-expanded="false">
+                <i class="fa fa-plus fa-border advanced-icon" aria-hidden="true"></i>
+                <span>${Resource.msg('txt.advance.search', 'giftRegistry', null)}</span>
+            </button>
+
+            <div class="advanced-search d-none" id="advanced-search-content" role="region">
+                <div class="form-group">
+                    <label class="form-control-label" for="searchGREmail">
+                        ${Resource.msg('field.registrant.email', 'giftRegistry', null)}
+                    </label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="searchGREmail"
+                        name="searchGREmail"
+                        pattern="^[\w.%+-]+@[\w.-]+\.[\w]{2,6}$"
+                        maxlength="50">
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="searchGRName">
+                        ${Resource.msg('field.event.name', 'giftRegistry', null)}
+                    </label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="searchGRName"
+                        name="searchGRName"
+                        maxlength="50">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="searchGRCity">
+                        ${Resource.msg('field.event.city', 'giftRegistry', null)}
+                    </label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="searchGRCity"
+                        name="searchGRCity"
+                        maxlength="50">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="searchGRState">
+                        ${Resource.msg('field.event.search.state', 'giftRegistry', null)}
+                    </label>
+                    <select id="searchGRState" class="form-control custom-select" name="searchGRState">
+                        <isloop items="${pdict.states.options}" var="option">
+                            <option value="${option.id || ''}">${option.label}</option>
+                        </isloop>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="searchGRCountry">
+                        ${Resource.msg('field.event.search.country', 'giftRegistry', null)}
+                    </label>
+                    <select id="searchGRCountry" class="form-control custom-select" name="searchGRCountry">
+                        <option value=""></option>
+                        <isloop items="${pdict.countries.options}" var="country">
+                            <option value="${country.id || ''}">${country.label}</option>
+                        </isloop>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <button
+                    class="btn btn-block btn-primary search-registries"
+                    type="submit"
+                    name="submit"
+                    value="submit"
+                    data-url="${pdict.urlSearchGR}">
+                    ${Resource.msg('button.find.list', 'giftRegistry', null)}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+

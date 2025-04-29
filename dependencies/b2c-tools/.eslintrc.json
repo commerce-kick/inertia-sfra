@@ -1,0 +1,32 @@
+{
+  "extends": "eslint:recommended",
+  "root": true,
+  "parserOptions": {
+    "ecmaVersion": 2022
+  },
+  "env": {
+    "node": true,
+    "es6": true,
+    "commonjs": true
+  },
+  "rules": {
+    "quotes": 0,
+    "indent": [
+      "error",
+      4,
+      {
+        "SwitchCase": 1
+      }
+    ],
+    "no-console": 0,
+    "no-unused-vars": [
+      "error",
+      {
+        "vars": "all",
+        "args": "after-used",
+        "argsIgnorePattern": "^_",
+        "ignoreRestSiblings": true
+      }
+    ]
+  }
+}

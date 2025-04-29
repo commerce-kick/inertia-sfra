@@ -1,0 +1,11 @@
+.item-image {
+    position: relative;
+}
+
+.gift-registry-item .item-image::after {
+    font-family: FontAwesome, sans-serif;
+    content: "\F06B";
+    position: absolute;
+    right: 0.3rem;
+    bottom: 0;
+}

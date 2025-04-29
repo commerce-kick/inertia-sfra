@@ -1,0 +1,107 @@
+<isdecorate template="common/layout/page">
+    <isscript>
+        var assets = require('*/cartridge/scripts/assets.js');
+        assets.addJs('/js/giftRegistry.js');
+        assets.addCss('/css/giftRegistry.css');
+    </isscript>
+
+    <div class="hero slant-down gift-registry-banner">
+        <h1 class="page-title">${Resource.msg('title.gift.registry.page','giftRegistry',null)}</h1>
+    </div>
+
+    <div class="container create-registry">
+        <isinclude template="components/breadcrumbs/pageBreadcrumbs"/>
+
+        <form class="create-gift-registry-form" action="${pdict.actionUrls.createRegistry}">
+            <input type="hidden" name="${pdict.csrf.tokenName}" value="${pdict.csrf.token}"/>
+            <fieldset class="event-and-registrant" data-action="${pdict.actionUrls.validateEventandRegistrant}">
+                <div class="row justify-content-center event-row">
+                    <isinclude template="giftRegistry/eventCard" />
+                </div>
+
+                <div class="row justify-content-center registrant-row">
+                    <isinclude template="giftRegistry/registrantCard" />
+                </div>
+
+                <div class="row justify-content-center co-registrant-row d-none">
+                    <isinclude template="giftRegistry/coRegistrantCard" />
+                </div>
+
+                <div class="row justify-content-center action-button-row">
+                    <div class="col-12 col-sm-6">
+                        <button class="btn btn-primary btn-block validate-event-info action-buttons" type="button">
+                            ${Resource.msg('button.next.address','giftRegistry',null)}
+                        </button>
+                    </div>
+                </div>
+            </fieldset>
+
+            <div class="event-and-registrant-summary d-none">
+                <div class="row justify-content-center event-summary-row">
+                    <div class="col col-sm-6">
+                        <isinclude template="giftRegistry/summary/eventSummaryCard" />
+                    </div>
+                </div>
+
+                <div class="row justify-content-center registrant-summary-row">
+                    <div class="col col-sm-6">
+                        <isinclude template="giftRegistry/summary/registrantSummaryCard" />
+                    </div>
+                </div>
+
+                <div class="row justify-content-center co-registrant-summary-row d-none">
+                    <div class="col col-sm-6">
+                        <isinclude template="giftRegistry/summary/coRegistrantSummaryCard" />
+                    </div>
+                </div>
+            </div>
+
+            <fieldset class="event-shipping d-none" data-action="${pdict.actionUrls.validateShipping}">
+                <div class="row justify-content-center pre-event-shipping-row">
+                    <isinclude template="giftRegistry/preEventShippingCard" />
+                </div>
+
+                <div class="row justify-content-center post-event-shipping-row d-none">
+                    <isinclude template="giftRegistry/postEventShippingCard" />
+                </div>
+
+                <div class="row justify-content-center action-button-row">
+                    <div class="col-12 col-sm-6">
+                        <button class="btn btn-primary btn-block validate-shipping-info action-buttons" type="button">
+                            ${Resource.msg('button.next.preview','giftRegistry',null)}
+                        </button>
+                    </div>
+                </div>
+            </fieldset>
+
+            <div class="event-shipping-summary d-none">
+                <div class="row justify-content-center pre-event-shipping-summary-row">
+                    <div class="col col-sm-6">
+                        <isinclude template="giftRegistry/summary/preEventShippingSummaryCard" />
+                    </div>
+                </div>
+
+                <div class="row justify-content-center post-event-shipping-summary-row d-none">
+                    <div class="col col-sm-6">
+                        <isinclude template="giftRegistry/summary/postEventShippingSummaryCard" />
+                    </div>
+                </div>
+            </div>
+
+            <fieldset class="preview d-none">
+                <div class="row justify-content-center action-button-row">
+                    <div class="col-12 col-sm-6">
+                        <button
+                            class="btn btn-primary btn-block create-registry-action action-buttons"
+                            type="submit"
+                            data-url="${pdict.actionUrls.createRegistry}"
+                        >
+                            ${Resource.msg('button.create.registry','giftRegistry',null)}
+                        </button>
+                    </div>
+                </div>
+            </fieldset>
+            <div class="failedAttempt d-none col-12"></div>
+        </form>
+    </div>
+</isdecorate>

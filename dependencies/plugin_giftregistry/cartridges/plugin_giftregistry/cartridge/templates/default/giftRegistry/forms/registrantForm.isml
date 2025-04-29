@@ -1,0 +1,61 @@
+<fieldset class="registrant-form ${registrantForm.htmlName}">
+    <div class="form-group ${registrantForm.role.mandatory === true ? 'required' : ''} ${registrantForm.role.htmlName}">
+        <label class="form-control-label" for="${registrantForm.role.htmlName}">
+            ${Resource.msg('field.registrant.role', 'giftRegistry', null)}
+        </label>
+        <input
+            type="text"
+            class="form-control"
+            id="${registrantForm.role.htmlName}"
+            aria-describedby="form-registrant-error"
+            value="${pdict.showEditForm ? registrantForm.role.htmlValue : ''}"
+            <isprint value=${registrantForm.role.attributes} encoding="off"/>
+        >
+        <div class="invalid-feedback" id="form-registrant-error"></div>
+    </div>
+    <div class="form-group ${registrantForm.firstName.mandatory === true ? 'required' : ''} ${registrantForm.firstName.htmlName}">
+        <label class="form-control-label" for="${registrantForm.firstName.htmlName}">
+            ${Resource.msg('field.registrant.first.name', 'giftRegistry', null)}
+        </label>
+        <input
+            type="text"
+            class="form-control"
+            id="${registrantForm.firstName.htmlName}"
+            aria-describedby="form-firstName-error"
+            value="${registrantForm.firstName.htmlValue}"
+            <isprint value=${registrantForm.firstName.attributes} encoding="off"/>
+            ${isRegistrantForm ? 'readonly' : ''}
+        >
+        <div class="invalid-feedback" id="form-firstName-error"></div>
+    </div>
+    <div class="form-group ${registrantForm.lastName.mandatory === true ? 'required' : ''} ${registrantForm.lastName.htmlName}">
+        <label class="form-control-label" for="${registrantForm.lastName.htmlName}">
+            ${Resource.msg('field.registrant.last.name', 'giftRegistry', null)}
+        </label>
+        <input
+            type="text"
+            class="form-control"
+            id="${registrantForm.lastName.htmlName}"
+            aria-describedby="form-lastName-error"
+            value="${registrantForm.lastName.htmlValue}"
+            <isprint value=${registrantForm.lastName.attributes} encoding="off"/>
+            ${isRegistrantForm ? 'readonly' : ''}
+        >
+        <div class="invalid-feedback" id="form-lastName-error"></div>
+    </div>
+    <div class="form-group ${registrantForm.email.mandatory === true ? 'required' : ''} ${registrantForm.email.htmlName}">
+        <label class="form-control-label" for="${registrantForm.email.htmlName}">
+            ${Resource.msg('field.registrant.email', 'giftRegistry', null)}
+        </label>
+        <input
+            type="text"
+            class="form-control"
+            id="${registrantForm.email.htmlName}"
+            aria-describedby="form-email-error"
+            value="${registrantForm.email.htmlValue}"
+            <isprint value=${registrantForm.email.attributes} encoding="off"/>
+            ${isRegistrantForm ? 'readonly' : ''}
+        >
+        <div class="invalid-feedback" id="form-email-error"></div>
+    </div>
+</fieldset>

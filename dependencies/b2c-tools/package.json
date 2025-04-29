@@ -1,0 +1,92 @@
+{
+  "name": "@SalesforceCommerceCloud/b2c-tools",
+  "version": "0.31.3",
+  "description": "SFCC Data Tools",
+  "license": "UNLICENSED",
+  "main": "./lib/index.js",
+  "types": "./types/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SalesforceCommerceCloud/b2c-tools.git"
+  },
+  "publishConfig": {
+    "@SalesforceCommerceCloud:registry": "https://npm.pkg.github.com"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "bin": {
+    "b2c-tools": "./cli.js"
+  },
+  "scripts": {
+    "test": "jest",
+    "test:unit": "jest",
+    "coverage": "npm test -- --coverage",
+    "build": "tsc -p tsconfig.json",
+    "lint": "eslint '*/**/*.{js,ts,tsx}'",
+    "build:singlefile": "webpack --config webpack.config.js",
+    "prepublishOnly": "npm run build",
+    "docs": "documentation build lib/index.js --resolve node -f md --github -o ./docs/RAWAPI.md"
+  },
+  "files": [
+    "lib/",
+    "types/",
+    "README.md",
+    "package.json",
+    "cli.js"
+  ],
+  "keywords": [],
+  "author": "Charles Lavery <clavery@salesforce.com>",
+  "devDependencies": {
+    "@types/node": "20.12.4",
+    "@types/xml2js": "^0.4.11",
+    "axios-mock-adapter": "1.19.0",
+    "documentation": "13.2.5",
+    "eslint": "8.29.0",
+    "eslint-plugin-jest": "^27.1.6",
+    "jest": "27.4.5",
+    "msw": "^2.2.10",
+    "node-loader": "^2.0.0",
+    "typescript": "5.4.3",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "adm-zip": "0.5.9",
+    "archiver": "5.3.0",
+    "axios": "0.27.2",
+    "chokidar": "^3.5.3",
+    "dotenv": "^16.0.0",
+    "fast-xml-parser": "4.3.6",
+    "fs-extra": "10.0.0",
+    "glob": "7.1.7",
+    "inquirer": "8.1.2",
+    "open": "8.2.1",
+    "winston": "3.3.3",
+    "xml2js": "0.6.2",
+    "yargs": "17.2.1"
+  },
+  "jest": {
+    "verbose": true,
+    "coverageReporters": [
+      "json-summary",
+      "text",
+      "lcov"
+    ],
+    "collectCoverageFrom": [
+      "lib/*.js"
+    ]
+  },
+  "b2c-tools": {
+    "defaultClientId": "10982068-3f03-4b52-86cc-ba45f15f8b88",
+    "library": "RefArchSharedLibrary",
+    "asset-query": [
+      "image.path"
+    ],
+    "vars": {
+      "testFromPackage": "test"
+    },
+    "features-dir": "./examples/features",
+    "deploy-script": "./examples/b2c-deploy.js"
+  }
+}

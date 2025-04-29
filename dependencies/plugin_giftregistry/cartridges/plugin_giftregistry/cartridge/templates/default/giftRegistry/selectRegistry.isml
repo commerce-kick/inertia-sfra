@@ -1,0 +1,46 @@
+<isdecorate template="common/layout/page">
+    <isscript>
+        var assets = require('*/cartridge/scripts/assets.js');
+        assets.addJs('/js/giftRegistrySelector.js');
+        assets.addCss('/css/giftRegistry.css');
+    </isscript>
+
+    <div class="hero slant-down gift-registry-banner">
+        <h1 class="page-title">${Resource.msg('title.gift.registry.page','giftRegistry',null)}</h1>
+    </div>
+
+    <div class="container select-registry">
+        <div class="row justify-content-center">
+            <div class="col-12 col-sm-6">
+                <div>
+                    <h2>${Resource.msg('title.gift.registry.page','giftRegistry',null)}</h2>
+                </div>
+                <div>
+                    <p>${Resource.msg('msg.select.registry','giftRegistry',null)}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center ${pdict.registries.length ? 'd-none' : ''}">
+            <div class="col-12 col-sm-6 text-center">
+                <p class="no-registry">${Resource.msg('msg.no.registry.found','giftRegistry',null)}</p>
+            </div>
+        </div>
+
+        <isloop items="${pdict.registries}" var="registry">
+            <div class="row justify-content-center">
+                <div class="col col-sm-6">
+                    <isinclude template="giftRegistry/selectRegistryCard" />
+                </div>
+            </div>
+        </isloop>
+
+        <div class="row justify-content-center">
+            <div class="col-6 text-center create-registry">
+                <a href="${pdict.createRegistryLink}">
+                    ${Resource.msg('link.create.new.gift.registry', 'giftRegistry', null)}
+                </a>
+            </div>
+        </div>
+    </div>
+</isdecorate>

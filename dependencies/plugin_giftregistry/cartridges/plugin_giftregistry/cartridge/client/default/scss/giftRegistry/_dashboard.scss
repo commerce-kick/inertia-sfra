@@ -1,0 +1,53 @@
+@import "variables";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/mixins/breakpoints";
+
+.account-gift-registry-item {
+    border-bottom: 1px dashed $grey3;
+    border-left: 0 none;
+    border-right: 0 none;
+    border-top: 0 none;
+    margin-right: 0.15rem;
+    margin-left: 0.15rem;
+
+    .line-item-event-name {
+        padding-right: 0.1rem;
+    }
+
+    .line-item-event-date {
+        padding-right: 0.1rem;
+        padding-left: 0.1rem;
+    }
+
+    .line-item-city-state {
+        padding-right: 0.1rem;
+        padding-left: 0.1rem;
+    }
+}
+
+.account-gift-registry-item .remove-gift-registry {
+    color: $grey4;
+    font-size: 1.75em;
+    padding: 0;
+    position: absolute;
+    border: none;
+    background-color: $white;
+    top: -0.65rem;
+    right: 0.25rem;
+}
+
+.gift-registry-list-account-card {
+    .account-gift-registry-item {
+        a {
+            text-decoration: underline;
+        }
+    }
+}
+
+.account-gift-registry-item:last-child {
+    border: 0 none;
+}
+
+.gift-registry-modal-header {
+    font-size: 1.5rem;
+}

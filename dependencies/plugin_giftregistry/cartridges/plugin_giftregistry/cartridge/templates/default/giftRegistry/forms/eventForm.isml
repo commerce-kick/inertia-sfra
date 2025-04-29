@@ -1,0 +1,86 @@
+<fieldset class="event-info-form">
+    <div class="form-group ${pdict.form.giftRegistryEvent.event.eventName.mandatory === true ? 'required' : ''} ${pdict.form.giftRegistryEvent.event.eventName.htmlName}">
+        <label class="form-control-label" for="${pdict.form.giftRegistryEvent.event.eventName.htmlName}">
+            ${Resource.msg('field.event.name', 'giftRegistry', null)}
+        </label>
+        <input
+            type="text"
+            class="form-control"
+            id="${pdict.form.giftRegistryEvent.event.eventName.htmlName}"
+            value="${pdict.showEditForm ? pdict.form.giftRegistryEvent.event.eventName.htmlValue : ''}"
+            aria-describedby="invalid-eventname-error"
+            <isprint value=${pdict.form.giftRegistryEvent.event.eventName.attributes} encoding="off"/>
+        >
+        <div id="invalid-eventname-error" class="invalid-feedback"></div>
+    </div>
+
+    <div class="form-group ${pdict.form.giftRegistryEvent.event.eventDate.mandatory === true ? 'required' : ''} ${pdict.form.giftRegistryEvent.event.eventDate.htmlName}">
+        <label class="form-control-label" for="${pdict.form.giftRegistryEvent.event.eventDate.htmlName}">
+            ${Resource.msg('field.event.date', 'giftRegistry', null)}
+        </label>
+        <input
+            type="text"
+            class="form-control grEventDate"
+            id="${pdict.form.giftRegistryEvent.event.eventDate.htmlName}"
+            value="${Resource.msgf('date.html.value', 'forms', null, pdict.giftRegistryModel.eventInfo.dateObj.d, pdict.giftRegistryModel.eventInfo.dateObj.m, pdict.giftRegistryModel.eventInfo.dateObj.y)}"
+            placeholder="${!!pdict.form.giftRegistryEvent.event.eventDate.htmlValue ? Resource.msgf('date.html.value', 'forms', null, pdict.giftRegistryModel.eventInfo.dateObj.d, pdict.giftRegistryModel.eventInfo.dateObj.m, pdict.giftRegistryModel.eventInfo.dateObj.y) : Resource.msg('placeholder.text.event.date.format', 'giftRegistry', null)}"
+            aria-describedby="invalid-eventdate-error"
+            <isprint value=${pdict.form.giftRegistryEvent.event.eventDate.attributes} encoding="off"/>
+        >
+        <div id="invalid-eventdate-error" class="invalid-feedback"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group ${pdict.form.giftRegistryEvent.event.eventCountry.mandatory === true ? 'required' : ''} ${pdict.form.giftRegistryEvent.event.eventCountry.htmlName}">
+                <label class="form-control-label" for="${pdict.form.giftRegistryEvent.event.eventCountry.htmlName}">
+                    ${Resource.msg('field.event.country', 'giftRegistry', null)}
+                </label>
+                <select class="form-control custom-select" id="${pdict.form.giftRegistryEvent.event.eventCountry.htmlName}"
+                    <isprint value=${pdict.form.giftRegistryEvent.event.eventCountry.attributes} encoding="off"/>
+                >
+                    <isloop items=${pdict.form.giftRegistryEvent.event.eventCountry.options} var="country">
+                        <option id="${country.id}" value="${country.htmlValue}">${country.label}</option>
+                    </isloop>
+                </select>
+                <div class="invalid-feedback"></div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group ${pdict.form.giftRegistryEvent.event.eventState.stateCode.mandatory === true ? 'required' : ''} ${pdict.form.giftRegistryEvent.event.eventState.stateCode.htmlName}">
+                <label class="form-control-label" for="${pdict.form.giftRegistryEvent.event.eventState.stateCode.htmlName}">
+                    ${Resource.msg('field.event.state', 'giftRegistry', null)}
+                </label>
+                <select class="form-control" id="${pdict.form.giftRegistryEvent.event.eventState.stateCode.htmlName}" aria-describedby="invalid-state-error"
+                    <isprint value="${pdict.form.giftRegistryEvent.event.eventState.stateCode.attributes}" encoding="off" />
+                >
+                    <isloop items=${pdict.form.giftRegistryEvent.event.eventState.stateCode.options} var="state">
+                        <option
+                            id="${state.id}"
+                            <isif condition="${pdict.showEditForm}">value="${state.value || ''}"</isif>
+                            <isif condition="${state.htmlValue == pdict.form.giftRegistryEvent.event.eventState.htmlValue}">selected</isif>
+                        >
+                            ${state.htmlValue || ' '}
+                        </option>
+                    </isloop>
+                </select>
+                <div id="invalid-state-error" class="invalid-feedback"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group ${pdict.form.giftRegistryEvent.event.eventCity.mandatory === true ? 'required' : ''} ${pdict.form.giftRegistryEvent.event.eventCity.htmlName}">
+        <label class="form-control-label" for="${pdict.form.giftRegistryEvent.event.eventCity.htmlName}">
+            ${Resource.msg('field.event.city', 'giftRegistry', null)}
+        </label>
+        <input
+            type="text"
+            class="form-control"
+            id="${pdict.form.giftRegistryEvent.event.eventCity.htmlName}"
+            value="${pdict.showEditForm ? pdict.form.giftRegistryEvent.event.eventCity.htmlValue : ''}"
+            aria-describedby="invalid-eventcity-error"
+            <isprint value=${pdict.form.giftRegistryEvent.event.eventCity.attributes} encoding="off"/>
+        >
+        <div id="invalid-eventcity-error" class="invalid-feedback"></div>
+    </div>
+</fieldset>

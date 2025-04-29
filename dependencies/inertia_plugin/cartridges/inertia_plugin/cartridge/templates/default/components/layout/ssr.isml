@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="${pdict.csrf.token}">
+
+    <isif condition="${pdict.meta}">
+        <isloop items="${pdict.meta}" var="metaTag">
+            <isprint value="${metaTag}" encoding="off" />
+        </isloop>
+    </isif>
+
+
+    <isif condition="${pdict.canonicalUrl}">
+        <link rel="canonical" href="${pdict.canonicalUrl}" />
+    </isif>
+
+
+    <isif condition="${pdict.html.head}">
+        <isloop items="${pdict.html.head}" var="metaTag">
+            <isprint value="${metaTag}" encoding="off" />
+        </isloop>
+    </isif>
+
+    <isinclude url="${URLUtils.url('Inertia-Head', 'component', pdict.page.component)}" />
+
+</head>
+
+<body>
+
+    <isprint value="${pdict.html.body}" encoding="off" />
+
+</body>
+
+</html>

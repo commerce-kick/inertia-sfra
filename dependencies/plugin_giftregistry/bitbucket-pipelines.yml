@@ -1,0 +1,42 @@
+# This is a sample build configuration for JavaScript.
+# Check our guides at https://confluence.atlassian.com/x/14UWN for more examples.
+# Only use spaces to indent your .yml configuration.
+# -----
+# You can specify a custom docker image from Docker Hub as your build environment.
+image: node:6.9.4
+
+pipelines:
+  default:
+    - step:
+        caches:
+          - node
+        script: # Modify the commands below to build your repository.
+          - npm install
+          - npm run lint
+          - export cloneDir=$(pwd) # Gets directory of gift registry plugin
+
+          - cd ..
+          - git clone git@bitbucket.org:demandware/storefront-reference-architecture.git # Updates base repo
+          - cd ./storefront-reference-architecture
+          - git checkout integration
+          - npm install
+          - npm run compile:js
+          - npm run compile:scss
+          - npm run compile:fonts
+          - node node_modules/.bin/dwupload --hostname ${HOSTNAME} --username ${USERNAME} --password "${PASSWORD}" --cartridge cartridges/app_storefront_base
+          - node node_modules/.bin/dwupload --hostname ${HOSTNAME} --username ${USERNAME} --password "${PASSWORD}" --cartridge cartridges/modules
+
+          - git clone git@bitbucket.org:demandware/lib_productlist.git
+          - cd ./lib_productlist
+          - npm install
+          - node node_modules/.bin/dwupload --hostname ${HOSTNAME} --username ${USERNAME} --password "${PASSWORD}" --cartridge cartridges/lib_productlist
+          - cd ../
+
+          # Back to gift registry plugin to execute
+          - cd $cloneDir
+          - npm run compile:js
+          - npm run compile:scss
+          - npm run test
+
+          - node node_modules/.bin/dwupload --hostname ${HOSTNAME} --username ${USERNAME} --password "${PASSWORD}" --cartridge cartridges/plugin_giftregistry
+          - npm run test:integration -- --baseUrl https://${HOSTNAME}/on/demandware.store/Sites-RefArch-Site/en_US "test/integration/*"

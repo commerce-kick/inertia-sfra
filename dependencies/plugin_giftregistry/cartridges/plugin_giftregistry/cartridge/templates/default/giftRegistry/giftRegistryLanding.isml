@@ -1,0 +1,63 @@
+<isdecorate template="common/layout/page">
+    <isscript>
+        var assets = require('*/cartridge/scripts/assets.js');
+        assets.addJs('/js/giftRegistry.js');
+        assets.addCss('/css/giftRegistry.css');
+    </isscript>
+    <div class="hero slant-down gift-registry-banner">
+        <h1 class="page-title">${Resource.msg('title.gift.registry.page', 'giftRegistry', null)}</h1>
+    </div>
+    <div class="container gift-registry-landing-page">
+        <isinclude template="giftRegistry/components/giftRegistryBreadcrumbs"/>
+
+        <div class="row justify-content-center">
+            <div class="col-sm-6">
+                <isinclude template="giftRegistry/forms/searchForm" />
+                <div class="card">
+                     <div class="card-header">
+                        <h3>${Resource.msg('heading.search.gr.create', 'giftRegistry', null)}</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="gr-landing-links">
+                            <a href="${pdict.urlCreateGR}">
+                                ${Resource.msg('link.search.gr.create', 'giftRegistry', null)}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                 <div class="card">
+                    <div class="card-header">
+                        <h3>${Resource.msg('heading.search.gr.manage', 'giftRegistry', null)}</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="gr-landing-links">
+                            <a href="${pdict.urlManageGR}">
+                                ${Resource.msg('link.search.gr.manage', 'giftRegistry', null)}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="response"
+                    data-first-name=""
+                    data-last-name=""
+                    data-month=""
+                    data-year=""
+                    data-email=""
+                    data-name=""
+                    data-city=""
+                    data-state=""
+                    data-country=""
+                    data-page-size="<isprint value="${pdict.pageSize}" formatter="##" />"
+                    data-page-number="1"
+                    data-total=""
+                    data-url="${pdict.moreButtonUrl}"                    
+                >
+                    <isinclude template="giftRegistry/components/searchResults" />
+                </div>
+            </div>
+        </div>
+    </div>
+</isdecorate>
+

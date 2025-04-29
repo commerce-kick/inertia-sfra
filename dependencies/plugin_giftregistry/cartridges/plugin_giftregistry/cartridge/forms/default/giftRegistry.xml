@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<form xmlns="http://www.demandware.com/xml/form/2008-04-19" secure="false">
+
+    <group formid="giftRegistryEvent">
+        <include formid="event" name="giftRegistryEvent"/>
+        <include formid="registrant" name="giftRegistryRegistrant"/>
+        <include formid="coRegistrant" name="giftRegistryRegistrant"/>
+    </group>
+
+    <!-- form for creating and editing shipping address -->
+    <group formid="giftRegistryShippingAddress">
+        <include formid="preEventShippingAddress" name="address"/>
+        <include formid="postEventShippingAddress" name="address"/>
+    </group>
+
+    <field formid="coRegistrantCheck" label="" type="boolean" checked="false" default-value="false"
+           binding="coRegistrantCheck" mandatory="false"
+    />
+
+    <field formid="postShippingCheck" label="" type="boolean" checked="false" default-value="false"
+           binding="postShippingCheck" mandatory="false"
+    />
+</form>

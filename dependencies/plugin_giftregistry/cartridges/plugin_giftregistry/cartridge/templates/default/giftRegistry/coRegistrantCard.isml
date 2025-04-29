@@ -1,0 +1,12 @@
+<div class="col col-sm-6">
+    <div class="card co-registrant-info-card">
+        <div class="card-header">
+            <h2 class="pull-left registry-info-header-empty">${Resource.msg('heading.co.registrant.information', 'giftRegistry', null)}</h2>
+        </div>
+        <div class="card-body">
+            <isset name="registrantForm" value="${pdict.form.giftRegistryEvent.coRegistrant}" scope="page"/>
+            <isset name="isRegistrantForm" value="${false}" scope="page" />
+            <isinclude template="giftRegistry/forms/registrantForm" />
+        </div>
+    </div>
+</div>

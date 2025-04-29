@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<form xmlns="http://www.demandware.com/xml/form/2008-04-19" secure="false">
+    <field formid="eventName" label="giftregistry.eventName" type="string" mandatory="true"
+           binding="eventName" max-length="60" missing-error="error.message.required"
+    />
+
+    <field formid="eventDate" label="giftregistry.eventDate" type="string"
+           timezoned="false" mandatory="true" binding="eventDate"
+           missing-error="error.message.required" parse-error="error.invalid.date"
+           max-length="10"
+    />
+
+    <field formid="eventCountry" label="label.input.country" type="string" mandatory="true"
+           binding="eventCountry" missing-error="error.message.required">
+        <options>
+            <option optionid="JP" label="select.option.country.japan" value="JP"/>
+        </options>
+    </field>
+
+    <include formid="eventState" name="states" missing-error="error.message.required" mandatory="true"
+             parse-error="error.message.required" value-error="error.message.required" binding="eventState"
+    />
+
+    <field formid="eventCity" label="label.input.city" type="string" mandatory="true" binding="eventCity"
+           min-length="2" max-length="50" missing-error="error.message.required"
+           range-error="error.message.between2and50"
+    />
+</form>

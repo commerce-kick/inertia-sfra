@@ -1,0 +1,10 @@
+<isif condition="${pdict.account.giftRegistryList && pdict.account.giftRegistryList.length > 0}">
+        <isloop items="${pdict.account.giftRegistryList}" var="item">
+            <isinclude template="account/giftRegistry/listCard"/>
+        </isloop>
+    <iselse>
+        <div class="text-center empty-giftRegistrylist-msg">
+            ${Resource.msg('giftRegistryList.empty.text','giftRegistry',null)}
+        </div>
+    </iselse>
+</isif>

@@ -1,0 +1,2 @@
+<isset name="customerAddress" value="${pdict.address}" scope="page" />
+<isinclude template="/giftRegistry/components/addressSelectorOption" />

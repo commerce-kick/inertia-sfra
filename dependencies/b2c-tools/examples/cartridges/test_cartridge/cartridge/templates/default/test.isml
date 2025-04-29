@@ -1,0 +1,45 @@
+
+<html>
+
+  <body>
+    <script>
+    var test = require('test');
+    var result = test.testFunction();
+    for (var i = 0; i < result.length; i++) {
+      document.write(result[i]);
+    }
+    if (test) {
+      document.write("test is not null");
+    } else {
+      document.write("test is null");
+    }
+
+    for (i=0 ; i<result.length ; i++) {
+      document.write(result[i]);
+    }
+    </script>
+
+    <isscript>
+      var test = require('test');
+      var result = test.testFunction();
+      if (test) {
+        document.write("test is not null");
+      } else {
+        document.write("test is null");
+      }
+
+      if (test) {
+        document.write("test is not null");
+      } else {
+        document.write("test is null");
+      }
+    </isscript>
+    <isif condition="${test}">
+      dadas
+      <iselseif condition="${test}">
+      test is not null
+    </isif>
+
+  </body>
+
+</html>

@@ -1,0 +1,43 @@
+
+<div class="gr-search-results-header row d-none">
+<div class="col-8">
+    <h3>${Resource.msg('heading.search.gr.results', 'giftRegistry', null)}</h3>
+</div>
+    <div class="col-4 gr-search-results-count">
+        <span class="gr-search-results-number d-none"></span>
+        <span class="gr-search-results-text d-none">${Resource.msg('heading.search.gr.results.text', 'giftRegistry', null)}</span>
+        <span class="gr-search-result-text d-none">${Resource.msg('heading.search.gr.result.text', 'giftRegistry', null)}</span>
+    </div>
+</div>
+
+<div name="gr-search-results-response" class="gr-search-results row"></div>
+<div class="no-results-div">
+    <p class="no-results-msg d-none">${Resource.msg('txt.search.no.results', 'giftRegistry', null)}</p>
+    <a href="${'#'}" class="d-none">${Resource.msg('link.search.try.again', 'giftRegistry', null)}</a>
+</div>
+<div class="gr-result-template card col-12 d-none">
+    <div class="card-header">
+        <h3 class="pull-left">${Resource.msg('heading.search.gr.manage', 'giftRegistry', null)}</h3>
+        <span class="view-gr pull-right" data-url="">${Resource.msg('link.view.registry.txt', 'giftRegistry', null)}</span>
+    </div>
+    <div class="card-body">
+        <div class="row registrant">
+            <div class="col-6 label">${Resource.msg('txt.search.results.registrant', 'giftRegistry', null)}</div>
+            <div class="col-6 text"></div>
+        </div>
+        <div class="row co-registrant">
+            <div class="col-6 label">${Resource.msg('txt.search.results.coregistrant', 'giftRegistry', null)}</div>
+            <div class="col-6 text"></div>
+        </div>
+        <div class="row event-location">
+            <div class="col-6 label">${Resource.msg('txt.search.results.location', 'giftRegistry', null)}</div>
+            <div class="col-6 text"></div>
+        </div>
+        <div class="row event-date">
+            <div class="col-6 label">${Resource.msg('txt.search.results.date', 'giftRegistry', null)}</div>
+            <div class="col-6 text"></div>
+        </div>
+    </div>
+</div>
+<isinclude template="giftRegistry/components/moreResultsButton"/>
+

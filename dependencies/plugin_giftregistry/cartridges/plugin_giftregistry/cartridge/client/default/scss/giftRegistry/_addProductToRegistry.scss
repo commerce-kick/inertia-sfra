@@ -1,0 +1,9 @@
+@import "~base/components/toastMessage";
+
+.add-to-registry-message {
+    @include toast-message;
+}
+
+.add-to-registry-alert {
+    @include toast-alert;
+}

@@ -1,0 +1,16 @@
+<div class="card">
+    <div class="card-header clearfix">
+        <h2 class="pull-left">${Resource.msg('label.giftRegistry','account',null)}</h2>
+        <isif condition="${pdict.account.giftRegistryList && pdict.account.giftRegistryList.length > 0}">
+            <a href="${URLUtils.url('GiftRegistry-Landing', 'rurl', 4)}" class="pull-right">${Resource.msg('link.view','account',null)}</a>
+        </isif>
+    </div>
+
+    <div class="card-body card-info-group gift-registry-manage-list">
+        <isinclude template="giftRegistry/listCardBody"/>
+    </div>
+
+    <div class="card-footer card-footer-border text-center">
+        <a href="${URLUtils.url('GiftRegistry-Begin')}" aria-label="${Resource.msg('label.add.new.gift.registry','account',null)}">${Resource.msg('link.addnew','account',null)}</a>
+    </div>
+</div>

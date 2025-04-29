@@ -1,0 +1,12 @@
+<div class="row justify-content-center action-button-row edit-event-btns">
+    <div class="col-6">
+        <button class="btn btn-outline-primary btn-block cancel" type="button">
+            ${Resource.msg('button.cancel','giftRegistry',null)}
+        </button>
+    </div>
+    <div class="col-6">
+        <button class="btn btn-primary btn-block action-buttons edit" type="button">
+            ${Resource.msg('button.save','giftRegistry',null)}
+        </button>
+    </div>
+</div>

@@ -1,0 +1,10 @@
+<div class="card event-info-card">
+    <div class="card-header">
+        <h4 class="pull-left">${registry.eventName}</h4>
+        <a href="${registry.url}" class="add-product pull-right">
+            ${Resource.msg('action.add.product', 'giftRegistry', null)}
+        </a>
+    </div>
+
+    <isinclude template="giftRegistry/selectRegistryCardContent" />
+</div>

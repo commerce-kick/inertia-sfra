@@ -1,0 +1,13 @@
+<div class="footer gift-registry-footer-border text-center more-btn-template ${pdict.moreResults ? '' : 'd-none'}">
+    <div class="more-btn-border"></div>
+    <button 
+        class="btn btn-outline-primary more-managed-lists" 
+        data-url="${pdict.moreButtonUrl}"
+        data-pagesize="<isprint value="${pdict.pageSize}" formatter="#"/>"
+        data-pagenumber="<isprint value="${pdict.pageNumber}" formatter="#"/>"
+        data-public="false"
+        data-total="${pdict.totalNumber}"
+    >
+        ${Resource.msg('button.giftregistry.show.more','giftRegistry',null)}
+    </button>
+</div>
