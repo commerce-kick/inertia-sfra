@@ -9,7 +9,6 @@ server.extend(module.superModule);
 
 const sharedData = require("*/cartridge/scripts/middleware/sharedData");
 const inertia = require("*/cartridge/scripts/middleware/inertiaMiddleware");
-const utils = require("*/cartridge/helpers/utils");
 
 server.append("UpdateGrid", function (req, res, next) {
   var ProductFactory = require("*/cartridge/scripts/factories/product");
@@ -36,12 +35,7 @@ server.append("UpdateGrid", function (req, res, next) {
 server.append(
   "Show",
   function (req, res, next) {
-    const viewData = res.getViewData();
-
-    const query = viewData.queryString;
-
-    const page = dw.experience.PageMgr.serializePage("homepage", null);
-    page;
+    const viewData = res.getViewData(); 
 
     res.setViewData({
       template: "Search/Show",

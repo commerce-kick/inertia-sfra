@@ -14,7 +14,6 @@ server.append(
   "Show",
   function (req, res, next) {
     const URLUtils = require("dw/web/URLUtils");
-    const c = customer.isAuthenticated();
     const viewData = res.getViewData();
 
     if (customer.isAuthenticated()) {

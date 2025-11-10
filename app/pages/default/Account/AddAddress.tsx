@@ -17,7 +17,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import {
-  Account_SaveProfile,
   Address_SaveAddress,
   createRouteHelpers,
 } from "@/generated/routes";

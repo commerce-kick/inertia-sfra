@@ -1,7 +1,7 @@
 "use strict";
 
 /**
- * @namespace Account
+ * @namespace Home
  */
 
 const server = require("server");
@@ -11,7 +11,6 @@ const sharedData = require("*/cartridge/scripts/middleware/sharedData");
 const inertia = require("*/cartridge/scripts/middleware/inertiaMiddleware");
 
 const ProductSearchModel = require("dw/catalog/ProductSearchModel");
-const ProductMgr = require("dw/catalog/ProductMgr");
 
 server.append(
   "Show",

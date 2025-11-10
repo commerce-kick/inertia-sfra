@@ -1,8 +1,4 @@
-"use client";
-
-import type React from "react";
-
-import { useEffect, useState, useRef } from "react";
+import { useState, useRef } from "react";
 import { Link, router, usePage } from "@inertiajs/react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -53,8 +49,10 @@ import { CommerceNavigation } from "./commerce/nav";
 import {
   Cart_MiniCartShow,
   Checkout_Begin,
+  createRouteHelpers,
   getUrl,
   Home_Show,
+  Login_Show,
 } from "@/generated/routes";
 
 const SearchBox = () => {
@@ -492,7 +490,7 @@ export function Header() {
             <MobileNav categories={navBar.categories} />
 
             <Link
-              href="/on/demandware.store/Sites-RefArch-Site/en_US/Home-Show"
+              href={Home_Show.uri()}
               className="flex items-center gap-2 font-bold text-xl"
             >
               <svg
@@ -527,7 +525,7 @@ export function Header() {
               <DropDownUser {...currentCustomer.profile} />
             ) : (
               <Button asChild variant="ghost" size="sm" className="gap-2">
-                <Link href="/on/demandware.store/Sites-RefArch-Site/en_US/Login-Show">
+                <Link href={Login_Show.uri()}>
                   <User className="h-4 w-4" />
                   <span className="hidden sm:inline">Login</span>
                 </Link>

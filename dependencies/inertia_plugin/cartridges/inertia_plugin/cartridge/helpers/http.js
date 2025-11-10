@@ -44,7 +44,6 @@ function getComponentName(component, locale) {
 
 function render(req, component, props, action, locale) {
   var url = generateURL(action, req.querystring);
-
   const componentName = getComponentName(component, locale);
 
   var pageData = {
