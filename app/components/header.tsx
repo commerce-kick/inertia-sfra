@@ -452,7 +452,7 @@ const MobileNav = ({ categories }: NavigationData) => {
         <div className="px-6 py-4">
           <nav className="flex flex-col space-y-4">
             <Link
-              href="Home-Show"
+              href={getUrl(Home_Show)}
               className="flex items-center py-2 text-base font-medium"
               onClick={() => setOpen(false)}
             >
@@ -490,7 +490,7 @@ export function Header() {
             <MobileNav categories={navBar.categories} />
 
             <Link
-              href={Home_Show.uri()}
+              href={getUrl(Home_Show)}
               className="flex items-center gap-2 font-bold text-xl"
             >
               <svg

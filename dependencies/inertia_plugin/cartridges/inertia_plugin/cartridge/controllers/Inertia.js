@@ -10,8 +10,6 @@ var viteTags = require("*/cartridge/helpers/vite");
 
 server.get("Head", function (req, res, next) {
   const page = req.querystring.component;
-
-  const manifest = require("*/cartridge/static/default/manifest.json");
   const componet = `app/Pages/${page}.tsx`;
 
   const tags = viteTags(["app/app.tsx", componet]);

@@ -66,7 +66,7 @@ export default function ProductTile({
     : 0;
 
   return (
-    <div className={cn('group space-y-3', className)}>
+    <div className={cn("group space-y-3", className)}>
       <div className="bg-gray-100 rounded-lg overflow-hidden aspect-square relative">
         <Image
           src={images.large?.[0].absURL}
@@ -97,7 +97,11 @@ export default function ProductTile({
               .map((_, i) => (
                 <Star
                   key={i}
-                  className={`h-4 w-4 ${i < Math.floor(rating) ? "fill-yellow-400 text-yellow-400" : "fill-gray-200 text-gray-200"}`}
+                  className={`h-4 w-4 ${
+                    i < Math.floor(rating)
+                      ? "fill-yellow-400 text-yellow-400"
+                      : "fill-gray-200 text-gray-200"
+                  }`}
                 />
               ))}
           </div>

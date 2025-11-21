@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import { Head, Link, router, usePrefetch } from "@inertiajs/react";
+import { Link, router } from "@inertiajs/react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Filter } from "lucide-react";
@@ -27,9 +27,7 @@ import { queryData, searchParams } from "@/lib/commerce";
 import {
   createRouteHelpers,
   getUrl,
-  Search_Show,
-  Search_ShowAjax,
-  Search_UpdateGrid,
+  Search_Show, Search_UpdateGrid
 } from "@/generated/routes";
 import { cn } from "@/lib/utils";
 
