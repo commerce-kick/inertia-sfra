@@ -1,13 +1,13 @@
-import { Separator } from "@/components/ui/separator"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import type { CheckoutResponse } from "@/types/response/checkout"
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
+import type { CheckoutResponse } from "@/types/response/checkout";
 
 type OrderSummaryProps = {
-  order: CheckoutResponse["order"]
-}
+  order: CheckoutResponse["order"];
+};
 
 export default function OrderSummary({ order }: OrderSummaryProps) {
-  if (!order) return null
+  if (!order) return null;
 
   return (
     <div className="space-y-6">
@@ -17,14 +17,21 @@ export default function OrderSummary({ order }: OrderSummaryProps) {
             <div key={item.id} className="flex items-center space-x-4">
               <div className="relative h-20 w-20 rounded-md overflow-hidden border">
                 <img
-                  src={item.images.small[0].absURL || "/placeholder.svg?height=80&width=80"}
-                  alt={item.images.small[0].alt}
+                  src={
+                    item.images?.small[0]?.absURL ||
+                    "/placeholder.svg?height=80&width=80"
+                  }
+                  alt={item.images.small[0]?.alt}
                   className="object-cover h-full w-full"
                 />
               </div>
               <div className="flex-1 min-w-0">
-                <h4 className="text-sm font-medium line-clamp-2">{item.productName}</h4>
-                <p className="text-sm text-muted-foreground mt-1">{item.price.sales.formatted}</p>
+                <h4 className="text-sm font-medium line-clamp-2">
+                  {item.productName}
+                </h4>
+                <p className="text-sm text-muted-foreground mt-1">
+                  {item.price.sales.formatted}
+                </p>
                 <div className="flex items-center mt-2">
                   <span className="text-sm">Qty: {item.quantity}</span>
                 </div>
@@ -65,5 +72,5 @@ export default function OrderSummary({ order }: OrderSummaryProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }

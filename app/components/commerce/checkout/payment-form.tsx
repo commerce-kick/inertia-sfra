@@ -1,10 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -14,6 +18,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Select,
   SelectContent,
@@ -21,26 +27,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { CreditCard, Wallet, Check, Pencil, Loader2 } from "lucide-react";
 import type {
+  Address,
   Billing,
   CheckoutResponse,
-  Address,
 } from "@/types/response/checkout";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "@inertiajs/react";
-import axios from "axios";
 import { useMutation } from "@tanstack/react-query";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import axios from "axios";
+import { Check, CreditCard, Loader2, Pencil, Wallet } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 const paymentSchema = z.object({
   dwfrm_billing_paymentMethod: z
@@ -84,14 +84,14 @@ export default function PaymentForm({
   expirationYears = [],
   onSubmit,
 }: PaymentFormProps) {
-  const [showBillingAddress, setShowBillingAddress] = useState(false);
   const [showSavedCards, setShowSavedCards] = useState(
     customer?.customerPaymentInstruments &&
       customer.customerPaymentInstruments.length > 0
   );
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editingAddress, setEditingAddress] = useState<Address | null>(null);
-  const [useShippingAsBilling, setUseShippingAsBilling] = useState(true);
+  const [useShippingAsBilling, setUseShippingAsBilling] =
+    useState<boolean>(true);
 
   const savedPaymentMethods = customer?.customerPaymentInstruments || [];
   const paymentMethods = billing?.payment.applicablePaymentMethods || [];
@@ -109,7 +109,7 @@ export default function PaymentForm({
       dwfrm_billing_paymentMethod: "CREDIT_CARD",
       dwfrm_billing_shippingAddressUseAsBillingAddress: true,
       dwfrm_billing_creditCardFields_cardType:
-        paymentCards.length > 0 ? paymentCards[0].cardType : "",
+        paymentCards.length > 0 ? paymentCards[0]?.cardType : "",
       dwfrm_billing_creditCardFields_cardNumber: "",
       dwfrm_billing_creditCardFields_cardOwner: "",
       dwfrm_billing_creditCardFields_expirationMonth: "",
@@ -147,7 +147,7 @@ export default function PaymentForm({
         billing?.billingAddress?.address?.phone || shippingAddress?.phone || "",
       savedPaymentMethodUUID:
         savedPaymentMethods.length > 0
-          ? savedPaymentMethods[0].UUID
+          ? savedPaymentMethods[0]?.UUID
           : undefined,
     },
   });
@@ -271,7 +271,11 @@ export default function PaymentForm({
 
   useEffect(() => {
     // If we have shipping data and the user wants to edit billing (not using shipping as billing)
-    if (!useShippingAsBilling && customer?.addresses?.length > 0) {
+    if (
+      !useShippingAsBilling &&
+      customer?.addresses?.length &&
+      customer?.addresses?.length > 0
+    ) {
       // Find the shipping address that's being used
       const shippingAddress =
         customer.addresses.find(
@@ -321,7 +325,8 @@ export default function PaymentForm({
     updateBillingAddress.mutate(values);
   }
 
-  function startEditingAddress(address: Address) {
+  function startEditingAddress(address?: Address) {
+    if (!address) return;
     setEditingAddress(address);
     setIsEditDialogOpen(true);
   }
@@ -332,8 +337,7 @@ export default function PaymentForm({
   );
   const paymentMethod = form.watch("dwfrm_billing_paymentMethod");
 
-
-  console.log(form.formState.errors)
+  console.log(form.formState.errors);
 
   return (
     <>
@@ -668,8 +672,7 @@ export default function PaymentForm({
                       checked={field.value}
                       onCheckedChange={(checked) => {
                         field.onChange(checked);
-                        setUseShippingAsBilling(checked);
-                        setShowBillingAddress(!checked);
+                        setUseShippingAsBilling(checked ? true : false);
                       }}
                     />
                   </FormControl>
@@ -774,11 +777,16 @@ export default function PaymentForm({
                   <FormField
                     control={form.control}
                     name="dwfrm_billing_addressFields_address2"
-                    render={({ field }) => (
+                    render={({ field: { onChange, onBlur, value } }) => (
                       <FormItem className="col-span-2">
                         <FormLabel>Address Line 2 (Optional)</FormLabel>
                         <FormControl>
-                          <Input placeholder="Apt, Suite, etc." {...field} />
+                          <Input
+                            placeholder="Apt, Suite, etc."
+                            value={value ? value : ""}
+                            onChange={onChange}
+                            onBlur={onBlur}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -935,11 +943,15 @@ export default function PaymentForm({
                 <FormField
                   control={editForm.control}
                   name="dwfrm_billing_addressFields_address2"
-                  render={({ field }) => (
+                  render={({ field: { value, ...rest } }) => (
                     <FormItem className="col-span-2">
                       <FormLabel>Address Line 2 (Optional)</FormLabel>
                       <FormControl>
-                        <Input placeholder="Apt, Suite, etc." {...field} />
+                        <Input
+                          placeholder="Apt, Suite, etc."
+                          value={value ? value : ""}
+                          {...rest}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

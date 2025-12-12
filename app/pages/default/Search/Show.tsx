@@ -90,7 +90,7 @@ const FiltersContent = ({
   cgid,
   handleSelectedRinament,
   handleOnSortChange,
-}) => {
+}: any) => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -102,13 +102,15 @@ const FiltersContent = ({
             <SelectValue placeholder={productSort.ruleId} />
           </SelectTrigger>
           <SelectContent>
-            {productSort.options.map((sort) => {
-              return (
-                <SelectItem key={sort.id} value={sort.id}>
-                  {sort.displayName}
-                </SelectItem>
-              );
-            })}
+            {productSort.options.map(
+              (sort: { id: string; displayName: string }) => {
+                return (
+                  <SelectItem key={sort.id} value={sort.id}>
+                    {sort.displayName}
+                  </SelectItem>
+                );
+              }
+            )}
           </SelectContent>
         </Select>
       </div>
@@ -119,42 +121,56 @@ const FiltersContent = ({
         </Link>
       </Button>
 
-      {refinements.map((refinament, index) => {
-        return (
-          <div className="border-t pt-4" key={`serach-${index}`}>
-            <h3 className="mb-2 font-medium">{refinament.displayName}</h3>
-            <div className="space-y-2">
-              {refinament.values.map((val, i) => {
-                return (
-                  <div
-                    className="flex items-center gap-2"
-                    data-url={val.url}
-                    key={`ref-${i}`}
-                  >
-                    <Checkbox
-                      id={`${val.presentationId}-${index}`}
-                      checked={val.selected}
-                      disabled={!val.selectable}
-                      onCheckedChange={() => {
-                        handleSelectedRinament(val.url);
-                      }}
-                    />
-                    <label
-                      htmlFor={`${val.presentationId}-${index}`}
-                      className={cn(
-                        "text-sm",
-                        !val.selectable && "line-through"
-                      )}
+      {refinements.map(
+        (
+          refinament: {
+            displayName: string;
+            values: {
+              url: string;
+              presentationId: string;
+              selected: boolean;
+              selectable: boolean;
+              displayValue: string;
+            }[];
+          },
+          index: number
+        ) => {
+          return (
+            <div className="border-t pt-4" key={`serach-${index}`}>
+              <h3 className="mb-2 font-medium">{refinament.displayName}</h3>
+              <div className="space-y-2">
+                {refinament.values.map((val, i: number) => {
+                  return (
+                    <div
+                      className="flex items-center gap-2"
+                      data-url={val.url}
+                      key={`ref-${i}`}
                     >
-                      {val.displayValue}
-                    </label>
-                  </div>
-                );
-              })}
+                      <Checkbox
+                        id={`${val.presentationId}-${index}`}
+                        checked={val.selected}
+                        disabled={!val.selectable}
+                        onCheckedChange={() => {
+                          handleSelectedRinament(val.url);
+                        }}
+                      />
+                      <label
+                        htmlFor={`${val.presentationId}-${index}`}
+                        className={cn(
+                          "text-sm",
+                          !val.selectable && "line-through"
+                        )}
+                      >
+                        {val.displayValue}
+                      </label>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        );
-      })}
+          );
+        }
+      )}
     </div>
   );
 };
@@ -166,7 +182,6 @@ const SearchShow = ({
   showMore,
   cgid,
   query,
-  resetLink,
 }: {
   refinements: any[];
   productSort: any;
@@ -191,7 +206,9 @@ const SearchShow = ({
 
   const handleOnSortChange = useCallback(
     (sortId: string) => {
-      const rule = productSort.options.find((sort) => sort.id === sortId);
+      const rule = productSort.options.find(
+        (sort: { id: string }) => sort.id === sortId
+      );
 
       router.reload({
         data: Object.fromEntries(new URLSearchParams(rule.url)),

@@ -5,8 +5,8 @@ export default function LineItem({ item }: { item: TItem }) {
     <div key={item.id} className="flex gap-4">
       <div className="relative h-24 w-24 rounded-md overflow-hidden border bg-muted/40">
         <img
-          src={item.imageObj.small[0].absURL || "/placeholder.svg"}
-          alt={item.imageObj.small[0].alt}
+          src={item.imageObj.small[0]?.absURL || "/placeholder.svg"}
+          alt={item.imageObj.small[0]?.alt}
           className="object-cover h-full w-full"
         />
       </div>

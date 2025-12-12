@@ -3,10 +3,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host && rm -rf ./store_front/cartridges/store_front/cartridge/scripts/hot.json",
-    "build": "vite build",
+    "build": "tsc --noEmit --skipLibCheck && vite build",
     "preview": "vite preview",
     "deploy": "npx b2c-tools code deploy",
-    "build:ssr": "bun run scripts/generate-routes.js && vite build --ssr --config ssr.config.js"
+    "build:ssr": "tsc --noEmit  --skipLibCheck && bun run scripts/generate-routes.js && vite build --ssr --config ssr.config.js",
+    "type-check": "tsc --noEmit  --skipLibCheck"
   },
   "private": true,
   "devDependencies": {

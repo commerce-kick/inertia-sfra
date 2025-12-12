@@ -55,7 +55,6 @@ import { CommerceNavigation } from "./commerce/nav";
 
 const SearchBox = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [isSearching, setIsSearching] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   const { data, isLoading } = useQuery<{
@@ -63,14 +62,12 @@ const SearchBox = () => {
   }>({
     queryKey: ["searchSuggestions", searchQuery],
     queryFn: async () => {
-      setIsSearching(true);
       try {
         const { data } = await axios.get("SearchServices-GetSuggestions", {
           params: { q: searchQuery },
         });
         return data;
       } finally {
-        setIsSearching(false);
       }
     },
     enabled: searchQuery.length >= 3,

@@ -13,6 +13,12 @@ export default defineConfig({
   build: {
     emptyOutDir: true,
     outDir: "./store_front/cartridges/store_front/cartridge/static/default",
+    rollupOptions: {
+      onwarn(warning, warn) {
+        if (warning.code === "UNUSED_EXTERNAL_IMPORT") return;
+        warn(warning);
+      },
+    },
   },
   server: {
     https: true,

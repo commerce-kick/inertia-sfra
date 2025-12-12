@@ -1,22 +1,21 @@
-import { Trash, ShoppingCart, ExternalLink } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import Image from "../ui/image";
 import type { TItem } from "@/types/wishlist";
+import { ExternalLink, ShoppingCart, Trash } from "lucide-react";
+import Image from "../ui/image";
 
 export function WishlistItem({ item }: { item: TItem }) {
-
   return (
     <Card className="overflow-hidden border-2 shadow-sm hover:shadow-md transition-shadow py-0">
       <CardContent className="p-4">
         <div className="flex flex-col sm:flex-row gap-4">
           {/* Product Image */}
-          <div className="flex-shrink-0">
+          <div className="shrink-0">
             <div className="relative h-24 w-24 sm:h-32 sm:w-32 rounded-md border overflow-hidden bg-muted/50">
               <Image
-                src={item.imageObj?.small[0].absURL || "/placeholder.svg"}
-                alt={item.imageObj?.alt || item.name}
+                src={item.imageObj?.small[0]?.absURL || "/placeholder.svg"}
+                alt={item.imageObj?.small[0]?.alt || item.name}
                 className="object-cover"
               />
             </div>
@@ -61,7 +60,7 @@ export function WishlistItem({ item }: { item: TItem }) {
               <span className="font-medium text-lg">
                 {item.priceObj.sales.formatted}
               </span>
-            {/*   {hasDiscount && (
+              {/*   {hasDiscount && (
                 <span className="text-sm text-muted-foreground line-through">
                   {item.priceObj.list.formatted}
                 </span>

@@ -1,12 +1,11 @@
-import "./styles/globals.css";
 import "./config";
+import "./styles/globals.css";
 
 import { createInertiaApp } from "@inertiajs/react";
 import createServer from "@inertiajs/react/server";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import ReactDOMServer from "react-dom/server";
-import { ThemeProvider } from "./components/theme-provider";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "./components/ui/sonner";
 
 createServer((page) =>

@@ -1,26 +1,26 @@
 "use client";
 
-import { useState } from "react";
 import { useZodForm } from "@/hooks/use-zod-form";
-import type { ServerFormDefinition } from "@/types/form";
 import {
   flattenFormDefinition,
   isCheckboxField,
   isSelectField,
 } from "@/lib/form-utils";
+import type { ServerFormDefinition } from "@/types/form";
+import { useState } from "react";
 import type { z } from "zod";
 
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
-  FormField as ShadcnFormField,
   FormItem,
   FormLabel,
   FormMessage,
+  FormField as ShadcnFormField,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
   SelectContent,
@@ -188,11 +188,13 @@ export function RenderForm({
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {field.options?.map((option) => (
-                      <SelectItem key={option.value} value={option.value}>
-                        {option.label}
-                      </SelectItem>
-                    ))}
+                    {field.options?.map(
+                      (option: { value: string; label: string }) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      )
+                    )}
                   </SelectContent>
                 </Select>
               </>

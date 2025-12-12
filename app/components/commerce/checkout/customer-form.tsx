@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CheckoutServicesSubmitCustomer } from "@/generated/routes";
+import { AccountLogin, CheckoutServicesSubmitCustomer } from "@/generated/routes";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "@inertiajs/react";
 import { useMutation } from "@tanstack/react-query";
@@ -87,7 +87,7 @@ export default function CustomerForm({
 
   const submitLogin = useMutation({
     mutationFn: async (formData: z.infer<typeof loginSchema>) => {
-      const { data } = await axios.postForm(getUrl(Account_Login), {
+      const { data } = await axios.postForm(AccountLogin.url(), {
         ...formData,
         csrf_token: token,
       });

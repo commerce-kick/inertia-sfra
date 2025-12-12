@@ -16,12 +16,12 @@
 
     // Best practices
     "strict": true,
-    "skipLibCheck": true,
+    "skipLibCheck": true,  // This should help with node_modules
     "noFallthroughCasesInSwitch": true,
-
-    // Some stricter flags (disabled by default)
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "noPropertyAccessFromIndexSignature": false,
 
     /* Shadcn/ui */
@@ -30,6 +30,15 @@
       "@/*": ["./*"]
     }
   },
-  "exclude": ["./dependencies", "./store_front"],
-  "include": ["./app"]
+  "include": [
+    "./app/**/*"
+  ],
+  "exclude": [
+    "./dependencies/**/*",
+    "./store_front/**/*", 
+    "./node_modules/**/*",
+    "./app/generated/**/*",
+    "./vendor/**/*",
+    "**/node_modules/**/*"
+  ]
 }

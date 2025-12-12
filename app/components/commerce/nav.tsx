@@ -2,7 +2,6 @@
 
 import * as React from "react";
 
-import { cn } from "@/lib/utils";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -12,22 +11,9 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import { cn } from "@/lib/utils";
 import type { Category } from "@/types/navigation";
 import { Link } from "@inertiajs/react";
-
-// Sample featured items that could be displayed in a special section
-const featuredItems = [
-  {
-    title: "New Collection",
-    description: "Check out our latest seasonal arrivals with premium quality.",
-    href: "/new-collection",
-  },
-  {
-    title: "Sale Items",
-    description: "Up to 50% off on selected items while supplies last.",
-    href: "/sale",
-  },
-];
 
 interface CommerceNavigationProps {
   categories: Category[];

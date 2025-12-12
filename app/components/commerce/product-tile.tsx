@@ -15,13 +15,10 @@ export default function ProductTile({
   images,
   productName,
   price,
-  selectedProductUrl,
-  variationAttributes,
   rating,
   id,
   isBundle,
   className,
-  ...rest
 }: Product & {
   isBundle?: boolean;
   className?: string;
@@ -60,7 +57,7 @@ export default function ProductTile({
     <div className={cn("group space-y-3", className)}>
       <div className="bg-gray-100 rounded-lg overflow-hidden aspect-square relative">
         <Image
-          src={images.large?.[0].absURL}
+          src={images.large?.[0]?.absURL || "placeholder.svg"}
           alt={productName}
           width={300}
           height={300}

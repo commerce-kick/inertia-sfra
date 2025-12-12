@@ -1,6 +1,4 @@
-import type { TProfile } from "@/types/account";
-
-export function ProfileInfo({ firstName, lastName, email, phone }: TProfile) {
+export function ProfileInfo({ firstName, lastName, email, phone }: any) {
   return (
     <div className="space-y-4">
       <div>

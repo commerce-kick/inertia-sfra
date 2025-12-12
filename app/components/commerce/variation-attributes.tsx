@@ -1,9 +1,9 @@
 "use client"
 
-import { memo } from "react"
-import { Check } from "lucide-react"
 import { cn } from "@/lib/utils"
 import type { VariationAttribute } from "@/types/productFactory"
+import { Check } from "lucide-react"
+import { memo } from "react"
 
 interface VariationAttributesProps {
   attributes: VariationAttribute[]
@@ -35,7 +35,7 @@ const SwatchValue = memo(
       >
         {value.images?.swatch?.at(0) ? (
           <img
-            src={value.images.swatch[0].url || "/placeholder.svg"}
+            src={value.images.swatch[0]?.url || "/placeholder.svg"}
             alt={value.displayValue}
             className="h-full w-full rounded-full object-cover"
             loading="lazy"
