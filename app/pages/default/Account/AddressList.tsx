@@ -1,19 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Address_DeleteAddress,
-  Address_EditAddress,
-  createRouteHelpers,
-} from "@/generated/routes";
-import AccountLayout from "@/layouts/account";
-import Layout from "@/layouts/default";
-import type { AddressListProps } from "@/types/response/address-list";
-import { Link } from "@inertiajs/react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
-import { Edit, MapPin, Phone, Plus, Trash } from "lucide-react";
-import { useCallback } from "react";
-import { Badge } from "@/components/ui/badge";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -25,20 +12,23 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Badge } from "@/components/ui/badge";
+import { AddressDeleteAddress, AddressEditAddress } from "@/generated/routes";
+import AccountLayout from "@/layouts/account";
+import Layout from "@/layouts/default";
+import type { AddressListProps } from "@/types/response/address-list";
+import { Link } from "@inertiajs/react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+import { Edit, MapPin, Phone, Plus, Trash } from "lucide-react";
+import { useCallback } from "react";
 
 const AddressList = (props: AddressListProps) => {
   const queryClient = useQueryClient();
 
-  const routes = createRouteHelpers({
-    "Address-EditAddress": Address_EditAddress,
-    "Address-DeleteAddress": Address_DeleteAddress,
-  });
-
   const { mutate, isPending } = useMutation({
     mutationFn: async (addressId: string) => {
-      const { data } = await axios.get(
-        routes.url("Address-DeleteAddress", { addressId })
-      );
+      const { data } = await axios.get(AddressDeleteAddress.url());
       return data;
     },
     onSuccess: () => {
@@ -96,8 +86,8 @@ const AddressList = (props: AddressListProps) => {
                   <div className="flex gap-2">
                     <Button variant="ghost" size="icon" asChild>
                       <Link
-                        href={routes.url("Address-EditAddress", {
-                          addressId: ad.address.ID,
+                        href={AddressEditAddress.url({
+                          params: { addressId: ad.address.ID },
                         })}
                       >
                         <Edit className="h-4 w-4" />

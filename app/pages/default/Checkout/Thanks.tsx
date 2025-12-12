@@ -9,8 +9,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Image from "@/components/ui/image";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Table,
   TableBody,
@@ -21,12 +19,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getUrl, Home_Show } from "@/generated/routes";
+import { HomeShow } from "@/generated/routes";
 import Layout from "@/layouts/default";
 import type { TOrder } from "@/types/checkout";
 import { Link } from "@inertiajs/react";
 import { format } from "date-fns";
-import { Check } from "lucide-react";
 
 const ThanksPage = ({ order }: { order: TOrder }) => {
   return (
@@ -206,7 +203,7 @@ const ThanksPage = ({ order }: { order: TOrder }) => {
             </CardContent>
             <CardFooter className="flex justify-between">
               <Button asChild>
-                <Link href={getUrl(Home_Show)}>Continue Shopping</Link>
+                <Link href={HomeShow.url()}>Continue Shopping</Link>
               </Button>
             </CardFooter>
           </Card>

@@ -10,6 +10,11 @@ server.extend(module.superModule);
 const sharedData = require("*/cartridge/scripts/middleware/sharedData");
 const inertia = require("*/cartridge/scripts/middleware/inertiaMiddleware");
 
+/**
+ * Display product details page
+ * 
+ * @param pid required string the product ID to display
+ */
 server.append(
   "Show",
   function (req, res, next) {

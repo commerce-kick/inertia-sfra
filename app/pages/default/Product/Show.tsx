@@ -1,20 +1,19 @@
-"use client";
-
-import { Fragment, useCallback, useState, useEffect, memo } from "react";
 import { Link } from "@inertiajs/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { toast } from "sonner";
 import {
+  ArrowLeft,
   Heart,
+  Info,
+  Share2,
   ShoppingBag,
   Star,
   Truck,
-  ArrowLeft,
-  Share2,
-  Info,
 } from "lucide-react";
+import { Fragment, memo, useCallback, useEffect, useState } from "react";
+import { toast } from "sonner";
 
+import { Badge } from "@/components/ui/badge";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -23,8 +22,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -34,8 +32,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Tooltip,
   TooltipContent,
@@ -43,17 +41,17 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-import Layout from "@/layouts/default";
-import { ImageCarousel } from "@/components/image-carousel";
-import VariationAttributes from "@/components/commerce/variation-attributes";
-import ProductTile from "@/components/commerce/product-tile";
-import type { Product } from "@/types/productFactory";
-import { cart$ } from "@/state/cart";
-import useProductVariation from "@/hooks/useProductVariation";
-import type { ProductShowProps } from "@/types/response/product-show";
-import { Cart_AddProduct, getUrl, Home_Show } from "@/generated/routes";
 import EinsteinRecs from "@/components/commerce/einstein-recs";
 import { EmblaCarousel } from "@/components/commerce/overflow-carousel";
+import ProductTile from "@/components/commerce/product-tile";
+import VariationAttributes from "@/components/commerce/variation-attributes";
+import { ImageCarousel } from "@/components/image-carousel";
+import { CartAddProduct, HomeShow } from "@/generated/routes";
+import useProductVariation from "@/hooks/useProductVariation";
+import Layout from "@/layouts/default";
+import { cart$ } from "@/state/cart";
+import type { Product } from "@/types/productFactory";
+import type { ProductShowProps } from "@/types/response/product-show";
 
 // Componente para mostrar el rating con estrellas
 const ProductRating = memo(({ rating }: { rating: number }) => {
@@ -137,7 +135,7 @@ const ProductInfo = ({ initialProduct }: { initialProduct: Product }) => {
 
   const addToCart = useMutation({
     mutationFn: async (variables: { pid: string; quantity: string }) => {
-      const { data } = await axios.postForm(getUrl(Cart_AddProduct), variables);
+      const { data } = await axios.postForm(CartAddProduct.url(), variables);
       return data;
     },
     onSuccess: (data) => {
@@ -383,13 +381,13 @@ const ProductComponent = ({
   breadcrumbs,
   addToCartUrl,
   ...rest
-}: ProductShowProps) => {  
+}: ProductShowProps) => {
   return (
     <div className="container mx-auto py-8 px-4 md:px-6">
       {/* Back button and breadcrumbs */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
         <Button variant="ghost" size="sm" className="w-fit" asChild>
-          <Link href={getUrl(Home_Show)}>
+          <Link href={HomeShow.url()}>
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to shopping
           </Link>
@@ -415,7 +413,8 @@ const ProductComponent = ({
 
       {/* Product Master Info */}
       {(product.productType === "master" ||
-        product.productType === "bundle" || product.productType === 'variant') && (
+        product.productType === "bundle" ||
+        product.productType === "variant") && (
         <ProductInfo initialProduct={product} />
       )}
 

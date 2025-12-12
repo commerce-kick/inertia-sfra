@@ -1,26 +1,29 @@
-import { useState, useRef } from "react";
 import { Link, router, usePage } from "@inertiajs/react";
+import { use$ } from "@legendapp/state/react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { use$ } from "@legendapp/state/react";
 import {
+  ChevronDown,
+  Gift,
+  Home,
+  LogOut,
+  Menu,
   Minus,
   Plus,
   Search,
   ShoppingBag,
   ShoppingCart,
-  X,
   User,
-  Menu,
-  ChevronDown,
-  LogOut,
-  Home,
-  Gift,
+  X,
 } from "lucide-react";
+import { useRef, useState } from "react";
 
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
+import { ModeToggle } from "./mode-toggle";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,31 +32,26 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { ModeToggle } from "./mode-toggle";
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-  SheetClose,
 } from "./ui/sheet";
-import { Separator } from "@/components/ui/separator";
-import { Input } from "@/components/ui/input";
 
+import {
+  CartMiniCart,
+  CheckoutBegin,
+  HomeShow,
+  LoginShow,
+} from "@/generated/routes";
 import { cart$ } from "@/state/cart";
 import type { MiniCartResponse } from "@/types/minicart";
-import type { SearchSuggestionsResponse } from "@/types/search-suggestion";
 import type { NavigationData } from "@/types/navigation";
+import type { SearchSuggestionsResponse } from "@/types/search-suggestion";
 import { CommerceNavigation } from "./commerce/nav";
-import {
-  Cart_MiniCartShow,
-  Checkout_Begin,
-  createRouteHelpers,
-  getUrl,
-  Home_Show,
-  Login_Show,
-} from "@/generated/routes";
 
 const SearchBox = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -284,7 +282,7 @@ const CartContent = () => {
   const { data } = useQuery<MiniCartResponse>({
     queryKey: ["cart"],
     queryFn: async () => {
-      const { data } = await axios.get(getUrl(Cart_MiniCartShow));
+      const { data } = await axios.get(CartMiniCart.url());
       return data;
     },
   });
@@ -303,7 +301,7 @@ const CartContent = () => {
           </p>
           <SheetClose asChild>
             <Button className="mt-6" variant="outline" asChild>
-              <Link href={getUrl(Home_Show)}>Continue Shopping</Link>
+              <Link href={HomeShow.url()}>Continue Shopping</Link>
             </Button>
           </SheetClose>
         </div>
@@ -388,11 +386,11 @@ const CartContent = () => {
 
           <div className="space-y-3 pb-6">
             <Button className="w-full" size="lg" asChild>
-              <Link href={getUrl(Checkout_Begin)}>Proceed to Checkout</Link>
+              <Link href={CheckoutBegin.url()}>Proceed to Checkout</Link>
             </Button>
             <SheetClose asChild>
               <Button variant="outline" className="w-full" size="lg" asChild>
-                <Link href={getUrl(Home_Show)}>Continue Shopping</Link>
+                <Link href={HomeShow.url()}>Continue Shopping</Link>
               </Button>
             </SheetClose>
           </div>
@@ -452,7 +450,7 @@ const MobileNav = ({ categories }: NavigationData) => {
         <div className="px-6 py-4">
           <nav className="flex flex-col space-y-4">
             <Link
-              href={getUrl(Home_Show)}
+              href={HomeShow.url()}
               className="flex items-center py-2 text-base font-medium"
               onClick={() => setOpen(false)}
             >
@@ -490,7 +488,7 @@ export function Header() {
             <MobileNav categories={navBar.categories} />
 
             <Link
-              href={getUrl(Home_Show)}
+              href={HomeShow.url()}
               className="flex items-center gap-2 font-bold text-xl"
             >
               <svg
@@ -525,7 +523,7 @@ export function Header() {
               <DropDownUser {...currentCustomer.profile} />
             ) : (
               <Button asChild variant="ghost" size="sm" className="gap-2">
-                <Link href={Login_Show.uri()}>
+                <Link href={LoginShow.url()}>
                   <User className="h-4 w-4" />
                   <span className="hidden sm:inline">Login</span>
                 </Link>

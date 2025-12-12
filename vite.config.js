@@ -35,6 +35,8 @@ export default defineConfig({
       base: "/on/demandware.static/Sites-RefArch-Site/-/en_US/",
       publicDirectory:
         "./store_front/cartridges/store_front/cartridge/static/default",
+      hotFile:
+        "./store_front/cartridges/store_front/cartridge/static/defaut/hot",
     }),
     react(),
     tailwindcss(),
@@ -42,7 +44,14 @@ export default defineConfig({
     viteHotFilePlugin(
       "./store_front/cartridges/store_front/cartridge/scripts/hot.json"
     ),
-    routesPlugin(),
+    routesPlugin({
+      source: {
+        pattern: "**/cartridge/controllers",
+      },
+      params: {
+        mergeStrategy: "merge", // Combines unique params from both cartridges
+      },
+    }),
   ],
   esbuild: {
     jsx: "automatic",

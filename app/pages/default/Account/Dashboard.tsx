@@ -1,17 +1,9 @@
-import {
-  User,
-  CreditCard,
-  Lock,
-  MapPin,
-  Edit,
-  Plus,
-  Eye,
-  Phone,
-  Mail,
-  ChevronRight,
-  ShoppingBag, Heart,
-  AlertCircle
-} from "lucide-react";
+import { OrderCard } from "@/components/commerce/order-card";
+import { OrderCardSkeleton } from "@/components/commerce/order-card-skeleton";
+import { WishlistItem } from "@/components/commerce/wishlist-item";
+import { WishlistItemSkeleton } from "@/components/commerce/wishlist-item-skeleton";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -21,29 +13,37 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  AccountEditProfile,
+  AddressAddAddress,
+  AddressEditAddress,
+  PaymentInstrumentsAddPayment,
+  PaymentInstrumentsList,
+} from "@/generated/routes";
+import AccountLayout from "@/layouts/account";
 import Layout from "@/layouts/default";
 import type { TAccount } from "@/types/account";
-import { OrderCard } from "@/components/commerce/order-card";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import type { TOrder } from "@/types/order";
 import type { WishListShowResponse } from "@/types/wishlist";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { OrderCardSkeleton } from "@/components/commerce/order-card-skeleton";
-import { WishlistItemSkeleton } from "@/components/commerce/wishlist-item-skeleton";
-import { WishlistItem } from "@/components/commerce/wishlist-item";
-import AccountLayout from "@/layouts/account";
 import { Link } from "@inertiajs/react";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import {
-  Account_EditProfile,
-  Address_AddAddress,
-  Address_EditAddress,
-  createRouteHelpers,
-  PaymentInstruments_AddPayment,
-  PaymentInstruments_List,
-} from "@/generated/routes";
+  AlertCircle,
+  ChevronRight,
+  CreditCard,
+  Edit,
+  Eye,
+  Heart,
+  Lock,
+  Mail,
+  MapPin,
+  Phone,
+  Plus,
+  ShoppingBag,
+  User,
+} from "lucide-react";
 
 const OrderHistory = () => {
   const { data, isLoading, error } = useQuery<{ orders: TOrder[] }>({
@@ -184,14 +184,6 @@ const Dashboard = ({ account, ...rest }: { account: TAccount }) => {
     enabled: false, // Only load when tab is active
   });
 
-  const routes = createRouteHelpers({
-    "Address-EditAddress": Address_EditAddress,
-    "PaymentInstruments-AddPayment": PaymentInstruments_AddPayment,
-    "Account-EditProfile": Account_EditProfile,
-    "Address-AddAddress": Address_AddAddress,
-    "PaymentInstruments-List": PaymentInstruments_List,
-  });
-
   return (
     <>
       <div className="container mx-auto py-8 px-4">
@@ -217,7 +209,7 @@ const Dashboard = ({ account, ...rest }: { account: TAccount }) => {
                     className="text-primary gap-1 h-8"
                   >
                     <Edit className="h-4 w-4" />
-                    <Link href={routes.url("Account-EditProfile")}>Edit</Link>
+                    <Link href={AccountEditProfile.url()}>Edit</Link>
                   </Button>
                 </CardHeader>
                 <CardContent className="grid gap-4 pt-4">
@@ -269,7 +261,7 @@ const Dashboard = ({ account, ...rest }: { account: TAccount }) => {
                     className="text-primary gap-1 h-8"
                     asChild
                   >
-                    <Link href={routes.url("PaymentInstruments-List")}>
+                    <Link href={PaymentInstrumentsList.url()}>
                       <Edit className="h-4 w-4" />
                       <span>View All</span>
                     </Link>
@@ -288,7 +280,7 @@ const Dashboard = ({ account, ...rest }: { account: TAccount }) => {
                 </CardContent>
                 <CardFooter className="flex justify-center border-t p-4">
                   <Button className="gap-2" asChild>
-                    <Link href={routes.url("PaymentInstruments-AddPayment")}>
+                    <Link href={PaymentInstrumentsAddPayment.url()}>
                       <Plus className="h-4 w-4" />
                       <span>Add Payment Method</span>
                     </Link>
@@ -374,8 +366,10 @@ const Dashboard = ({ account, ...rest }: { account: TAccount }) => {
                       asChild
                     >
                       <Link
-                        href={routes.url("Address-EditAddress", {
-                          addressId: account.preferredAddress.address.ID,
+                        href={AddressEditAddress.url({
+                          params: {
+                            addressId: account.preferredAddress.address.ID,
+                          },
                         })}
                       >
                         <Edit className="h-4 w-4" />
@@ -384,7 +378,7 @@ const Dashboard = ({ account, ...rest }: { account: TAccount }) => {
                     </Button>
                   )}
                   <Button className="gap-1" asChild>
-                    <Link href={routes.url("Address-AddAddress")}>
+                    <Link href={AddressAddAddress.url()}>
                       <Plus className="h-4 w-4" />
                       <span>Add New Address</span>
                     </Link>

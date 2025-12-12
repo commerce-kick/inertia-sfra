@@ -2,33 +2,21 @@
 
 import { Button } from "@/components/ui/button";
 import {
+  Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  Form,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import AccountLayout from "@/layouts/account";
 import Layout from "@/layouts/default";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import {
-  createRouteHelpers,
-  PaymentInstruments_SavePayment,
-} from "@/generated/routes";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import type { AddPaymentProps } from "@/types/response/add-payment";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
 import {
   Card,
   CardContent,
@@ -37,8 +25,18 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { CreditCard } from "lucide-react";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { PaymentInstrumentsSavePayment } from "@/generated/routes";
+import type { AddPaymentProps } from "@/types/response/add-payment";
 import { router } from "@inertiajs/react";
+import { CreditCard } from "lucide-react";
 
 const FormSchema = z.object({
   "paymentOption-Credit": z.string().optional(),
@@ -67,14 +65,10 @@ const EditProfile = (props: AddPaymentProps) => {
     },
   });
 
-  const routes = createRouteHelpers({
-    "PaymentInstruments-SavePayment": PaymentInstruments_SavePayment,
-  });
-
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: z.infer<typeof FormSchema>) => {
       const { data: response } = await axios.postForm(
-        routes.url("PaymentInstruments-SavePayment"),
+        PaymentInstrumentsSavePayment.url(),
         {
           ...data,
           csrf_token: props.csrf.token,

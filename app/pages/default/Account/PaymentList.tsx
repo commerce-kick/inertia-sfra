@@ -1,16 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  createRouteHelpers,
-  PaymentInstruments_AddPayment,
-  PaymentInstruments_DeletePayment,
-} from "@/generated/routes";
-import AccountLayout from "@/layouts/account";
-import Layout from "@/layouts/default";
-import type { PaymentListProps } from "@/types/response/payment-list";
-import { Link } from "@inertiajs/react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,21 +12,26 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import {
+  PaymentInstrumentsAddPayment,
+  PaymentInstrumentsDeletePayment,
+} from "@/generated/routes";
+import AccountLayout from "@/layouts/account";
+import Layout from "@/layouts/default";
+import type { PaymentListProps } from "@/types/response/payment-list";
+import { Link } from "@inertiajs/react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 import { CreditCard, Plus, Trash } from "lucide-react";
 import { useCallback } from "react";
 
 const PaymentList = (props: PaymentListProps) => {
   const queryClient = useQueryClient();
 
-  const routes = createRouteHelpers({
-    "PaymentInstruments-DeletePayment": PaymentInstruments_DeletePayment,
-    "PaymentInstruments-AddPayment": PaymentInstruments_AddPayment,
-  });
-
   const { mutate, isPending } = useMutation({
     mutationFn: async (UUID: string) => {
       const { data } = await axios.get(
-        routes.url("PaymentInstruments-DeletePayment", { UUID })
+        PaymentInstrumentsDeletePayment.url({ params: { UUID } })
       );
       return data;
     },
@@ -70,7 +65,7 @@ const PaymentList = (props: PaymentListProps) => {
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="text-xl font-bold">Payment Methods</CardTitle>
         <Button size="sm" className="gap-1" asChild>
-          <Link href={routes.url("PaymentInstruments-AddPayment")}>
+          <Link href={PaymentInstrumentsAddPayment.url()}>
             <Plus className="h-4 w-4" />
             <span>Add Payment Method</span>
           </Link>
@@ -82,7 +77,7 @@ const PaymentList = (props: PaymentListProps) => {
             <CreditCard className="h-12 w-12 mx-auto mb-3 opacity-20" />
             <p>You don't have any saved payment methods yet.</p>
             <Button size="sm" className="mt-4 gap-1" asChild>
-              <Link href={routes.url("PaymentInstruments-AddPayment")}>
+              <Link href={PaymentInstrumentsAddPayment.url()}>
                 <Plus className="h-4 w-4" />
                 <span>Add Your First Payment Method</span>
               </Link>
@@ -93,7 +88,9 @@ const PaymentList = (props: PaymentListProps) => {
             {props.paymentInstruments.map((payment) => (
               <div
                 key={payment.UUID}
-                className={`bg-muted/30 p-4 rounded-lg border-l-4 ${getCardTypeClass(payment.creditCardType)}`}
+                className={`bg-muted/30 p-4 rounded-lg border-l-4 ${getCardTypeClass(
+                  payment.creditCardType
+                )}`}
               >
                 <div className="flex justify-between items-start">
                   <div className="space-y-1">

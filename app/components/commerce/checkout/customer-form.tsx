@@ -1,9 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -16,15 +12,15 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { CheckoutServicesSubmitCustomer } from "@/generated/routes";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { router } from "@inertiajs/react";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import { router } from "@inertiajs/react";
 import { Loader2 } from "lucide-react";
-import {
-  Account_Login,
-  CheckoutServices_SubmitCustomer,
-  getUrl,
-} from "@/generated/routes";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 const customerSchema = z.object({
   dwfrm_coCustomer_email: z
@@ -68,7 +64,7 @@ export default function CustomerForm({
   const submitCustomer = useMutation({
     mutationFn: async (formData: z.infer<typeof customerSchema>) => {
       const { data } = await axios.postForm(
-        getUrl(CheckoutServices_SubmitCustomer),
+        CheckoutServicesSubmitCustomer.url(),
         {
           ...formData,
           csrf_token: token,

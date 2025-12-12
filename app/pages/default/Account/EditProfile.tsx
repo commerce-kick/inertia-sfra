@@ -1,32 +1,5 @@
 import { Button } from "@/components/ui/button";
 import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  Form,
-  FormDescription,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import AccountLayout from "@/layouts/account";
-import Layout from "@/layouts/default";
-import type { EditAccountProps } from "@/types/response/EditAccount";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
-import { Account_SaveProfile, createRouteHelpers } from "@/generated/routes";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
   Card,
   CardContent,
   CardDescription,
@@ -34,9 +7,36 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import { AccountSaveProfile } from "@/generated/routes";
+import AccountLayout from "@/layouts/account";
+import Layout from "@/layouts/default";
+import type { EditAccountProps } from "@/types/response/EditAccount";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 import { User } from "lucide-react";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { z } from "zod";
 
 const FormSchema = z
   .object({
@@ -80,14 +80,10 @@ const EditProfile = (props: EditAccountProps) => {
     },
   });
 
-  const routes = createRouteHelpers({
-    "Account-SaveProfile": Account_SaveProfile,
-  });
-
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: z.infer<typeof FormSchema>) => {
       const { data: response } = await axios.postForm(
-        routes.url("Account-SaveProfile"),
+        AccountSaveProfile.url(),
         {
           ...data,
           csrf_token: props.csrf.token,

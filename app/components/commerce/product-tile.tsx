@@ -1,20 +1,15 @@
-import type { Product } from "@/types/productFactory";
-import { Heart, Star } from "lucide-react";
-import { Button } from "../ui/button";
-import { Badge } from "../ui/badge";
-import Image from "../ui/image";
-import { Link } from "@inertiajs/react";
+import { ProductShow, WishlistAddProduct } from "@/generated/routes";
 import { cn } from "@/lib/utils";
-import { useCallback } from "react";
+import type { Product } from "@/types/productFactory";
+import { Link } from "@inertiajs/react";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
+import { Heart, Star } from "lucide-react";
+import { useCallback } from "react";
 import { toast } from "sonner";
-import {
-  createRouteHelpers,
-  getUrl,
-  Product_Show,
-  Wishlist_AddProduct,
-} from "@/generated/routes";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import Image from "../ui/image";
 
 export default function ProductTile({
   images,
@@ -31,13 +26,9 @@ export default function ProductTile({
   isBundle?: boolean;
   className?: string;
 }) {
-  const routes = createRouteHelpers({
-    "Product-Show": Product_Show,
-  });
-
   const { mutate } = useMutation({
     mutationFn: async () => {
-      const { data } = await axios.postForm(getUrl(Wishlist_AddProduct), {
+      const { data } = await axios.postForm(WishlistAddProduct.url(), {
         pid: id,
         optionId: null,
         optionVal: null,
@@ -85,7 +76,7 @@ export default function ProductTile({
         )}
       </div>
       <h3 className="font-medium truncate pr-4">
-        <Link href={routes.url("Product-Show", { pid: id })}>
+        <Link href={ProductShow.url({ params: { pid: id } })}>
           {productName}
         </Link>
       </h3>

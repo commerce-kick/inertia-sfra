@@ -1,8 +1,8 @@
-import { useCallback, useMemo, useState } from "react";
 import { Link, router } from "@inertiajs/react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Filter } from "lucide-react";
+import { useCallback, useMemo, useState } from "react";
 
 import { ProductsGridSkeleton } from "@/components/commerce/product-skeleton";
 import ProductTile from "@/components/commerce/product-tile";
@@ -24,11 +24,8 @@ import {
 } from "@/components/ui/sheet";
 import Layout from "@/layouts/default";
 import { queryData, searchParams } from "@/lib/commerce";
-import {
-  createRouteHelpers,
-  getUrl,
-  Search_Show, Search_UpdateGrid
-} from "@/generated/routes";
+
+import { SearchShowAjax, SearchUpdateGrid } from "@/generated/routes";
 import { cn } from "@/lib/utils";
 
 const MoreProducts = ({
@@ -47,7 +44,7 @@ const MoreProducts = ({
     useInfiniteQuery({
       queryKey: ["showMore", { queryString }],
       queryFn: async ({ pageParam }: any) => {
-        const { data } = await axios.get(getUrl(Search_UpdateGrid), {
+        const { data } = await axios.get(SearchUpdateGrid.url(), {
           params: pageParam,
         });
         return data;
@@ -181,14 +178,10 @@ const SearchShow = ({
 }) => {
   const [open, setOpen] = useState(false);
 
-  const routes = createRouteHelpers({
-    "Search-Show": Search_Show,
-  });
-
   const handleSelectedRinament = useCallback(async (url: string) => {
     const { data } = searchParams(url);
 
-    router.visit(routes.url("Search-Show"), {
+    router.visit(SearchShowAjax.url(), {
       data,
       preserveScroll: true,
     });

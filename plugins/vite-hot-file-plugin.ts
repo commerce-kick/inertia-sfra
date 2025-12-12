@@ -1,6 +1,6 @@
 import fs from "fs";
-import { ViteDevServer } from "vite";
 import os from "os";
+import { ViteDevServer } from "vite";
 
 export default function viteHotFilePlugin(filePath) {
   return {

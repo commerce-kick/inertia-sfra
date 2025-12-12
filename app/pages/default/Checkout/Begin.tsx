@@ -1,28 +1,28 @@
 "use client";
 
-import { useEffect } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
-  CardFooter,
 } from "@/components/ui/card";
-import { ShoppingBag, CreditCard, Truck, Check } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Check, CreditCard, ShoppingBag, Truck } from "lucide-react";
+import { useEffect } from "react";
 
-import type { CheckoutResponse } from "@/types/response/checkout";
 import CustomerForm from "@/components/commerce/checkout/customer-form";
-import ShippingForm from "@/components/commerce/checkout/shipping-form";
-import PaymentForm from "@/components/commerce/checkout/payment-form";
 import OrderSummary from "@/components/commerce/checkout/order-summary";
+import PaymentForm from "@/components/commerce/checkout/payment-form";
+import ShippingForm from "@/components/commerce/checkout/shipping-form";
 import { Button } from "@/components/ui/button";
-import { useQueryState } from "nuqs";
+import { OrderConfirm } from "@/generated/routes";
+import type { CheckoutResponse } from "@/types/response/checkout";
 import { router } from "@inertiajs/react";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import { getUrl, Order_Confirm } from "@/generated/routes";
+import { useQueryState } from "nuqs";
 
 export default function CheckoutPage(checkoutData: CheckoutResponse) {
   const [activeTab, setActiveTab] = useQueryState("stage", {
@@ -50,7 +50,7 @@ export default function CheckoutPage(checkoutData: CheckoutResponse) {
     onSuccess: (data) => {
       // Redirect to order confirmation page
       router.post(
-        getUrl(Order_Confirm),
+        OrderConfirm.url(),
         {
           orderID: data.orderID,
           orderToken: data.orderToken,

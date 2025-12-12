@@ -2,14 +2,11 @@
 
 import { Rec, RecomendationsResponse } from "@/types/response/recomendations";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { ScrollArea } from "../ui/scroll-area";
-import { Card, CardContent } from "../ui/card";
-import Image from "../ui/image";
+
 import { Link } from "@inertiajs/react";
-import { getUrl, Product_Show } from "@/generated/routes";
-import { Star } from "lucide-react";
-import { cn } from "@/lib/utils";
+import Image from "../ui/image";
+
+import { ProductShow } from "@/generated/routes";
 import { Button } from "../ui/button";
 import { EmblaCarousel } from "./overflow-carousel";
 
@@ -36,7 +33,9 @@ const ProductTile = ({ image_url, product_name, id }: Rec) => {
         />
       </div>
       <h3 className="font-medium truncate">
-        <Link href={getUrl(Product_Show, { pid: id })}>{product_name}</Link>
+        <Link href={ProductShow.url({ params: { pid: id } })}>
+          {product_name}
+        </Link>
       </h3>
     </div>
   );
@@ -91,9 +90,9 @@ export default function EinsteinRecs({
       </div>
       <EmblaCarousel className="pb-4">
         <div className="flex gap-6">
-            {data.recs.map((i) => (
-              <ProductTile  key={i.id} {...i} />
-            ))}
+          {data.recs.map((i) => (
+            <ProductTile key={i.id} {...i} />
+          ))}
         </div>
       </EmblaCarousel>
     </section>

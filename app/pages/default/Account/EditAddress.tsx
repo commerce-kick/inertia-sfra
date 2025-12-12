@@ -1,33 +1,20 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import {
+  Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  Form,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import AccountLayout from "@/layouts/account";
 import Layout from "@/layouts/default";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import {
-  Account_SaveProfile,
-  Address_SaveAddress,
-  createRouteHelpers,
-} from "@/generated/routes";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
 import {
   Card,
   CardContent,
@@ -36,8 +23,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { MapPin } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { AddressSaveAddress } from "@/generated/routes";
 import type { AddAddressProps } from "@/types/response/add-address";
+import { MapPin } from "lucide-react";
 import { useQueryState } from "nuqs";
 
 const FormSchema = z.object({
@@ -75,15 +70,13 @@ const AddAddress = (props: AddAddressProps) => {
     },
   });
 
-  const routes = createRouteHelpers({
-    "Address-SaveAddress": Address_SaveAddress,
-  });
-
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: z.infer<typeof FormSchema>) => {
       const { data: response } = await axios.postForm(
-        routes.url("Address-SaveAddress", {
-          addressId: addressId,
+        AddressSaveAddress.url({
+          params: {
+            addressId: addressId!,
+          },
         }),
         {
           ...data,

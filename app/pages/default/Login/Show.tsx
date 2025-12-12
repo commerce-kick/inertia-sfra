@@ -1,7 +1,7 @@
-"use client";
-
+import { RenderForm } from "@/components/commerce/render-form";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -12,31 +12,28 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Checkbox } from "@/components/ui/checkbox";
+import {
+  AccountLogin,
+  AccountShow,
+  AccountSubmitRegistration,
+} from "@/generated/routes";
 import Layout from "@/layouts/default";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "@inertiajs/react";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
+import {
+  ArrowRight,
+  Eye,
+  EyeOff,
+  Loader2,
+  Lock,
+  Mail,
+  User,
+} from "lucide-react";
 import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import {
-  ArrowRight,
-  Loader2,
-  Mail,
-  Lock,
-  User,
-  Eye,
-  EyeOff,
-} from "lucide-react";
-import { RenderForm } from "@/components/commerce/render-form";
-import {
-  Account_Login,
-  Account_Show,
-  createRouteHelpers,
-  Login_Show,
-} from "@/generated/routes";
 
 const loginSchema = z.object({
   loginEmail: z.string().email("Please enter a valid email address"),
@@ -68,11 +65,6 @@ const registerSchema = z
 const AuthPage = ({ csrf, profileForm }: { csrf: { token: string } }) => {
   const [activeView, setActiveView] = useState<"login" | "register">("login");
 
-  const accountRoutes = createRouteHelpers({
-    "Account-Login": Account_Login,
-    "Account-Show": Account_Show,
-  });
-
   // Login form
   const loginForm = useForm({
     resolver: zodResolver(loginSchema),
@@ -86,24 +78,21 @@ const AuthPage = ({ csrf, profileForm }: { csrf: { token: string } }) => {
   // Login mutation
   const login = useMutation({
     mutationFn: async (formData: z.infer<typeof loginSchema>) => {
-      const { data } = await axios.postForm(
-        accountRoutes.url("Account-Login"),
-        {
-          ...formData,
-          csrf_token: csrf.token,
-        }
-      );
+      const { data } = await axios.postForm(AccountLogin.url(), {
+        ...formData,
+        csrf_token: csrf.token,
+      });
       return data;
     },
     onSuccess: () => {
-      router.visit(accountRoutes.url("Account-Show"));
+      router.visit(AccountShow.url());
     },
   });
 
   // Register mutation
   const register = useMutation({
     mutationFn: async (formData: any) => {
-      const { data } = await axios.postForm("Account-SubmitRegistration", {
+      const { data } = await axios.postForm(AccountSubmitRegistration.url(), {
         ...formData,
         csrf_token: csrf.token,
       });
