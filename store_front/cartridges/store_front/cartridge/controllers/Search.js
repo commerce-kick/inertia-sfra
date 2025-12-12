@@ -7,7 +7,6 @@
 const server = require("server");
 server.extend(module.superModule);
 
-const sharedData = require("*/cartridge/scripts/middleware/sharedData");
 const inertia = require("*/cartridge/scripts/middleware/inertiaMiddleware");
 
 server.append("UpdateGrid", function (req, res, next) {
@@ -52,8 +51,8 @@ server.append(
 
     next();
   },
-  sharedData.inertiaSharedData,
-  inertia.inertiaMiddleware
+  inertia.shareData,
+  inertia.render
 );
 
 server.append("ShowAjax", function (req, res, next) {
@@ -79,8 +78,8 @@ server.get(
 
     next();
   },
-  sharedData.inertiaSharedData,
-  inertia.inertiaMiddleware
+  inertia.shareData,
+  inertia.render
 );
 
 module.exports = server.exports();

@@ -5,11 +5,9 @@
  */
 
 var server = require("server");
-var system = require("dw/system/System");
 var Resource = require("dw/web/Resource");
 var consentTracking = require("*/cartridge/scripts/middleware/consentTracking");
 const inertia = require("*/cartridge/scripts/middleware/inertiaMiddleware");
-const sharedData = require("*/cartridge/scripts/middleware/sharedData");
 
 /**
  * Error-Start : This endpoint is called when there is a server error
@@ -35,8 +33,8 @@ server.use(
 
     next();
   },
-  sharedData.inertiaSharedData,
-  inertia.inertiaMiddleware
+  inertia.shareData,
+  inertia.render
 );
 
 /**

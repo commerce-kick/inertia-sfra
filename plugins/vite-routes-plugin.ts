@@ -154,8 +154,8 @@ interface RouteDefinition {
  * Input:
  * ```
  * /**
- *  * @param pid optional string the product id
- *  * @param color required string the color variant
+ *  * @queryParam pid optional string the product id
+ *  * @queryParam color required string the color variant
  *  *\/
  * server.get("Show")
  * ```
@@ -169,11 +169,11 @@ interface RouteDefinition {
 function parseJSDocParams(jsDocComment: string): ParamDefinition[] {
   const params: ParamDefinition[] = [];
   
-  // Match @param lines with various formats:
-  // @param pid optional string the product id
-  // @param {string} pid the product id (optional)
-  // @param pid string the product id
-  const paramRegex = /@param\s+(?:\{([^}]+)\}\s+)?(\w+)\s+(optional|required)?\s*([a-zA-Z]+)?\s*(.*)/g;
+  // Match @queryParam lines with various formats:
+  // @queryParam pid optional string the product id
+  // @queryParam {string} pid the product id (optional)
+  // @queryParam pid string the product id
+  const paramRegex = /@queryParam\s+(?:\{([^}]+)\}\s+)?(\w+)\s+(optional|required)?\s*([a-zA-Z]+)?\s*(.*)/g;
   
   let match;
   while ((match = paramRegex.exec(jsDocComment)) !== null) {
@@ -513,8 +513,8 @@ export function addQueryParams(url: string, params?: QueryParams): string {
 /**
  * Create a route collection with helper methods
  * 
- * @param routes - Object containing all routes
- * @param defaultLocale - Default locale for URL building
+ * @queryParam routes - Object containing all routes
+ * @queryParam defaultLocale - Default locale for URL building
  * @returns Route collection with helper methods
  * 
  * @example
@@ -665,8 +665,8 @@ const ${identifier}: Route<${paramsType}> = {
 /**
  * Type-safe URL builder for ${identifier}
  * 
- * @param params - Route parameters
- * @param locale - Locale code (optional)
+ * @queryParam params - Route parameters
+ * @queryParam locale - Locale code (optional)
  * @returns Complete URL with parameters
  * 
  * @example

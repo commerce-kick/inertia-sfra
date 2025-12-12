@@ -3,7 +3,18 @@
 var inertiaResponse = require("*/cartridge/helpers/http");
 const utils = require("*/cartridge/helpers/utils");
 
-function inertiaMiddleware(req, res, next) {
+function shareData(req, res, next) {
+  var URLUtils = require("dw/web/URLUtils");
+
+  res.setViewData({
+    currentCustomer: req.currentCustomer,
+    staticUrl: URLUtils.staticURL("/").toString(),
+  });
+
+  next();
+}
+
+function render(req, res, next) {
   res.setViewData({
     inertia: true,
     version: "1.0",
@@ -56,5 +67,6 @@ function inertiaMiddleware(req, res, next) {
 }
 
 module.exports = {
-  inertiaMiddleware: inertiaMiddleware,
+  render: render,
+  shareData: shareData,
 };
