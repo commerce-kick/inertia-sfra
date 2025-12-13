@@ -25,7 +25,7 @@ import {
 import Layout from "@/layouts/default";
 import { queryData, searchParams } from "@/lib/commerce";
 
-import { SearchShowAjax, SearchUpdateGrid } from "@/generated/routes";
+import { SearchShow, SearchUpdateGrid } from "@/generated/routes";
 import { cn } from "@/lib/utils";
 
 const MoreProducts = ({
@@ -175,7 +175,7 @@ const FiltersContent = ({
   );
 };
 
-const SearchShow = ({
+const SearchShowPage = ({
   refinements,
   productSort,
   count,
@@ -196,7 +196,7 @@ const SearchShow = ({
   const handleSelectedRinament = useCallback(async (url: string) => {
     const { data } = searchParams(url);
 
-    router.visit(SearchShowAjax.url(), {
+    router.visit(SearchShow.url(), {
       data,
       preserveScroll: true,
     });
@@ -265,6 +265,6 @@ const SearchShow = ({
 };
 
 //@ts-ignore
-SearchShow.layout = (page) => <Layout>{page}</Layout>;
+SearchShowPage.layout = (page) => <Layout>{page}</Layout>;
 
-export default SearchShow;
+export default SearchShowPage;

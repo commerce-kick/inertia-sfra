@@ -40,9 +40,7 @@ export default defineConfig({
       buildDirectory: "/on/demandware.static/Sites-RefArch-Site/-/en_US/",
       base: "/on/demandware.static/Sites-RefArch-Site/-/en_US/",
       publicDirectory:
-        "./store_front/cartridges/store_front/cartridge/static/default",
-      hotFile:
-        "./store_front/cartridges/store_front/cartridge/static/defaut/hot",
+        "./store_front/cartridges/store_front/cartridge/static/default"
     }),
     react(),
     tailwindcss(),
