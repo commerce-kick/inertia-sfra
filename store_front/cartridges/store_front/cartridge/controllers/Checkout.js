@@ -8,7 +8,7 @@ var server = require("server");
 server.extend(module.superModule);
 
 const inertia = require("*/cartridge/scripts/middleware/inertiaMiddleware");
-
+const sharedData = require("*/cartridge/scripts/middleware/shareData");
 /**
  * Main entry point for Checkout
  */
@@ -38,7 +38,7 @@ server.append(
 
     return next();
   },
-  inertia.shareData,
+  sharedData,
   inertia.render
 );
 

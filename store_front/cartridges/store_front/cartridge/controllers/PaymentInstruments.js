@@ -2,6 +2,7 @@ const server = require("server");
 server.extend(module.superModule);
 
 const inertia = require("*/cartridge/scripts/middleware/inertiaMiddleware");
+const sharedData = require("*/cartridge/scripts/middleware/shareData");
 
 server.append(
   "AddPayment",
@@ -15,7 +16,7 @@ server.append(
 
     next();
   },
-  inertia.shareData,
+  sharedData,
   inertia.render
 );
 
@@ -31,7 +32,7 @@ server.append(
 
     next();
   },
-  inertia.shareData,
+  sharedData,
   inertia.render
 );
 

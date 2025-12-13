@@ -8,16 +8,14 @@ const server = require("server");
 server.extend(module.superModule);
 
 const inertia = require("*/cartridge/scripts/middleware/inertiaMiddleware");
+const sharedData = require("*/cartridge/scripts/middleware/shareData");
 
 server.append(
   "Confirm",
   function (req, res, next) {
-    var reportingUrlsHelper = require("*/cartridge/scripts/reportingUrls");
     var OrderMgr = require("dw/order/OrderMgr");
     var OrderModel = require("*/cartridge/models/order");
     var Locale = require("dw/util/Locale");
-
-    var id = req.form.orderID;
 
     var order;
 
@@ -45,7 +43,7 @@ server.append(
 
     next();
   },
-  inertia.shareData,
+  sharedData,
   inertia.render
 );
 
@@ -61,7 +59,7 @@ server.append(
 
     next();
   },
-  inertia.shareData,
+  sharedData,
   inertia.render
 );
 

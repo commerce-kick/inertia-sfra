@@ -23,7 +23,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { ModeToggle } from "./mode-toggle";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -41,17 +40,13 @@ import {
   SheetTrigger,
 } from "./ui/sheet";
 
-import {
-  CartMiniCart,
-  CheckoutBegin,
-  HomeShow,
-  LoginShow,
-} from "@/generated/routes";
+import { CommerceNavigation } from "@/components/commerce/nav";
+import { ModeToggle } from "@/components/mode-toggle";
+import { CartMiniCart, CheckoutBegin, HomeShow, LoginShow } from "@/generated/routes";
 import { cart$ } from "@/state/cart";
 import type { MiniCartResponse } from "@/types/minicart";
 import type { NavigationData } from "@/types/navigation";
 import type { SearchSuggestionsResponse } from "@/types/search-suggestion";
-import { CommerceNavigation } from "./commerce/nav";
 
 const SearchBox = () => {
   const [searchQuery, setSearchQuery] = useState("");

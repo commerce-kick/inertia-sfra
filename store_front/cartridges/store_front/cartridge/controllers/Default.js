@@ -12,7 +12,7 @@ server.append(
 
     next();
   },
-  inertia.shareData,
+  inertia.sharedData,
   inertia.render
 );
 

@@ -2,7 +2,7 @@ import fs from "fs";
 import os from "os";
 import { ViteDevServer } from "vite";
 
-export default function viteHotFilePlugin(filePath) {
+export default function viteHotFilePlugin(filePath: string) {
   return {
     name: "vite-hot-file",
     configureServer: function (server: ViteDevServer) {
@@ -52,6 +52,7 @@ export default function viteHotFilePlugin(filePath) {
 function getNetworkIP() {
   const interfaces = os.networkInterfaces();
   for (const name of Object.keys(interfaces)) {
+    //@ts-ignore
     for (const iface of interfaces[name]) {
       // Skip over internal and non-IPv4 addresses
       if (!iface.internal && iface.family === "IPv4") {

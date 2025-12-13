@@ -7,6 +7,7 @@
 const server = require("server");
 
 const inertia = require("*/cartridge/scripts/middleware/inertiaMiddleware");
+const sharedData = require("*/cartridge/scripts/middleware/shareData");
 
 server.get(
   "Show",
@@ -20,7 +21,7 @@ server.get(
 
     next();
   },
-  inertia.shareData,
+  sharedData,
   inertia.render
 );
 
@@ -36,7 +37,7 @@ server.post(
 
     next();
   },
-  inertia.shareData,
+  sharedData,
   inertia.render
 );
 
