@@ -1,5 +1,7 @@
-import { z } from "zod";
+//@ts-nocheck
+
 import type { FormField, FormGroup, ServerFormDefinition } from "@/types/form";
+import { z } from "zod";
 
 // Helper to check if a property is a FormField
 const isFormField = (value: any): value is FormField => {

@@ -72,7 +72,7 @@ const ThanksPage = ({ order }: { order: TOrder }) => {
                                 <div className="flex items-center gap-3">
                                   <div className="h-16 w-16 overflow-hidden rounded-md border bg-muted">
                                     <Image
-                                      src={item.images.small[0].absURL}
+                                      src={item.images.small[0]?.absURL}
                                       alt={item.productName}
                                       width={64}
                                       height={64}

@@ -1,7 +1,6 @@
 import Banner from "@/components/commerce/banner";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { TAccount } from "@/types/account";
 import { usePage } from "@inertiajs/react";
 import { Clock, Heart, ShoppingBag } from "lucide-react";
 
@@ -12,12 +11,12 @@ export default function AccountLayout({
 }) {
   const {
     currentCustomer: { profile },
-  } = usePage<{ currentCustomer: { profile: TAccount } }>().props;
+  } = usePage().props;
 
   // Get initials for avatar
   const getInitials = () => {
     const firstName = profile.firstName || "";
-    const lastName = profile.lastName || "";
+    const lastName = profile?.lastName || "";
     return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
   };
 

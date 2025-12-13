@@ -1,10 +1,10 @@
-import { format } from "date-fns"
-import { Package, ExternalLink, Calendar, Mail } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
-import Image from "../ui/image"
 import type { OrderCardProps } from "@/types/order"
+import { format } from "date-fns"
+import { Calendar, ExternalLink, Mail, Package } from "lucide-react"
+import Image from "../ui/image"
 
 
 export function OrderCard({ order, resources }: OrderCardProps) {
@@ -37,7 +37,7 @@ export function OrderCard({ order, resources }: OrderCardProps) {
         <div className="flex flex-col sm:flex-row gap-4">
           {/* Product Image */}
           {order.firstLineItem && (
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
               <div className="relative h-20 w-20 rounded-md border overflow-hidden bg-muted/50">
                 <Image
                   src={order.firstLineItem.imageURL || "/placeholder.svg"}

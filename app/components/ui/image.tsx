@@ -7,12 +7,16 @@ export default function Image({
   alt,
   className,
 }: {
-  src: string;
+  src?: string;
   alt?: string;
   height?: number;
   width?: number;
   className?: string;
 }) {
+  if (!src) {
+    return <img src="./placeholder.svg" />;
+  }
+
   return (
     <LazyLoadImage
       alt={alt || "Image"}

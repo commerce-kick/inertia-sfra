@@ -247,7 +247,7 @@ const AddAddress = (props: AddAddressProps) => {
                           {(
                             props.addressForm.states.stateCode.options ?? []
                           ).map((opt, index) => (
-                            <SelectItem key={"zip" + index} value={opt.value}>
+                            <SelectItem key={"zip" + index} value={opt.value ? opt.value : ''}>
                               {opt.label}
                             </SelectItem>
                           ))}

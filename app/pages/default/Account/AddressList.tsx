@@ -27,7 +27,7 @@ const AddressList = (props: AddressListProps) => {
   const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({
-    mutationFn: async (addressId: string) => {
+    mutationFn: async (_: string) => {
       const { data } = await axios.get(AddressDeleteAddress.url());
       return data;
     },
@@ -71,7 +71,7 @@ const AddressList = (props: AddressListProps) => {
           </div>
         ) : (
           <div className="space-y-4">
-            {props.addressBook.map((ad, index) => (
+            {props.addressBook.map((ad) => (
               <div
                 key={ad.address.ID}
                 className="bg-muted/30 p-4 rounded-lg border"

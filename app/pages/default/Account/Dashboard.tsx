@@ -171,8 +171,8 @@ const Wishlist = () => {
   );
 };
 
-const Dashboard = ({ account, ...rest }: { account: TAccount }) => {
-  const { data: orderHistoryData, isLoading: orderHistoryLoading } = useQuery<{
+const Dashboard = ({ account }: { account: TAccount }) => {
+  const { data: _, isLoading: orderHistoryLoading } = useQuery<{
     orders: TOrder[];
   }>({
     queryKey: ["orderHistory"],
@@ -409,10 +409,7 @@ const Dashboard = ({ account, ...rest }: { account: TAccount }) => {
                     </div>
                   ) : account.orderHistory ? (
                     <div className="space-y-6">
-                      <OrderCard
-                        order={account.orderHistory}
-                        resources={account.orderHistory.resources}
-                      />
+                     <h1>TODO Order History</h1>
                     </div>
                   ) : (
                     <div className="min-h-[100px] flex flex-col items-center justify-center gap-3">

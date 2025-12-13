@@ -71,9 +71,6 @@ export default function CheckoutPage(checkoutData: CheckoutResponse) {
   const isCustomerCompleted = !!checkoutData.order?.orderEmail;
   const isShippingCompleted =
     checkoutData.order?.shipping?.[0]?.selectedShippingMethod?.ID;
-  const isPaymentCompleted = checkoutData.currentStage === "placeOrder";
-
-  console.log(checkoutData);
 
   return (
     <div className="container mx-auto py-8 px-4">
@@ -237,7 +234,7 @@ export default function CheckoutPage(checkoutData: CheckoutResponse) {
                     </div>
 
                     {/* Shipping Information Summary */}
-                    {checkoutData.order?.shipping?.[0].shippingAddress && (
+                    {checkoutData.order?.shipping?.[0]?.shippingAddress && (
                       <div className="space-y-2">
                         <h3 className="text-lg font-medium">
                           Shipping Information

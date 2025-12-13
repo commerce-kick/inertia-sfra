@@ -3,7 +3,7 @@ import isEmpty from "lodash/isEmpty";
 import { CarrotIcon } from "lucide-react";
 
 
-export default function DemoPage(props: any) {
+export default function DemoPage() {
   return (
     <div>
       <CarrotIcon />

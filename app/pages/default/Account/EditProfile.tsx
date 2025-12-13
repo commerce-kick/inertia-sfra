@@ -94,7 +94,7 @@ const EditProfile = (props: EditAccountProps) => {
     onSuccess: () => {
       toast.success("Profile updated");
     },
-    onError: (error) => {
+    onError: () => {
       toast.error("Error");
     },
   });

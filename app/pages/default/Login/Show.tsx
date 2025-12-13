@@ -41,28 +41,21 @@ const loginSchema = z.object({
   rememberMe: z.boolean().optional(),
 });
 
-const registerSchema = z
-  .object({
-    fullName: z.string().min(2, "Please enter your full name"),
-    email: z.string().email("Please enter a valid email address"),
-    password: z
-      .string()
-      .min(8, "Password must be at least 8 characters")
-      .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-        "Password must include uppercase, lowercase, number and special character"
-      ),
-    confirmPassword: z.string(),
-    terms: z.boolean().refine((val) => val === true, {
-      message: "You must agree to the terms and conditions",
-    }),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"],
-  });
+const registerSchema = z.object({
+  fullName: z.string(),
+  email: z.string().email("Please enter a valid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+  confirmPassword: z.string(),
+  terms: z.boolean().optional(),
+});
 
-const AuthPage = ({ csrf, profileForm }: { csrf: { token: string } }) => {
+const AuthPage = ({
+  csrf,
+  profileForm,
+}: {
+  csrf: { token: string };
+  profileForm: any;
+}) => {
   const [activeView, setActiveView] = useState<"login" | "register">("login");
 
   // Login form
@@ -72,6 +65,13 @@ const AuthPage = ({ csrf, profileForm }: { csrf: { token: string } }) => {
       loginEmail: "",
       loginPassword: "",
       rememberMe: false,
+    },
+  });
+
+  const registerForm = useForm({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      terms: true,
     },
   });
 
@@ -98,8 +98,8 @@ const AuthPage = ({ csrf, profileForm }: { csrf: { token: string } }) => {
       });
       return data;
     },
-    onSuccess: (data) => {
-      router.visit("Account-Show");
+    onSuccess: () => {
+      router.visit(AccountShow.url());
     },
   });
 
@@ -178,12 +178,12 @@ const AuthPage = ({ csrf, profileForm }: { csrf: { token: string } }) => {
                     formDefinition={profileForm}
                     onSubmit={handleRegisterSubmit}
                   />
-                  {/* <RegisterForm
+                  <RegisterForm
                     form={registerForm}
                     onSubmit={handleRegisterSubmit}
                     isLoading={register.isPending}
                     onLoginClick={() => setActiveView("login")}
-                  /> */}
+                  />
                 </CardContent>
               </Card>
             </TabsContent>
@@ -202,22 +202,12 @@ const AuthPage = ({ csrf, profileForm }: { csrf: { token: string } }) => {
               </div>
 
               {/* Register Form */}
-              <div className="p-8 bg-gradient-to-br from-muted/50 to-muted/20">
-                <RenderForm
-                  formDefinition={profileForm}
-                  onSubmit={handleRegisterSubmit}
-                  excludeFields={[
-                    "dwfrm_profile_login_newpasswords_newpassword",
-                    "dwfrm_profile_login_newpasswords_newpasswordconfirm",
-                    "dwfrm_profile_login_currentpassword",
-                  ]}
-                  bottomFields={["dwfrm_profile_customer_addtoemaillist"]}
-                />
-                {/* <RegisterForm
+              <div className="p-8 bg-linear-to-br from-muted/50 to-muted/20">
+                <RegisterForm
                   form={registerForm}
                   onSubmit={handleRegisterSubmit}
                   isLoading={register.isPending}
-                /> */}
+                />
               </div>
             </CardContent>
           </Card>

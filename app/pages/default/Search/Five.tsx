@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import Layout from "@/layouts/default";
-import { useState, useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Virtuoso } from "react-virtuoso";
 
 // Define the data type
@@ -41,15 +41,6 @@ const Five = ({ data }: FiveProps) => {
     );
   }, [items, searchTerm]);
 
-  // Calculate random background colors based on language (consistent per language)
-  const getLanguageColor = (language: string) => {
-    // Simple hash function for consistent colors
-    const hash = language.split("").reduce((acc, char) => {
-      return char.charCodeAt(0) + ((acc << 5) - acc);
-    }, 0);
-    return `hsl(${Math.abs(hash % 360)}, 70%, 90%)`;
-  };
-
   // Render loading state
   if (isLoading) {
     return <div className="p-4">Loading data...</div>;
@@ -83,16 +74,12 @@ const Five = ({ data }: FiveProps) => {
           data={filteredItems}
           totalCount={filteredItems.length}
           overscan={200}
-          itemContent={(index, item) => {
-            const bgColor = getLanguageColor(item.language);
-            // Vary the size a bit based on bio length
+          itemContent={(_, item) => {
             return (
               <div className="bg-background p-4 border border-border hover:shadow-md transition-shadow">
                 <div className="flex justify-between items-start">
                   <h3 className="font-bold text-lg">{item.name}</h3>
-                  <Badge>
-                    {item.language}
-                  </Badge>
+                  <Badge>{item.language}</Badge>
                 </div>
 
                 <div className="text-sm">{item.bio}</div>

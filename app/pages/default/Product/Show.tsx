@@ -376,12 +376,7 @@ const ProductInfo = ({ initialProduct }: { initialProduct: Product }) => {
   );
 };
 
-const ProductComponent = ({
-  product,
-  breadcrumbs,
-  addToCartUrl,
-  ...rest
-}: ProductShowProps) => {
+const ProductComponent = ({ product, breadcrumbs }: ProductShowProps) => {
   return (
     <div className="container mx-auto py-8 px-4 md:px-6">
       {/* Back button and breadcrumbs */}

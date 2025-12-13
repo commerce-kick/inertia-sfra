@@ -11,32 +11,28 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import Image from "@/components/ui/image";
 import Layout from "@/layouts/default";
 import { cn } from "@/lib/utils";
-import type { TProductFactory } from "@/types/productFactory";
+import { Product } from "@/types/productFactory";
 import { Link } from "@inertiajs/react";
 import {
   Brain,
+  Code,
+  Code2,
   ExternalLink,
-  Figma,
   FileArchive,
-  Github,
   Heart,
   HelpCircle,
   LayoutGrid,
   Lock,
   ShoppingCart,
-  User,
+  User
 } from "lucide-react";
 
 const HomePage = ({
   recommendedProducts,
-  staticUrl,
-  viewAllLink,
-  ...props
 }: {
-  recommendedProducts: TProductFactory[];
+  recommendedProducts: Product[];
   staticUrl: string;
   viewAllLink: string;
 }) => {
@@ -47,7 +43,7 @@ const HomePage = ({
         <div className="flex w-full items-start justify-center absolute inset-0">
           <InteractiveGridPattern
             className={cn(
-              "[mask-image:radial-gradient(500px_circle_at_top_center,white,transparent)]",
+              "mask-[radial-gradient(500px_circle_at_top_center,white,transparent)]",
               "relative w-auto h-auto"
             )}
             width={50}
@@ -83,14 +79,14 @@ const HomePage = ({
         <div className="grid gap-6 md:grid-cols-3">
           <Card className="flex flex-col items-center p-6 text-center hover:-translate-y-2.5 transition-all">
             <div className="mb-4 rounded-full bg-primary/10 p-3">
-              <Github className="h-6 w-6 text-primary" />
+              <Code className="h-6 w-6 text-primary" />
             </div>
             <h3 className="mb-2 text-xl font-medium">Download on GitHub</h3>
             <p className="mb-4 text-sm text-muted-foreground">
               Get the source code and start building your store
             </p>
             <Button variant="outline" className="mt-auto">
-              <Github className="mr-2 h-4 w-4" /> Clone Repository
+              <Code2 className="mr-2 h-4 w-4" /> Clone Repository
             </Button>
           </Card>
 
@@ -144,7 +140,7 @@ const HomePage = ({
             <CarouselContent>
               {recommendedProducts.map((product, index) => (
                 <CarouselItem key={`product-${index}`} className="md:basis-1/3">
-                  <ProductTile  {...product} />
+                  <ProductTile {...product} />
                 </CarouselItem>
               ))}
             </CarouselContent>

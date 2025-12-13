@@ -1,4 +1,4 @@
 
-export default function DemoPage(props: any) {
+export default function DemoPage() {
   return <div>post</div>;
 }

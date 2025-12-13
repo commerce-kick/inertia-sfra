@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button";
 import Image from "@/components/ui/image";
+import { HomeShow } from "@/generated/routes";
 import Layout from "@/layouts/default";
+import { router } from "@inertiajs/react";
 
 const ErrorPage = ({ status }: { status: 403 | 404 | 500 | 503 }) => {
   const title = {
@@ -21,15 +23,21 @@ const ErrorPage = ({ status }: { status: 403 | 404 | 500 | 503 }) => {
     <div className="h-screen flex gap-12 items-center justify-center">
       <Image src="https://cataas.com/cat/gif" />
       <div className="text-center">
-        <h1 className="text-9xl font-bold text-foreground">404</h1>
+        <h1 className="text-9xl font-bold text-foreground">{status}</h1>
         <p className="text-2xl font-light text-muted-foreground mt-4">
-          Oops! Page not found
+          {title[status] || "Oops! Page not found"}
         </p>
         <p className="text-muted-foreground mt-4 mb-8">
-          The page you are looking for might have been removed or is temporarily
-          unavailable.
+          {description[status] ||
+            "The page you are looking for might have been removed or is temporarily unavailable."}
         </p>
-        <Button>Go back to homepage</Button>
+        <Button
+          onClick={() => {
+            router.visit(HomeShow.url());
+          }}
+        >
+          Go back to homepage
+        </Button>
       </div>
     </div>
   );

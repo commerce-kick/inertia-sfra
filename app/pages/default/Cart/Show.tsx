@@ -2,7 +2,7 @@ import Banner from "@/components/commerce/banner";
 import Layout from "@/layouts/default";
 import type { CartProps } from "@/types/cart";
 
-const Cart = function ({ resources, items, numItems }: CartProps) {
+const Cart = function ({ resources, numItems }: CartProps) {
   return (
     <div>
       <Banner title="Cart" />

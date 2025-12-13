@@ -1,21 +1,21 @@
 import { Button } from "@/components/ui/button";
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
 } from "@/components/ui/card";
 import Image from "@/components/ui/image";
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableFooter,
-    TableHead,
-    TableHeader,
-    TableRow,
+  Table,
+  TableBody,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Layout from "@/layouts/default";
@@ -26,7 +26,7 @@ import { Check } from "lucide-react";
 const OrderDetails = ({ order }: { order: TOrder }) => {
   return (
     <>
-      <div className="bg-gradient-to-r from-primary/90 to-primary text-primary-foreground">
+      <div className="bg-linear-to-r from-primary/90 to-primary text-primary-foreground">
         <div className="container mx-auto flex flex-col items-center justify-center gap-2 px-4 py-10 text-center md:py-16">
           <div className="rounded-full bg-primary-foreground/20 p-3">
             <Check className="h-8 w-8" />
@@ -80,7 +80,7 @@ const OrderDetails = ({ order }: { order: TOrder }) => {
                                 <div className="flex items-center gap-3">
                                   <div className="h-16 w-16 overflow-hidden rounded-md border bg-muted">
                                     <Image
-                                      src={item.images.small[0].absURL}
+                                      src={item.images.small[0]?.absURL}
                                       alt={item.productName}
                                       width={64}
                                       height={64}

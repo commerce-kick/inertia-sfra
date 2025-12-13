@@ -132,7 +132,6 @@ const SearchBox = () => {
 const MobileSearch = () => {
   const [open, setOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [isSearching, setIsSearching] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   const { data, isLoading } = useQuery<{
@@ -140,14 +139,12 @@ const MobileSearch = () => {
   }>({
     queryKey: ["searchSuggestions", searchQuery],
     queryFn: async () => {
-      setIsSearching(true);
       try {
         const { data } = await axios.get("SearchServices-GetSuggestions", {
           params: { q: searchQuery },
         });
         return data;
       } finally {
-        setIsSearching(false);
       }
     },
     enabled: searchQuery.length >= 3,
@@ -309,8 +306,8 @@ const CartContent = () => {
               <div key={item.id} className="flex gap-4">
                 <div className="relative h-24 w-24 rounded-md overflow-hidden border bg-muted/40">
                   <img
-                    src={item.images.small[0].absURL || "/placeholder.svg"}
-                    alt={item.images.small[0].alt}
+                    src={item.images.small[0]?.absURL || "/placeholder.svg"}
+                    alt={item.images.small[0]?.alt}
                     className="object-cover h-full w-full"
                   />
                 </div>
@@ -472,10 +469,7 @@ const MobileNav = ({ categories }: NavigationData) => {
 };
 
 export function Header() {
-  const { currentCustomer, navBar } = usePage<{
-    currentCustomer: { profile: any };
-    navBar: NavigationData;
-  }>().props;
+  const { currentCustomer, navBar } = usePage().props;
 
   return (
     <header className="w-full sticky top-0 z-40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
