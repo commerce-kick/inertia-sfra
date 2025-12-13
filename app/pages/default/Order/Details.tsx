@@ -18,7 +18,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Layout from "@/layouts/default";
 import type { TOrder } from "@/types/checkout";
 import { format } from "date-fns";
 import { Check } from "lucide-react";
@@ -161,8 +160,5 @@ const OrderDetails = ({ order }: { order: TOrder }) => {
     </>
   );
 };
-
-//@ts-ignore
-OrderDetails.layout = (page) => <Layout>{page}</Layout>;
 
 export default OrderDetails;

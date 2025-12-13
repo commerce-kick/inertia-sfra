@@ -1,5 +1,4 @@
 import Banner from "@/components/commerce/banner";
-import Layout from "@/layouts/default";
 import type { CartProps } from "@/types/cart";
 
 const Cart = function ({ resources, numItems }: CartProps) {
@@ -16,8 +15,5 @@ const Cart = function ({ resources, numItems }: CartProps) {
     </div>
   );
 };
-
-//@ts-ignore
-Cart.layout = (page) => <Layout>{page}</Layout>;
 
 export default Cart;

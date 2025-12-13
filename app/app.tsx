@@ -1,23 +1,32 @@
-import "./styles/globals.css";
 import "./config";
+import "./styles/globals.css";
 
 import { createInertiaApp } from "@inertiajs/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { createRoot } from "react-dom/client";
 import { ThemeProvider } from "./components/theme-provider";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "./components/ui/sonner";
 
-import { NuqsAdapter } from "nuqs/adapters/react";
+import Layout from "@/layouts/default";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { NuqsAdapter } from "nuqs/adapters/react";
 
 createInertiaApp({
-  resolve: (name) =>
-    resolvePageComponent(
+  resolve: async (name) => {
+    const page = await resolvePageComponent(
       `./pages/${name}.tsx`,
       //@ts-ignore
       import.meta.glob("./pages/**/*.tsx")
-    ),
+    );
+
+    //@ts-ignore
+    page.default.layout =
+      //@ts-ignore
+      page.default.layout || ((page) => <Layout children={page} />);
+
+    return page;
+  },
   setup({ el, App, props }) {
     const root = createRoot(el);
     root.render(

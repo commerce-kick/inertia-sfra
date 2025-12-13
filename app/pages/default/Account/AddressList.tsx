@@ -14,8 +14,6 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { AddressDeleteAddress, AddressEditAddress } from "@/generated/routes";
-import AccountLayout from "@/layouts/account";
-import Layout from "@/layouts/default";
 import type { AddressListProps } from "@/types/response/address-list";
 import { Link } from "@inertiajs/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -151,12 +149,5 @@ const AddressList = (props: AddressListProps) => {
     </Card>
   );
 };
-
-//@ts-ignore
-AddressList.layout = (page) => (
-  <Layout>
-    <AccountLayout>{page}</AccountLayout>
-  </Layout>
-);
 
 export default AddressList;

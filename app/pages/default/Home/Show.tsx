@@ -11,9 +11,8 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import Layout from "@/layouts/default";
 import { cn } from "@/lib/utils";
-import { Product } from "@/types/productFactory";
+import type { IProductTile } from "@/types/models/product";
 import { Link } from "@inertiajs/react";
 import {
   Brain,
@@ -26,13 +25,25 @@ import {
   LayoutGrid,
   Lock,
   ShoppingCart,
-  User
+  User,
 } from "lucide-react";
+
+function FeatureCard({ icon, title, description }: any) {
+  return (
+    <HoverBox>
+      <Card className="flex flex-col p-6">
+        <div className="mb-4 text-primary">{icon}</div>
+        <h3 className="mb-2 text-xl font-medium">{title}</h3>
+        <p className="text-sm text-muted-foreground">{description}</p>
+      </Card>
+    </HoverBox>
+  );
+}
 
 const HomePage = ({
   recommendedProducts,
 }: {
-  recommendedProducts: Product[];
+  recommendedProducts: IProductTile[];
   staticUrl: string;
   viewAllLink: string;
 }) => {
@@ -216,20 +227,5 @@ const HomePage = ({
     </div>
   );
 };
-
-function FeatureCard({ icon, title, description }: any) {
-  return (
-    <HoverBox>
-      <Card className="flex flex-col p-6">
-        <div className="mb-4 text-primary">{icon}</div>
-        <h3 className="mb-2 text-xl font-medium">{title}</h3>
-        <p className="text-sm text-muted-foreground">{description}</p>
-      </Card>
-    </HoverBox>
-  );
-}
-
-//@ts-ignore
-HomePage.layout = (page) => <Layout children={page} />;
 
 export default HomePage;

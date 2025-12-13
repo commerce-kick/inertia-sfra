@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import Image from "@/components/ui/image";
 import { HomeShow } from "@/generated/routes";
-import Layout from "@/layouts/default";
 import { router } from "@inertiajs/react";
 
 const ErrorPage = ({ status }: { status: 403 | 404 | 500 | 503 }) => {
@@ -42,8 +41,5 @@ const ErrorPage = ({ status }: { status: 403 | 404 | 500 | 503 }) => {
     </div>
   );
 };
-
-//@ts-ignore
-ErrorPage.layout = (page) => <Layout children={page} />;
 
 export default ErrorPage;

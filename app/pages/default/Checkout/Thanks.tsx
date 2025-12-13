@@ -20,7 +20,6 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { HomeShow } from "@/generated/routes";
-import Layout from "@/layouts/default";
 import type { TOrder } from "@/types/checkout";
 import { Link } from "@inertiajs/react";
 import { format } from "date-fns";
@@ -212,8 +211,5 @@ const ThanksPage = ({ order }: { order: TOrder }) => {
     </>
   );
 };
-
-//@ts-ignore
-ThanksPage.layout = (page) => <Layout>{page}</Layout>;
 
 export default ThanksPage;

@@ -21,8 +21,6 @@ import {
   PaymentInstrumentsAddPayment,
   PaymentInstrumentsList,
 } from "@/generated/routes";
-import AccountLayout from "@/layouts/account";
-import Layout from "@/layouts/default";
 import type { TAccount } from "@/types/account";
 import type { TOrder } from "@/types/order";
 import type { WishListShowResponse } from "@/types/wishlist";
@@ -409,7 +407,7 @@ const Dashboard = ({ account }: { account: TAccount }) => {
                     </div>
                   ) : account.orderHistory ? (
                     <div className="space-y-6">
-                     <h1>TODO Order History</h1>
+                      <h1>TODO Order History</h1>
                     </div>
                   ) : (
                     <div className="min-h-[100px] flex flex-col items-center justify-center gap-3">
@@ -469,12 +467,5 @@ const Dashboard = ({ account }: { account: TAccount }) => {
     </>
   );
 };
-
-//@ts-ignore
-Dashboard.layout = (page) => (
-  <Layout>
-    <AccountLayout>{page}</AccountLayout>
-  </Layout>
-);
 
 export default Dashboard;

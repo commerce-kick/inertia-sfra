@@ -17,7 +17,6 @@ import {
   AccountShow,
   AccountSubmitRegistration,
 } from "@/generated/routes";
-import Layout from "@/layouts/default";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "@inertiajs/react";
 import { useMutation } from "@tanstack/react-query";
@@ -622,8 +621,5 @@ function RegisterForm({
     </Form>
   );
 }
-
-//@ts-ignore
-AuthPage.layout = (page) => <Layout>{page}</Layout>;
 
 export default AuthPage;

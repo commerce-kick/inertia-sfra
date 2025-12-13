@@ -35,7 +35,7 @@ server.append("UpdateGrid", function (req, res, next) {
 server.append(
   "Show",
   function (req, res, next) {
-    const viewData = res.getViewData(); 
+    const viewData = res.getViewData();
 
     res.setViewData({
       template: "Search/Show",
@@ -63,24 +63,5 @@ server.append("ShowAjax", function (req, res, next) {
 
   next();
 });
-
-/* This its a test to render 15K entries on a 5Mb json */
-server.get(
-  "Five",
-  function (req, res, next) {
-    const fiveJson = require("*/cartridge/scripts/five");
-
-    res.setViewData({
-      template: "Search/Five",
-      props: {
-        data: fiveJson,
-      },
-    });
-
-    next();
-  },
-  sharedData,
-  inertia.render
-);
 
 module.exports = server.exports();

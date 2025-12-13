@@ -16,8 +16,6 @@ import {
   PaymentInstrumentsAddPayment,
   PaymentInstrumentsDeletePayment,
 } from "@/generated/routes";
-import AccountLayout from "@/layouts/account";
-import Layout from "@/layouts/default";
 import type { PaymentListProps } from "@/types/response/payment-list";
 import { Link } from "@inertiajs/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -151,12 +149,5 @@ const PaymentList = (props: PaymentListProps) => {
     </Card>
   );
 };
-
-//@ts-ignore
-PaymentList.layout = (page) => (
-  <Layout>
-    <AccountLayout>{page}</AccountLayout>
-  </Layout>
-);
 
 export default PaymentList;

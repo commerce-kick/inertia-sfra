@@ -27,8 +27,6 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { AccountSaveProfile } from "@/generated/routes";
-import AccountLayout from "@/layouts/account";
-import Layout from "@/layouts/default";
 import type { EditAccountProps } from "@/types/response/EditAccount";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
@@ -297,12 +295,5 @@ const EditProfile = (props: EditAccountProps) => {
     </Card>
   );
 };
-
-//@ts-ignore
-EditProfile.layout = (page) => (
-  <Layout>
-    <AccountLayout>{page}</AccountLayout>
-  </Layout>
-);
 
 export default EditProfile;

@@ -1,6 +1,6 @@
 import { ProductShow, WishlistAddProduct } from "@/generated/routes";
 import { cn } from "@/lib/utils";
-import type { Product } from "@/types/productFactory";
+import { IProductTile } from "@/types/models/product";
 import { Link } from "@inertiajs/react";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
@@ -19,7 +19,7 @@ export default function ProductTile({
   id,
   isBundle,
   className,
-}: Product & {
+}: IProductTile & {
   isBundle?: boolean;
   className?: string;
 }) {
@@ -31,7 +31,6 @@ export default function ProductTile({
         optionVal: null,
       });
 
-      console.log(data);
       return data;
     },
     onSuccess: () => {
@@ -44,7 +43,7 @@ export default function ProductTile({
     mutate({});
   }, []);
 
-  const hasDiscount = price.list?.value && price.sales?.value;
+  const hasDiscount = price?.list?.value && price.sales?.value;
   const discountPercentage = hasDiscount
     ? Math.round(
         ((Number(price.list?.value) - Number(price.sales?.value)) /
@@ -57,7 +56,7 @@ export default function ProductTile({
     <div className={cn("group space-y-3", className)}>
       <div className="bg-gray-100 rounded-lg overflow-hidden aspect-square relative">
         <Image
-          src={images.large?.[0]?.absURL || "placeholder.svg"}
+          src={images?.large?.[0]?.absURL || "placeholder.svg"}
           alt={productName}
           width={300}
           height={300}
@@ -99,7 +98,7 @@ export default function ProductTile({
               isBundle && "line-through"
             )}
           >
-            <span className="font-semibold">{price.sales?.formatted}</span>
+            <span className="font-semibold">{price?.sales?.formatted}</span>
             {hasDiscount && (
               <>
                 <span className="text-gray-400 line-through text-sm">

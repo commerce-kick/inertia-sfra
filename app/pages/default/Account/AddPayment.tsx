@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -9,8 +7,6 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import AccountLayout from "@/layouts/account";
-import Layout from "@/layouts/default";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
@@ -34,7 +30,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { PaymentInstrumentsSavePayment } from "@/generated/routes";
-import type { AddPaymentProps } from "@/types/response/add-payment";
 import { router } from "@inertiajs/react";
 import { CreditCard } from "lucide-react";
 
@@ -50,7 +45,7 @@ const FormSchema = z.object({
 
 const resolver = zodResolver(FormSchema);
 
-const EditProfile = (props: AddPaymentProps) => {
+const EditProfile = (props: any) => {
   const form = useForm({
     resolver,
     defaultValues: {
@@ -220,23 +215,6 @@ const EditProfile = (props: AddPaymentProps) => {
                   )}
                 />
               </div>
-
-              {/* <FormField
-                name="makeDefaultPayment"
-                control={form.control}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Default Payment</FormLabel>
-                    <FormControl>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              /> */}
             </form>
           </Form>
         </CardContent>
@@ -253,12 +231,5 @@ const EditProfile = (props: AddPaymentProps) => {
     </div>
   );
 };
-
-//@ts-ignore
-EditProfile.layout = (page) => (
-  <Layout>
-    <AccountLayout>{page}</AccountLayout>
-  </Layout>
-);
 
 export default EditProfile;

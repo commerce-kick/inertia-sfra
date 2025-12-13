@@ -22,7 +22,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import Layout from "@/layouts/default";
 import { queryData, searchParams } from "@/lib/commerce";
 
 import { SearchShow, SearchUpdateGrid } from "@/generated/routes";
@@ -263,8 +262,5 @@ const SearchShowPage = ({
     </div>
   );
 };
-
-//@ts-ignore
-SearchShowPage.layout = (page) => <Layout>{page}</Layout>;
 
 export default SearchShowPage;

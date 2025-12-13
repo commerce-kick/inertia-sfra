@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -33,7 +31,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { AddressSaveAddress } from "@/generated/routes";
-import type { AddAddressProps } from "@/types/response/add-address";
+import { TCSRF } from "@/types";
 import { MapPin } from "lucide-react";
 
 const FormSchema = z.object({
@@ -51,7 +49,7 @@ const FormSchema = z.object({
 
 const resolver = zodResolver(FormSchema);
 
-const AddAddress = (props: AddAddressProps) => {
+const AddAddress = (props: { csrf: TCSRF; addressForm: any }) => {
   const form = useForm({
     resolver,
     defaultValues: {
@@ -81,16 +79,9 @@ const AddAddress = (props: AddAddressProps) => {
       );
       return response;
     },
-    onSuccess: (data) => {
-      console.log(data);
-    },
-    onError: (error) => {
-      console.error(error);
-    },
   });
 
   const handleFormSubmit = (data: z.infer<typeof FormSchema>) => {
-    console.log(data);
     mutate(data);
   };
 
@@ -243,7 +234,10 @@ const AddAddress = (props: AddAddressProps) => {
                           {(
                             props.addressForm.states.stateCode.options ?? []
                           ).map((opt, index) => (
-                            <SelectItem key={"zip" + index} value={opt.value ? opt.value : ''}>
+                            <SelectItem
+                              key={"zip" + index}
+                              value={opt.value ? opt.value : ""}
+                            >
                               {opt.label}
                             </SelectItem>
                           ))}

@@ -7,8 +7,6 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import AccountLayout from "@/layouts/account";
-import Layout from "@/layouts/default";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
@@ -247,7 +245,10 @@ const AddAddress = (props: AddAddressProps) => {
                           {(
                             props.addressForm.states.stateCode.options ?? []
                           ).map((opt, index) => (
-                            <SelectItem key={"zip" + index} value={opt.value ? opt.value : ''}>
+                            <SelectItem
+                              key={"zip" + index}
+                              value={opt.value ? opt.value : ""}
+                            >
                               {opt.label}
                             </SelectItem>
                           ))}
@@ -301,12 +302,5 @@ const AddAddress = (props: AddAddressProps) => {
     </div>
   );
 };
-
-//@ts-ignore
-AddAddress.layout = (page) => (
-  <Layout>
-    <AccountLayout>{page}</AccountLayout>
-  </Layout>
-);
 
 export default AddAddress;

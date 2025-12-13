@@ -48,10 +48,8 @@ import VariationAttributes from "@/components/commerce/variation-attributes";
 import { ImageCarousel } from "@/components/image-carousel";
 import { CartAddProduct, HomeShow } from "@/generated/routes";
 import useProductVariation from "@/hooks/useProductVariation";
-import Layout from "@/layouts/default";
 import { cart$ } from "@/state/cart";
-import type { Product } from "@/types/productFactory";
-import type { ProductShowProps } from "@/types/response/product-show";
+import { Product } from "@/types/dw/catalog";
 
 // Componente para mostrar el rating con estrellas
 const ProductRating = memo(({ rating }: { rating: number }) => {
@@ -376,7 +374,13 @@ const ProductInfo = ({ initialProduct }: { initialProduct: Product }) => {
   );
 };
 
-const ProductComponent = ({ product, breadcrumbs }: ProductShowProps) => {
+const ProductComponent = ({
+  product,
+  breadcrumbs,
+}: {
+  product: Product;
+  breadcrumbs: any;
+}) => {
   return (
     <div className="container mx-auto py-8 px-4 md:px-6">
       {/* Back button and breadcrumbs */}
@@ -526,7 +530,5 @@ const ProductComponent = ({ product, breadcrumbs }: ProductShowProps) => {
     </div>
   );
 };
-
-ProductComponent.layout = (page: any) => <Layout children={page} />;
 
 export default ProductComponent;
