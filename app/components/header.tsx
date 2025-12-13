@@ -42,7 +42,12 @@ import {
 
 import { CommerceNavigation } from "@/components/commerce/nav";
 import { ModeToggle } from "@/components/mode-toggle";
-import { CartMiniCart, CheckoutBegin, HomeShow, LoginShow } from "@/generated/routes";
+import {
+  CartMiniCartShow,
+  CheckoutBegin,
+  HomeShow,
+  LoginShow
+} from "@/generated/routes";
 import { cart$ } from "@/state/cart";
 import type { MiniCartResponse } from "@/types/minicart";
 import type { NavigationData } from "@/types/navigation";
@@ -268,19 +273,20 @@ const DropDownUser = ({ firstName, lastName }: any) => {
 };
 
 const CartContent = () => {
-  const { data } = useQuery<MiniCartResponse>({
+  const { data, isLoading } = useQuery<MiniCartResponse>({
     queryKey: ["cart"],
     queryFn: async () => {
-      const { data } = await axios.get(CartMiniCart.url());
+      const { data } = await axios.get(CartMiniCartShow.url());
       return data;
     },
   });
 
-  if (!data) return <div className="py-8 text-center">Loading cart...</div>;
+  if (!data || isLoading)
+    return <div className="py-8 text-center">Loading cart...</div>;
 
   return (
     <div className="flex-1 overflow-y-auto">
-      {data?.items.length === 0 ? (
+      {!data.items || data?.items?.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-full py-12 text-center">
           <ShoppingBag className="h-12 w-12 text-muted-foreground mb-4" />
           <h3 className="text-lg font-medium">Your cart is empty</h3>
@@ -297,7 +303,7 @@ const CartContent = () => {
       ) : (
         <div className="px-6">
           <div className="space-y-6 py-6">
-            {data?.items.map((item) => (
+            {data?.items?.map((item) => (
               <div key={item.id} className="flex gap-4">
                 <div className="relative h-24 w-24 rounded-md overflow-hidden border bg-muted/40">
                   <img
