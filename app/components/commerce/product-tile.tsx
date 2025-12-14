@@ -1,6 +1,6 @@
 import { ProductShow, WishlistAddProduct } from "@/generated/routes";
 import { cn } from "@/lib/utils";
-import { IProductTile } from "@/types/models/product";
+import { IProductTileData } from "@/types/data/ProductTileData";
 import { Link } from "@inertiajs/react";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
@@ -14,12 +14,10 @@ import Image from "../ui/image";
 export default function ProductTile({
   images,
   productName,
-  price,
-  rating,
   id,
   isBundle,
   className,
-}: IProductTile & {
+}: IProductTileData & {
   isBundle?: boolean;
   className?: string;
 }) {
@@ -43,14 +41,8 @@ export default function ProductTile({
     mutate({});
   }, []);
 
-  const hasDiscount = price?.list?.value && price.sales?.value;
-  const discountPercentage = hasDiscount
-    ? Math.round(
-        ((Number(price.list?.value) - Number(price.sales?.value)) /
-          Number(price.list?.value)) *
-          100
-      )
-    : 0;
+  const hasDiscount = 0;
+  const discountPercentage = 0;
 
   return (
     <div className={cn("group space-y-3", className)}>
@@ -85,7 +77,7 @@ export default function ProductTile({
                 <Star
                   key={i}
                   className={`h-4 w-4 ${
-                    i < Math.floor(rating)
+                    i < Math.floor(1)
                       ? "fill-yellow-400 text-yellow-400"
                       : "fill-gray-200 text-gray-200"
                   }`}
@@ -98,12 +90,10 @@ export default function ProductTile({
               isBundle && "line-through"
             )}
           >
-            <span className="font-semibold">{price?.sales?.formatted}</span>
+            <span className="font-semibold">{0}</span>
             {hasDiscount && (
               <>
-                <span className="text-gray-400 line-through text-sm">
-                  {price.list?.formatted}
-                </span>
+                <span className="text-gray-400 line-through text-sm">{0}</span>
                 <Badge
                   variant="outline"
                   className="bg-red-50 text-red-500 border-red-100"

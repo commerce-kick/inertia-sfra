@@ -15,8 +15,8 @@ const ProductSearchModel = require("dw/catalog/ProductSearchModel");
 server.append(
   "Show",
   function (req, res, next) {
+    const ProductData = require("*/cartridge/scripts/data/ProductData");
     const category = "newarrivals-womens";
-
     var ProductFactory = require("*/cartridge/scripts/factories/product");
     // Create a new product search
     const productSearch = new ProductSearchModel();
@@ -34,7 +34,10 @@ server.append(
         pid: productSearchHit.getProduct().ID,
         quantity: 1,
       });
-      products.push(product);
+
+      let result = ProductData.from(product);
+      products.push(result);
+
       productCount++;
     }
 
@@ -42,7 +45,11 @@ server.append(
       template: "Home/Show",
       props: {
         recommendedProducts: products,
-        viewAllLink: dw.web.URLUtils.url("Search-Show", "cgid", category).toString(),
+        viewAllLink: dw.web.URLUtils.url(
+          "Search-Show",
+          "cgid",
+          category
+        ).toString(),
       },
     });
 

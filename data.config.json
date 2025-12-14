@@ -1,0 +1,5 @@
+{
+  "basePath": "store_front/cartridges/store_front/cartridge/scripts",
+  "typesPath": "app/types/data",
+  "generateTypes": true
+}

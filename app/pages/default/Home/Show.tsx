@@ -12,7 +12,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
-import type { IProductTile } from "@/types/models/product";
+import { IProductTileData } from "@/types/data/ProductTileData";
 import { Link } from "@inertiajs/react";
 import {
   Brain,
@@ -43,7 +43,7 @@ function FeatureCard({ icon, title, description }: any) {
 const HomePage = ({
   recommendedProducts,
 }: {
-  recommendedProducts: IProductTile[];
+  recommendedProducts: IProductTileData[];
   staticUrl: string;
   viewAllLink: string;
 }) => {
