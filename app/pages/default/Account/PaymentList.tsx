@@ -16,14 +16,13 @@ import {
   PaymentInstrumentsAddPayment,
   PaymentInstrumentsDeletePayment,
 } from "@/generated/routes";
-import type { PaymentListProps } from "@/types/response/payment-list";
 import { Link } from "@inertiajs/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { CreditCard, Plus, Trash } from "lucide-react";
 import { useCallback } from "react";
 
-const PaymentList = (props: PaymentListProps) => {
+const PaymentList = (props: any) => {
   const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({

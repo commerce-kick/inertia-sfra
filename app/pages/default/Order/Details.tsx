@@ -18,11 +18,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import type { TOrder } from "@/types/checkout";
 import { format } from "date-fns";
 import { Check } from "lucide-react";
 
-const OrderDetails = ({ order }: { order: TOrder }) => {
+const OrderDetails = ({ order }: { order: any }) => {
   return (
     <>
       <div className="bg-linear-to-r from-primary/90 to-primary text-primary-foreground">

@@ -378,7 +378,7 @@ const ProductComponent = ({
   product,
   breadcrumbs,
 }: {
-  product: Product;
+  product: any;
   breadcrumbs: any;
 }) => {
   return (

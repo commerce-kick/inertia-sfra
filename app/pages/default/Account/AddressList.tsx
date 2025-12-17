@@ -14,14 +14,13 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { AddressDeleteAddress, AddressEditAddress } from "@/generated/routes";
-import type { AddressListProps } from "@/types/response/address-list";
 import { Link } from "@inertiajs/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { Edit, MapPin, Phone, Plus, Trash } from "lucide-react";
 import { useCallback } from "react";
 
-const AddressList = (props: AddressListProps) => {
+const AddressList = (props: any) => {
   const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({

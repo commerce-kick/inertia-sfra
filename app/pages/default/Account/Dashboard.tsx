@@ -21,9 +21,6 @@ import {
   PaymentInstrumentsAddPayment,
   PaymentInstrumentsList,
 } from "@/generated/routes";
-import type { TAccount } from "@/types/account";
-import type { TOrder } from "@/types/order";
-import type { WishListShowResponse } from "@/types/wishlist";
 import { Link } from "@inertiajs/react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -44,7 +41,7 @@ import {
 } from "lucide-react";
 
 const OrderHistory = () => {
-  const { data, isLoading, error } = useQuery<{ orders: TOrder[] }>({
+  const { data, isLoading, error } = useQuery<{ orders: any[] }>({
     queryKey: ["orderHistory"],
     queryFn: async () => {
       const { data } = await axios.get("Order-History");
@@ -112,7 +109,7 @@ const OrderHistory = () => {
 };
 
 const Wishlist = () => {
-  const { data, isLoading, error } = useQuery<WishListShowResponse>({
+  const { data, isLoading, error } = useQuery<any>({
     queryKey: ["Wishlist"],
     queryFn: async () => {
       const { data } = await axios.get("Wishlist-Show");
@@ -169,9 +166,9 @@ const Wishlist = () => {
   );
 };
 
-const Dashboard = ({ account }: { account: TAccount }) => {
+const Dashboard = ({ account }: { account: any }) => {
   const { data: _, isLoading: orderHistoryLoading } = useQuery<{
-    orders: TOrder[];
+    orders: any[];
   }>({
     queryKey: ["orderHistory"],
     queryFn: async () => {

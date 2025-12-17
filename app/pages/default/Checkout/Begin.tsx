@@ -18,13 +18,12 @@ import PaymentForm from "@/components/commerce/checkout/payment-form";
 import ShippingForm from "@/components/commerce/checkout/shipping-form";
 import { Button } from "@/components/ui/button";
 import { OrderConfirm } from "@/generated/routes";
-import type { CheckoutResponse } from "@/types/response/checkout";
 import { router } from "@inertiajs/react";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useQueryState } from "nuqs";
 
-export default function CheckoutPage(checkoutData: CheckoutResponse) {
+export default function CheckoutPage(checkoutData: any) {
   const [activeTab, setActiveTab] = useQueryState("stage", {
     defaultValue: "customer",
   });

@@ -27,7 +27,6 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { AccountSaveProfile } from "@/generated/routes";
-import type { EditAccountProps } from "@/types/response/EditAccount";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";

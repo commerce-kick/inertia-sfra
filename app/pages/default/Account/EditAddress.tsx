@@ -29,7 +29,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { AddressSaveAddress } from "@/generated/routes";
-import type { AddAddressProps } from "@/types/response/add-address";
 import { MapPin } from "lucide-react";
 import { useQueryState } from "nuqs";
 
@@ -48,7 +47,7 @@ const FormSchema = z.object({
 
 const resolver = zodResolver(FormSchema);
 
-const AddAddress = (props: AddAddressProps) => {
+const AddAddress = (props: any) => {
   const [addressId] = useQueryState("addressId");
 
   const form = useForm({

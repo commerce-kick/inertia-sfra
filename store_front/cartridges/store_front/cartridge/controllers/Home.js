@@ -36,6 +36,7 @@ server.append(
       });
 
       let result = ProductData.from(product);
+      
       products.push(result);
 
       productCount++;

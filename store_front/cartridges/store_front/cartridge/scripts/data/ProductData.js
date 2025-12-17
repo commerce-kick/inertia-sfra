@@ -11,6 +11,9 @@ var ProductData = BaseData.extend({
       type: "data",
       of: ImageGroupData,
     },
+    price: {
+      type: 'object'
+    }
   },
 });
 

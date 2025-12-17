@@ -7,7 +7,8 @@
     "preview": "vite preview",
     "deploy": "npx b2c-tools code deploy",
     "build:ssr": "tsc --noEmit  --skipLibCheck && bun run scripts/generate-routes.js && vite build --ssr --config ssr.config.js",
-    "type-check": "tsc --noEmit  --skipLibCheck"
+    "type-check": "tsc --noEmit  --skipLibCheck",
+    "build:force": "vite build"
   },
   "private": true,
   "devDependencies": {
