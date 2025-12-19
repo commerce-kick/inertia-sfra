@@ -57,25 +57,40 @@ function render(req, component, props, action, locale) {
   const isPartial = utils.isPartialComponent(req) === componentName;
   const only = isPartial ? utils.partialProps(req) : null;
   const finalProps = {};
+  const deferredProps = {};
 
   Object.keys(props).forEach(function(key) {
     var value = props[key];
     var isLazy = value && typeof value === 'object' && value._isInertiaLazy;
+    var isDefer = value && typeof value === 'object' && value._isInertiaDefer;
 
     if (isPartial && only) {
       // Partial request: only include if key is in 'only' list
       if (only.indexOf(key) !== -1) {
-        finalProps[key] = isLazy ? value.callback() : value;
+        if (isLazy || isDefer) {
+          finalProps[key] = value.callback();
+        } else {
+          finalProps[key] = value;
+        }
       }
     } else {
       // Full request: include everything EXCEPT lazy props
-      if (!isLazy) {
+      if (isDefer) {
+        var group = value.group || "default";
+        if (!deferredProps[group]) {
+          deferredProps[group] = [];
+        }
+        deferredProps[group].push(key);
+      } else if (!isLazy) {
         finalProps[key] = value;
       }
     }
   });
 
   pageData.props = finalProps;
+  if (!isPartial && Object.keys(deferredProps).length > 0) {
+    pageData.deferredProps = deferredProps;
+  }
 
   if (utils.isInertia(req)) {
     return {
@@ -96,6 +111,7 @@ function render(req, component, props, action, locale) {
       JSON.stringify({
         component: componentName,
         props: pageData.props,
+        deferredProps: pageData.deferredProps,
         url: url,
         version: "1.0",
       })

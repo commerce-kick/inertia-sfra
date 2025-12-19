@@ -21,6 +21,15 @@ function partialProps(req) {
   return partial.split(",");
 }
 
+function resetProps(req) {
+  const reset = req.httpHeaders["x-inertia-reset"];
+  if (!reset) {
+    return [];
+  }
+
+  return reset.split(",").filter(Boolean);
+}
+
 /**
  * Recursively process an SFCC response object to convert all dw.web.URL objects to strings
  * @param {Object} obj - The object to process
@@ -29,35 +38,35 @@ function partialProps(req) {
 function processUrls(obj) {
   // Handle null/undefined or non-objects
   if (obj === null || obj === undefined || typeof obj !== "object") {
-      return obj;
+    return obj;
   }
 
   // Check if this is a dw.web.URL object using instanceof
   if (obj instanceof dw.web.URL) {
-      // Call toString() to convert the URL object to a string
-      return obj.toString();
+    // Call toString() to convert the URL object to a string
+    return obj.toString();
   }
 
   // Handle arrays
   if (Array.isArray(obj)) {
-      for (var i = 0; i < obj.length; i++) {
-          obj[i] = processUrls(obj[i]);
-      }
-      return obj;
+    for (var i = 0; i < obj.length; i++) {
+      obj[i] = processUrls(obj[i]);
+    }
+    return obj;
   }
 
   // Process object properties directly
   try {
-      Object.keys(obj).forEach(function(key) {
-          // Recursively process the object
-          obj[key] = processUrls(obj[key]);
-      });
+    Object.keys(obj).forEach(function (key) {
+      // Recursively process the object
+      obj[key] = processUrls(obj[key]);
+    });
   } catch (e) {
-      // Consider logging the error here for debugging
-      var Logger = require('dw/system/Logger');
-      Logger.error("Error processing object property: " + e.message);
-      // Potentially rethrow the error or handle it more specifically
-      return obj;
+    // Consider logging the error here for debugging
+    var Logger = require("dw/system/Logger");
+    Logger.error("Error processing object property: " + e.message);
+    // Potentially rethrow the error or handle it more specifically
+    return obj;
   }
 
   return obj;
@@ -66,7 +75,15 @@ function processUrls(obj) {
 function lazy(callback) {
   return {
     _isInertiaLazy: true,
-    callback: callback
+    callback: callback,
+  };
+}
+
+function defer(callback, group) {
+  return {
+    _isInertiaDefer: true,
+    group: group || "default",
+    callback: callback,
   };
 }
 
@@ -74,6 +91,8 @@ module.exports = {
   isInertia: isInertia,
   isPartialComponent: isPartialComponent,
   partialProps: partialProps,
+  resetProps: resetProps,
   processUrls: processUrls,
-  lazy: lazy
+  lazy: lazy,
+  defer: defer,
 };

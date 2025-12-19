@@ -17,7 +17,7 @@ server.append(
   function (req, res, next) {
     const category = "newarrivals-womens";
 
-    const lazy = utils.lazy(function () {
+    const defer = utils.defer(function () {
       const ProductData = require("*/cartridge/scripts/data/ProductData");
 
       var ProductFactory = require("*/cartridge/scripts/factories/product");
@@ -51,7 +51,7 @@ server.append(
     res.setViewData({
       template: "Home/Show",
       props: {
-        recommendedProducts: lazy,
+        recommendedProducts: defer,
         viewAllLink: dw.web.URLUtils.url(
           "Search-Show",
           "cgid",

@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
 import { IProductTileData } from "@/types/data/ProductTileData";
-import { Link, router, WhenVisible } from "@inertiajs/react";
+import { Deferred, Link, router } from "@inertiajs/react";
 import {
   Brain,
   Code,
@@ -151,7 +151,7 @@ const HomePage = ({
             on how to replace it.
           </p>
 
-          <WhenVisible
+          <Deferred
             data="recommendedProducts"
             fallback={() => <div>Loading...</div>}
           >
@@ -169,7 +169,7 @@ const HomePage = ({
               <CarouselPrevious className="left-2" />
               <CarouselNext className="right-2" />
             </Carousel>
-          </WhenVisible>
+          </Deferred>
         </div>
       </section>
 
