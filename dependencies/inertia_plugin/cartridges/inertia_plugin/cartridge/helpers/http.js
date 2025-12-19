@@ -53,19 +53,29 @@ function render(req, component, props, action, locale) {
     version: "1.0",
   };
 
-  // Handle partial reloads
-  if (utils.isPartialComponent(req) === component) {
-    const only = utils.partialProps(req);
-    if (only) {
-      const partialProps = {};
-      only.forEach((key) => {
-        if (props[key]) {
-          partialProps[key] = props[key];
-        }
-      });
-      pageData.props = partialProps;
+  // Resolve props (handling partial reloads and lazy props)
+  const isPartial = utils.isPartialComponent(req) === componentName;
+  const only = isPartial ? utils.partialProps(req) : null;
+  const finalProps = {};
+
+  Object.keys(props).forEach(function(key) {
+    var value = props[key];
+    var isLazy = value && typeof value === 'object' && value._isInertiaLazy;
+
+    if (isPartial && only) {
+      // Partial request: only include if key is in 'only' list
+      if (only.indexOf(key) !== -1) {
+        finalProps[key] = isLazy ? value.callback() : value;
+      }
+    } else {
+      // Full request: include everything EXCEPT lazy props
+      if (!isLazy) {
+        finalProps[key] = value;
+      }
     }
-  }
+  });
+
+  pageData.props = finalProps;
 
   if (utils.isInertia(req)) {
     return {
@@ -85,7 +95,7 @@ function render(req, component, props, action, locale) {
     const response = ssrService.callRestService(
       JSON.stringify({
         component: componentName,
-        props: props,
+        props: pageData.props,
         url: url,
         version: "1.0",
       })

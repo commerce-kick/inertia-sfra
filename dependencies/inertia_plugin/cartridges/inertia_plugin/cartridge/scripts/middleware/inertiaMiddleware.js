@@ -22,6 +22,7 @@ function render(req, res, next) {
   // Merge props with sharedData
   const mergedProps = Object.assign({}, sharedData, props);
 
+
   const hasInertiaHeader = utils.isInertia(req);
   const partialComponent = utils.isPartialComponent(req);
 

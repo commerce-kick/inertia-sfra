@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
 import { IProductTileData } from "@/types/data/ProductTileData";
-import { Link } from "@inertiajs/react";
+import { Link, router, WhenVisible } from "@inertiajs/react";
 import {
   Brain,
   Code,
@@ -43,10 +43,14 @@ function FeatureCard({ icon, title, description }: any) {
 const HomePage = ({
   recommendedProducts,
 }: {
-  recommendedProducts: IProductTileData[];
+  recommendedProducts?: IProductTileData[];
   staticUrl: string;
   viewAllLink: string;
 }) => {
+  const handleRecomendation = () => {
+    router.reload({ only: ["recommendedProducts"] });
+  };
+
   return (
     <div className="flex min-h-screen flex-col">
       {/* Hero Section */}
@@ -147,17 +151,25 @@ const HomePage = ({
             on how to replace it.
           </p>
 
-          <Carousel className="mx-auto max-w-5xl">
-            <CarouselContent>
-              {recommendedProducts.map((product, index) => (
-                <CarouselItem key={`product-${index}`} className="md:basis-1/3">
-                  <ProductTile {...product} />
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious className="left-2" />
-            <CarouselNext className="right-2" />
-          </Carousel>
+          <WhenVisible
+            data="recommendedProducts"
+            fallback={() => <div>Loading...</div>}
+          >
+            <Carousel className="mx-auto max-w-5xl">
+              <CarouselContent>
+                {recommendedProducts?.map((product, index) => (
+                  <CarouselItem
+                    key={`product-${index}`}
+                    className="md:basis-1/3"
+                  >
+                    <ProductTile {...product} />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="left-2" />
+              <CarouselNext className="right-2" />
+            </Carousel>
+          </WhenVisible>
         </div>
       </section>
 

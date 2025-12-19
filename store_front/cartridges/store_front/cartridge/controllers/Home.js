@@ -9,43 +9,49 @@ server.extend(module.superModule);
 
 const inertia = require("*/cartridge/scripts/middleware/inertiaMiddleware");
 const sharedData = require("*/cartridge/scripts/middleware/shareData");
-
+const utils = require("*/cartridge/helpers/utils");
 const ProductSearchModel = require("dw/catalog/ProductSearchModel");
 
 server.append(
   "Show",
   function (req, res, next) {
-    const ProductData = require("*/cartridge/scripts/data/ProductData");
     const category = "newarrivals-womens";
-    var ProductFactory = require("*/cartridge/scripts/factories/product");
-    // Create a new product search
-    const productSearch = new ProductSearchModel();
-    productSearch.setCategoryID(category);
-    productSearch.search();
 
-    const products = [];
-    let productCount = 0;
+    const lazy = utils.lazy(function () {
+      const ProductData = require("*/cartridge/scripts/data/ProductData");
 
-    const iter = productSearch.getProductSearchHits();
+      var ProductFactory = require("*/cartridge/scripts/factories/product");
+      // Create a new product search
+      const productSearch = new ProductSearchModel();
+      productSearch.setCategoryID(category);
+      productSearch.search();
 
-    while (iter !== null && iter.hasNext() && productCount < 6) {
-      let productSearchHit = iter.next();
-      let product = ProductFactory.get({
-        pid: productSearchHit.getProduct().ID,
-        quantity: 1,
-      });
+      const products = [];
+      let productCount = 0;
 
-      let result = ProductData.from(product);
-      
-      products.push(result);
+      const iter = productSearch.getProductSearchHits();
 
-      productCount++;
-    }
+      while (iter !== null && iter.hasNext() && productCount < 6) {
+        let productSearchHit = iter.next();
+        let product = ProductFactory.get({
+          pid: productSearchHit.getProduct().ID,
+          quantity: 1,
+        });
+
+        let result = ProductData.from(product);
+
+        products.push(result);
+
+        productCount++;
+      }
+
+      return products;
+    });
 
     res.setViewData({
       template: "Home/Show",
       props: {
-        recommendedProducts: products,
+        recommendedProducts: lazy,
         viewAllLink: dw.web.URLUtils.url(
           "Search-Show",
           "cgid",

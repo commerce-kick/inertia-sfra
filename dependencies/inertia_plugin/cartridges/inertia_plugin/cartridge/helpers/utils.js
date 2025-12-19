@@ -63,9 +63,17 @@ function processUrls(obj) {
   return obj;
 }
 
+function lazy(callback) {
+  return {
+    _isInertiaLazy: true,
+    callback: callback
+  };
+}
+
 module.exports = {
   isInertia: isInertia,
   isPartialComponent: isPartialComponent,
   partialProps: partialProps,
   processUrls: processUrls,
+  lazy: lazy
 };
