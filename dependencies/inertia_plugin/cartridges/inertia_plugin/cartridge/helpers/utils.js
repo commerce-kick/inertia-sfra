@@ -1,17 +1,13 @@
 function isInertia(req) {
-  return (
-    req.httpHeaders["X-SF-CC-Inertia"] === "true" ||
-    req.httpHeaders["x-sf-cc-inertia"] === "true" ||
-    req.httpHeaders["x-inertia"] === "true"
-  );
+  return req.httpHeaders["x-sf-cc-inertia"] === "true";
 }
 
 function isPartialComponent(req) {
-  return req.httpHeaders["x-inertia-partial-component"];
+  return req.httpHeaders["x-sf-cc-inertia-partial-component"];
 }
 
 function partialProps(req) {
-  const partial = req.httpHeaders["x-inertia-partial-data"];
+  const partial = req.httpHeaders["x-sf-cc-inertia-partial-data"];
   // Return null or empty array if partial doesn't exist
   if (!partial) {
     return null; // or return []; if you prefer an empty array
@@ -22,7 +18,7 @@ function partialProps(req) {
 }
 
 function resetProps(req) {
-  const reset = req.httpHeaders["x-inertia-reset"];
+  const reset = req.httpHeaders["x-sf-cc-inertia-reset"];
   if (!reset) {
     return [];
   }

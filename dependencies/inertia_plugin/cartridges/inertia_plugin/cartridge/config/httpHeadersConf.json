@@ -1,14 +1,10 @@
 [
   {
-    "id": "X-SF-CC-Inertia",
+    "id": "X-SF-CC-inertia",
     "value": "true"
   },
   {
-    "id": "X-SF-CC-Inertia-Version",
+    "id": "X-SF-CC-inertia-version",
     "value": "1.0"
-  },
-  {
-    "id": "X-SF-CC-Inertia-Location",
-    "value": "true"
   }
 ]

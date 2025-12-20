@@ -50,7 +50,7 @@ function render(req, component, props, action, locale) {
     component: componentName,
     props: props,
     url: url,
-    version: "1.0",
+    version: "1.0"
   };
 
   // Resolve props (handling partial reloads and lazy props)
@@ -97,11 +97,11 @@ function render(req, component, props, action, locale) {
       json: pageData,
       headers: {
         Vary: "Accept",
-        "X-SF-CC-Inertia": "true",
-        "X-SF-CC-Inertia-Version": pageData.version,
-        "X-SF-CC-Inertia-Location": pageData.url,
+        "X-SF-CC-inertia": "true",
+        "X-SF-CC-inertia-version": pageData.version,
+        "X-SF-CC-inertia-location": pageData.url,
         "Content-Type": "application/json",
-        "X-SF-CC-Inertia-Should-Redirect": "false",
+        "X-SF-CC-inertia-should-redirect": "false",
       },
     };
   }

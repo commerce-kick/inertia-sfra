@@ -1,0 +1,199 @@
+diff --git a/node_modules/@inertiajs/core/.bun-tag-3711edccaf483394 b/.bun-tag-3711edccaf483394
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+diff --git a/dist/index.esm.js b/dist/index.esm.js
+index 578541a85ca022fae536a2bda5aa22fe37576e3d..c75c51304b114f88338ac52e49d3f31f8e410992 100644
+--- a/dist/index.esm.js
++++ b/dist/index.esm.js
+@@ -1502,20 +1502,20 @@ var RequestParams = class _RequestParams {
+       ...this.params.headers
+     };
+     if (this.isPartial()) {
+-      headers["X-Inertia-Partial-Component"] = page.get().component;
++      headers["x-sf-cc-inertia-partial-component"] = page.get().component;
+     }
+     const only = this.params.only.concat(this.params.reset);
+     if (only.length > 0) {
+-      headers["X-Inertia-Partial-Data"] = only.join(",");
++      headers["x-sf-cc-inertia-partial-data"] = only.join(",");
+     }
+     if (this.params.except.length > 0) {
+-      headers["X-Inertia-Partial-Except"] = this.params.except.join(",");
++      headers["x-sf-cc-inertia-partial-except"] = this.params.except.join(",");
+     }
+     if (this.params.reset.length > 0) {
+-      headers["X-Inertia-Reset"] = this.params.reset.join(",");
++      headers["x-sf-cc-inertia-reset"] = this.params.reset.join(",");
+     }
+     if (this.params.errorBag && this.params.errorBag.length > 0) {
+-      headers["X-Inertia-Error-Bag"] = this.params.errorBag;
++      headers["x-sf-cc-inertia-error-bag"] = this.params.errorBag;
+     }
+     return headers;
+   }
+@@ -1719,7 +1719,7 @@ var Response = class _Response {
+   }
+   async handleNonInertiaResponse() {
+     if (this.isLocationVisit()) {
+-      const locationUrl = hrefToUrl(this.getHeader("x-inertia-location"));
++      const locationUrl = hrefToUrl(this.getHeader("x-sf-cc-inertia-location"));
+       setHashIfSameUrl(this.requestParams.all().url, locationUrl);
+       return this.locationVisit(locationUrl);
+     }
+@@ -1732,7 +1732,7 @@ var Response = class _Response {
+     }
+   }
+   isInertiaResponse() {
+-    return this.hasHeader("x-inertia");
++    return this.hasHeader("x-sf-cc-inertia");
+   }
+   hasStatus(status2) {
+     return this.response.status === status2;
+@@ -1744,7 +1744,7 @@ var Response = class _Response {
+     return this.getHeader(header) !== void 0;
+   }
+   isLocationVisit() {
+-    return this.hasStatus(409) && this.hasHeader("x-inertia-location");
++    return this.hasStatus(409) && this.hasHeader("x-sf-cc-inertia-location");
+   }
+   /**
+    * @link https://inertiajs.com/redirects#external-redirects
+@@ -2049,11 +2049,11 @@ var Request = class _Request {
+       ...this.requestParams.headers(),
+       Accept: "text/html, application/xhtml+xml",
+       "X-Requested-With": "XMLHttpRequest",
+-      "X-Inertia": true
++      "x-sf-cc-inertia": true
+     };
+     const page2 = page.get();
+     if (page2.version) {
+-      headers["X-Inertia-Version"] = page2.version;
++      headers["x-sf-cc-inertia-version"] = page2.version;
+     }
+     const onceProps = Object.entries(page2.onceProps || {}).filter(([, onceProp]) => {
+       if (page2.props[onceProp.prop] === void 0) {
+@@ -2062,7 +2062,7 @@ var Request = class _Request {
+       return !onceProp.expiresAt || onceProp.expiresAt > Date.now();
+     }).map(([key]) => key);
+     if (onceProps.length > 0) {
+-      headers["X-Inertia-Except-Once-Props"] = onceProps.join(",");
++      headers["x-sf-cc-inertia-except-once-props"] = onceProps.join(",");
+     }
+     return headers;
+   }
+@@ -2885,7 +2885,7 @@ function createHeadManager(isServer2, titleCallback, onUpdate) {
+ }
+ 
+ // src/infiniteScroll/data.ts
+-var MERGE_INTENT_HEADER = "X-Inertia-Infinite-Scroll-Merge-Intent";
++var MERGE_INTENT_HEADER = "x-sf-cc-inertia-infinite-scroll-merge-intent";
+ var useInfiniteScrollData = (options) => {
+   const getScrollPropFromCurrentPage = () => {
+     const scrollProp = page.get().scrollProps?.[options.getPropName()];
+@@ -3903,7 +3903,6 @@ function resetFormFields(formElement, defaults, fieldNames) {
+ // src/index.ts
+ var router = new Router();
+ export {
+-  UseFormUtils,
+   config,
+   createHeadManager,
+   formDataToObject,
+@@ -3923,8 +3922,7 @@ export {
+   shouldNavigate,
+   urlHasProtocol,
+   urlToString,
+-  urlWithoutHash,
+-  useInfiniteScroll
++  urlWithoutHash, UseFormUtils, useInfiniteScroll
+ };
+ /* NProgress, (c) 2013, 2014 Rico Sta. Cruz - http://ricostacruz.com/nprogress
+  * @license MIT */
+diff --git a/dist/index.js b/dist/index.js
+index cf55c8f66c6581188f95fc6124905f26cd8d40f6..cf277ae4bd35e4abf2fb5e9ecd7aac6cf763a532 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -1559,20 +1559,20 @@ var RequestParams = class _RequestParams {
+       ...this.params.headers
+     };
+     if (this.isPartial()) {
+-      headers["X-Inertia-Partial-Component"] = page.get().component;
++      headers["X-SF-CC-inertia-partial-component"] = page.get().component;
+     }
+     const only = this.params.only.concat(this.params.reset);
+     if (only.length > 0) {
+-      headers["X-Inertia-Partial-Data"] = only.join(",");
++      headers["X-SF-CC-inertia-partial-data"] = only.join(",");
+     }
+     if (this.params.except.length > 0) {
+-      headers["X-Inertia-Partial-Except"] = this.params.except.join(",");
++      headers["X-SF-CC-inertia-partial-except"] = this.params.except.join(",");
+     }
+     if (this.params.reset.length > 0) {
+-      headers["X-Inertia-Reset"] = this.params.reset.join(",");
++      headers["X-SF-CC-inertia-reset"] = this.params.reset.join(",");
+     }
+     if (this.params.errorBag && this.params.errorBag.length > 0) {
+-      headers["X-Inertia-Error-Bag"] = this.params.errorBag;
++      headers["X-SF-CC-inertia-error-bag"] = this.params.errorBag;
+     }
+     return headers;
+   }
+@@ -1776,7 +1776,7 @@ var Response = class _Response {
+   }
+   async handleNonInertiaResponse() {
+     if (this.isLocationVisit()) {
+-      const locationUrl = hrefToUrl(this.getHeader("x-inertia-location"));
++      const locationUrl = hrefToUrl(this.getHeader("X-SF-CC-inertia-location"));
+       setHashIfSameUrl(this.requestParams.all().url, locationUrl);
+       return this.locationVisit(locationUrl);
+     }
+@@ -1789,7 +1789,7 @@ var Response = class _Response {
+     }
+   }
+   isInertiaResponse() {
+-    return this.hasHeader("x-inertia");
++    return this.hasHeader("X-SF-CC-inertia");
+   }
+   hasStatus(status2) {
+     return this.response.status === status2;
+@@ -1801,7 +1801,7 @@ var Response = class _Response {
+     return this.getHeader(header) !== void 0;
+   }
+   isLocationVisit() {
+-    return this.hasStatus(409) && this.hasHeader("x-inertia-location");
++    return this.hasStatus(409) && this.hasHeader("X-SF-CC-inertia-location");
+   }
+   /**
+    * @link https://inertiajs.com/redirects#external-redirects
+@@ -2106,11 +2106,11 @@ var Request = class _Request {
+       ...this.requestParams.headers(),
+       Accept: "text/html, application/xhtml+xml",
+       "X-Requested-With": "XMLHttpRequest",
+-      "X-Inertia": true
++      "X-SF-CC-inertia": true
+     };
+     const page2 = page.get();
+     if (page2.version) {
+-      headers["X-Inertia-Version"] = page2.version;
++      headers["X-SF-CC-inertia-version"] = page2.version;
+     }
+     const onceProps = Object.entries(page2.onceProps || {}).filter(([, onceProp]) => {
+       if (page2.props[onceProp.prop] === void 0) {
+@@ -2119,7 +2119,7 @@ var Request = class _Request {
+       return !onceProp.expiresAt || onceProp.expiresAt > Date.now();
+     }).map(([key]) => key);
+     if (onceProps.length > 0) {
+-      headers["X-Inertia-Except-Once-Props"] = onceProps.join(",");
++      headers["X-SF-CC-inertia-except-once-props"] = onceProps.join(",");
+     }
+     return headers;
+   }
+@@ -2942,7 +2942,7 @@ function createHeadManager(isServer2, titleCallback, onUpdate) {
+ }
+ 
+ // src/infiniteScroll/data.ts
+-var MERGE_INTENT_HEADER = "X-Inertia-Infinite-Scroll-Merge-Intent";
++var MERGE_INTENT_HEADER = "X-SF-CC-inertia-ifinite-scroll-merge-intent";
+ var useInfiniteScrollData = (options) => {
+   const getScrollPropFromCurrentPage = () => {
+     const scrollProp = page.get().scrollProps?.[options.getPropName()];
