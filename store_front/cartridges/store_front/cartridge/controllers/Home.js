@@ -12,7 +12,7 @@ const sharedData = require("*/cartridge/scripts/middleware/shareData");
 const utils = require("*/cartridge/helpers/utils");
 const ProductSearchModel = require("dw/catalog/ProductSearchModel");
 
-server.append(
+server.replace(
   "Show",
   function (req, res, next) {
     const category = "newarrivals-womens";
