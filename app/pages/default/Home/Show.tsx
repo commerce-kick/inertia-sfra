@@ -1,7 +1,7 @@
 import ProductTile from "@/components/commerce/product-tile";
+import { Link } from "@/components/link";
 import HoverBox from "@/components/magic/hover-box";
 import { InteractiveGridPattern } from "@/components/magic/interactive-pattern";
-import { TextAnimate } from "@/components/magic/text-animate";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -13,7 +13,8 @@ import {
 } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
 import { IProductTileData } from "@/types/data/ProductTileData";
-import { Deferred, Link, router } from "@inertiajs/react";
+import { Deferred } from "@inertiajs/react";
+
 import {
   Brain,
   Code,
@@ -47,10 +48,6 @@ const HomePage = ({
   staticUrl: string;
   viewAllLink: string;
 }) => {
-  const handleRecomendation = () => {
-    router.reload({ only: ["recommendedProducts"] });
-  };
-
   return (
     <div className="flex min-h-screen flex-col">
       {/* Hero Section */}
@@ -68,12 +65,9 @@ const HomePage = ({
           />
         </div>
         <div className="flex flex-col items-start gap-4 relative z-10">
-          <TextAnimate
-            animation="fadeIn"
-            className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl"
-          >
+          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl motion-preset-blur-right  motion-delay-0 motion-duration-3000">
             The React Starter Store for Retail
-          </TextAnimate>
+          </h1>
           <p className="text-lg text-muted-foreground">
             A modern, high-performance e-commerce starter kit built with Inertia
             and shadcn/ui
@@ -140,7 +134,7 @@ const HomePage = ({
       {/* Shop Products */}
       <section className="bg-muted/50 py-12 md:py-16">
         <div className="container mx-auto">
-          <h2 className="mb-8 text-center text-3xl font-bold tracking-tight">
+          <h2 className="mb-8 text-center text-3xl font-bold tracking-tight motion-preset-seesaw">
             Shop Products
           </h2>
           <p className="mb-10 text-center text-muted-foreground">

@@ -473,7 +473,7 @@ export function Header() {
   const { currentCustomer, navBar } = usePage().props;
 
   return (
-    <header className="w-full sticky top-0 z-40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="w-full sticky top-0 z-40 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
       <div className="border-b">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <div className="flex items-center gap-4">

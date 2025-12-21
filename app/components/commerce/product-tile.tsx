@@ -1,7 +1,7 @@
+import { Link } from "@/components/link";
 import { ProductShow, WishlistAddProduct } from "@/generated/routes";
 import { cn } from "@/lib/utils";
 import { IProductTileData } from "@/types/data/ProductTileData";
-import { Link } from "@inertiajs/react";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { Heart, Star } from "lucide-react";

@@ -1,10 +1,8 @@
-import { Link, router } from "@inertiajs/react";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import axios from "axios";
+import { Link } from "@/components/link";
+import { InfiniteScroll, router } from "@inertiajs/react";
 import { Filter } from "lucide-react";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useState } from "react";
 
-import { ProductsGridSkeleton } from "@/components/commerce/product-skeleton";
 import ProductTile from "@/components/commerce/product-tile";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -22,66 +20,10 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { queryData, searchParams } from "@/lib/commerce";
+import { searchParams } from "@/lib/commerce";
 
-import { SearchShow, SearchUpdateGrid } from "@/generated/routes";
+import { SearchShow } from "@/generated/routes";
 import { cn } from "@/lib/utils";
-
-const MoreProducts = ({
-  showMore,
-  queryString,
-}: {
-  queryString: string;
-  showMore?: string;
-}) => {
-  const initialParams = useMemo(() => {
-    return queryData(queryString);
-  }, [queryString]);
-
-  //@ts-ignore
-  const { data, fetchNextPage, isLoading, isFetchingNextPage } =
-    useInfiniteQuery({
-      queryKey: ["showMore", { queryString }],
-      queryFn: async ({ pageParam }: any) => {
-        const { data } = await axios.get(SearchUpdateGrid.url(), {
-          params: pageParam,
-        });
-        return data;
-      },
-      initialPageParam: initialParams,
-      getNextPageParam: ({ showMore }) => {
-        return !showMore ? undefined : searchParams(showMore).data;
-      },
-      refetchOnMount: false,
-      refetchOnReconnect: false,
-      refetchOnWindowFocus: false,
-      select: (data) => data.pages.flatMap((page) => page.products || []),
-    });
-
-  if (isLoading) {
-    return <ProductsGridSkeleton />;
-  }
-
-  return (
-    <div className="grid grid-cols-2 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {data?.map((result) => {
-        return <ProductTile key={result.id} {...result.product} />;
-      })}
-      {showMore && (
-        <div className="col-span-full grid grid-cols-1">
-          <Button
-            disabled={isFetchingNextPage}
-            onClick={() => {
-              fetchNextPage();
-            }}
-          >
-            {isFetchingNextPage ? "loading..." : "View More"}
-          </Button>
-        </div>
-      )}
-    </div>
-  );
-};
 
 const FiltersContent = ({
   refinements,
@@ -178,9 +120,8 @@ const SearchShowPage = ({
   refinements,
   productSort,
   count,
-  showMore,
+  products,
   cgid,
-  query,
 }: {
   refinements: any[];
   productSort: any;
@@ -189,6 +130,7 @@ const SearchShowPage = ({
   showMore?: string;
   query: string;
   resetLink: string;
+  products: any[];
 }) => {
   const [open, setOpen] = useState(false);
 
@@ -256,7 +198,13 @@ const SearchShowPage = ({
 
         {/* Products Grid - Full width on mobile, 3/4 on desktop */}
         <div className="md:col-span-3">
-          <MoreProducts queryString={query} showMore={showMore} />
+          <InfiniteScroll data="products" preserveUrl>
+            <div className="grid grid-cols-2 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {products?.data?.map((result: any) => {
+                return <ProductTile key={result.id} {...result} />;
+              })}
+            </div>
+          </InfiniteScroll>
         </div>
       </div>
     </div>

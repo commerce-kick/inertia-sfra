@@ -1,4 +1,4 @@
-import { Link } from "@inertiajs/react";
+import { Link } from "@/components/link";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import {

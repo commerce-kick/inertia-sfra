@@ -1,4 +1,5 @@
 import Banner from "@/components/commerce/banner";
+import { Link } from "@/components/link";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -20,11 +21,9 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { HomeShow } from "@/generated/routes";
-import type { TOrder } from "@/types/checkout";
-import { Link } from "@inertiajs/react";
 import { format } from "date-fns";
 
-const ThanksPage = ({ order }: { order: TOrder }) => {
+const ThanksPage = ({ order }: { order: any }) => {
   return (
     <>
       <Banner

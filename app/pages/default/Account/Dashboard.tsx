@@ -2,6 +2,7 @@ import { OrderCard } from "@/components/commerce/order-card";
 import { OrderCardSkeleton } from "@/components/commerce/order-card-skeleton";
 import { WishlistItem } from "@/components/commerce/wishlist-item";
 import { WishlistItemSkeleton } from "@/components/commerce/wishlist-item-skeleton";
+import { Link } from "@/components/link";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -21,7 +22,6 @@ import {
   PaymentInstrumentsAddPayment,
   PaymentInstrumentsList,
 } from "@/generated/routes";
-import { Link } from "@inertiajs/react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import {

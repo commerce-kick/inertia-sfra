@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
+import { Link } from "@/components/link";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,7 +17,6 @@ import {
   PaymentInstrumentsAddPayment,
   PaymentInstrumentsDeletePayment,
 } from "@/generated/routes";
-import { Link } from "@inertiajs/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { CreditCard, Plus, Trash } from "lucide-react";
