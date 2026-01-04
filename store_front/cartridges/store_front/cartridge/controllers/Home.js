@@ -7,63 +7,24 @@
 const server = require("server");
 server.extend(module.superModule);
 
-const inertia = require("*/cartridge/scripts/middleware/inertiaMiddleware");
-const sharedData = require("*/cartridge/scripts/middleware/shareData");
-const utils = require("*/cartridge/helpers/utils");
-const ProductSearchModel = require("dw/catalog/ProductSearchModel");
+var initInertia = require("*/cartridge/scripts/middleware/initInertia");
+var shareData = require("*/cartridge/scripts/middleware/shareData");
 
-server.replace(
-  "Show",
-  function (req, res, next) {
-    const category = "newarrivals-womens";
+server.replace("Show", initInertia.init, shareData, function (req, res, next) {
+  // Render using the new API
+  res.inertia.render("Home/Show", {});
 
-    const defer = utils.defer(function () {
-      const ProductData = require("*/cartridge/scripts/data/ProductData");
+  next();
+});
 
-      var ProductFactory = require("*/cartridge/scripts/factories/product");
-      // Create a new product search
-      const productSearch = new ProductSearchModel();
-      productSearch.setCategoryID(category);
-      productSearch.search();
+server.get("Demo", initInertia.init, shareData, function (req, res, next) {
+  var props = {
+    user: { name: "John Doe" },
+  };
+  // Render using the new API
+  res.inertia.render("Home/Demo", props);
 
-      const products = [];
-      let productCount = 0;
-
-      const iter = productSearch.getProductSearchHits();
-
-      while (iter !== null && iter.hasNext() && productCount < 6) {
-        let productSearchHit = iter.next();
-        let product = ProductFactory.get({
-          pid: productSearchHit.getProduct().ID,
-          quantity: 1,
-        });
-
-        let result = ProductData.from(product);
-
-        products.push(result);
-
-        productCount++;
-      }
-
-      return products;
-    });
-
-    res.setViewData({
-      template: "Home/Show",
-      props: {
-        recommendedProducts: defer,
-        viewAllLink: dw.web.URLUtils.url(
-          "Search-Show",
-          "cgid",
-          category
-        ).toString(),
-      },
-    });
-
-    next();
-  },
-  sharedData,
-  inertia.render
-);
+  next();
+});
 
 module.exports = server.exports();

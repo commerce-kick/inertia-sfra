@@ -1,214 +1,28 @@
-import { Link } from "@/components/link";
-import { InfiniteScroll, router } from "@inertiajs/react";
-import { Filter } from "lucide-react";
-import { useCallback, useState } from "react";
+import { InfiniteScroll } from "@inertiajs/react";
 
-import ProductTile from "@/components/commerce/product-tile";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import { searchParams } from "@/lib/commerce";
-
-import { SearchShow } from "@/generated/routes";
-import { cn } from "@/lib/utils";
-
-const FiltersContent = ({
-  refinements,
-  productSort,
-  cgid,
-  handleSelectedRinament,
-  handleOnSortChange,
-}: any) => {
-  return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <Select
-          defaultValue={productSort.ruleId}
-          onValueChange={handleOnSortChange}
-        >
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder={productSort.ruleId} />
-          </SelectTrigger>
-          <SelectContent>
-            {productSort.options.map(
-              (sort: { id: string; displayName: string }) => {
-                return (
-                  <SelectItem key={sort.id} value={sort.id}>
-                    {sort.displayName}
-                  </SelectItem>
-                );
-              }
-            )}
-          </SelectContent>
-        </Select>
-      </div>
-
-      <Button variant="outline" className="w-full" asChild>
-        <Link href={"Search-Show"} data={{ cgid }}>
-          Reset
-        </Link>
-      </Button>
-
-      {refinements.map(
-        (
-          refinament: {
-            displayName: string;
-            values: {
-              url: string;
-              presentationId: string;
-              selected: boolean;
-              selectable: boolean;
-              displayValue: string;
-            }[];
-          },
-          index: number
-        ) => {
-          return (
-            <div className="border-t pt-4" key={`serach-${index}`}>
-              <h3 className="mb-2 font-medium">{refinament.displayName}</h3>
-              <div className="space-y-2">
-                {refinament.values.map((val, i: number) => {
-                  return (
-                    <div
-                      className="flex items-center gap-2"
-                      data-url={val.url}
-                      key={`ref-${i}`}
-                    >
-                      <Checkbox
-                        id={`${val.presentationId}-${index}`}
-                        checked={val.selected}
-                        disabled={!val.selectable}
-                        onCheckedChange={() => {
-                          handleSelectedRinament(val.url);
-                        }}
-                      />
-                      <label
-                        htmlFor={`${val.presentationId}-${index}`}
-                        className={cn(
-                          "text-sm",
-                          !val.selectable && "line-through"
-                        )}
-                      >
-                        {val.displayValue}
-                      </label>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          );
-        }
-      )}
-    </div>
-  );
-};
-
-const SearchShowPage = ({
-  refinements,
-  productSort,
-  count,
+export default function SearchShowPage({
   products,
-  cgid,
+  ...rest
 }: {
-  refinements: any[];
-  productSort: any;
-  count: number;
-  cgid: string;
-  showMore?: string;
-  query: string;
-  resetLink: string;
-  products: any[];
-}) => {
-  const [open, setOpen] = useState(false);
-
-  const handleSelectedRinament = useCallback(async (url: string) => {
-    const { data } = searchParams(url);
-
-    router.visit(SearchShow.url(), {
-      data,
-      preserveScroll: true,
-    });
-
-    setOpen(false);
-  }, []);
-
-  const handleOnSortChange = useCallback(
-    (sortId: string) => {
-      const rule = productSort.options.find(
-        (sort: { id: string }) => sort.id === sortId
-      );
-
-      router.reload({
-        data: Object.fromEntries(new URLSearchParams(rule.url)),
-      });
-    },
-    [productSort.options]
-  );
+  products: unknown[];
+}) {
+  console.log(rest);
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-lg font-medium">{count} Results</h1>
-        <Sheet open={open} onOpenChange={setOpen}>
-          <SheetTrigger asChild>
-            <Button variant="outline" size="sm" className="md:hidden">
-              <Filter className="h-4 w-4 mr-2" />
-              Filters
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="left" className="w-[300px] sm:w-[350px] p-4">
-            <SheetHeader>
-              <SheetTitle>Filters</SheetTitle>
-            </SheetHeader>
-            <FiltersContent
-              refinements={refinements}
-              productSort={productSort}
-              cgid={cgid}
-              handleSelectedRinament={handleSelectedRinament}
-              handleOnSortChange={handleOnSortChange}
-            />
-          </SheetContent>
-        </Sheet>
-      </div>
-
-      <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
-        {/* Desktop Filters - Hidden on Mobile */}
-        <div className="hidden md:block space-y-6">
-          <FiltersContent
-            refinements={refinements}
-            productSort={productSort}
-            cgid={cgid}
-            handleSelectedRinament={handleSelectedRinament}
-            handleOnSortChange={handleOnSortChange}
-          />
-        </div>
-
-        {/* Products Grid - Full width on mobile, 3/4 on desktop */}
-        <div className="md:col-span-3">
-          <InfiniteScroll data="products" preserveUrl>
-            <div className="grid grid-cols-2 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {products?.data?.map((result: any) => {
-                return <ProductTile key={result.id} {...result} />;
-              })}
-            </div>
-          </InfiniteScroll>
-        </div>
-      </div>
-    </div>
+    <InfiniteScroll
+      data="products"
+      manual
+      next={({ loading, fetch, hasMore }) => (
+            hasMore && (
+                <button onClick={fetch} disabled={loading}>
+                    {loading ? 'Loading...' : 'Load more'}
+                </button>
+            )
+        )}
+    >
+      {products.map((p) => {
+        return <p key={p.id}>{p.id}</p>;
+      })}
+    </InfiniteScroll>
   );
-};
-
-export default SearchShowPage;
+}
