@@ -1,25 +1,36 @@
-function sharedData(req, res, next) {
-  var catalogMgr = require("dw/catalog/CatalogMgr");
-  var URLUtils = require("dw/web/URLUtils");
-  var Categories = require("*/cartridge/models/categories");
-  var siteRootCategory = catalogMgr.getSiteCatalog().getRoot();
+'use strict';
 
-  var topLevelCategories = siteRootCategory.hasOnlineSubCategories()
-    ? siteRootCategory.getOnlineSubCategories()
-    : null;
+/**
+ * Middleware to share global data with Inertia
+ */
+function shareData(req, res, next) {
+    var catalogMgr = require("dw/catalog/CatalogMgr");
+    var Categories = require("*/cartridge/models/categories");
+    
+    // Check if Inertia is initialized
+    if (!res.inertia) {
+        return next();
+    }
 
-  const viewData = res.getViewData();
+    var siteRootCategory = catalogMgr.getSiteCatalog().getRoot();
 
-  const globalData = {
-    currentCustomer: req.currentCustomer,
-    staticUrl: URLUtils.staticURL("/").toString(),
-    navBar: new Categories(topLevelCategories),
-    locale: viewData.locale,
-  };
+    var topLevelCategories = siteRootCategory.hasOnlineSubCategories()
+        ? siteRootCategory.getOnlineSubCategories()
+        : null;
 
-  res.setViewData({sharedData: globalData});
+    res.inertia.share({
+        auth: {
+            user: req.currentCustomer.profile ? {
+                firstName: req.currentCustomer.profile.firstName,
+                lastName: req.currentCustomer.profile.lastName,
+                email: req.currentCustomer.profile.email
+            } : null
+        },
+        locale: req.locale.id,
+        navBar: new Categories(topLevelCategories)
+    });
 
-  next();
+    next();
 }
 
-module.exports = sharedData;
+module.exports = shareData;

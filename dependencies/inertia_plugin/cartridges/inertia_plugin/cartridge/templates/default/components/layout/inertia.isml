@@ -1,26 +1,15 @@
+<iscontent type="text/html" charset="UTF-8" compact="true"/>
 <!DOCTYPE html>
 <html>
-
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="${pdict.csrf.token}">
-
-    <isif condition="${pdict.meta}">
-        <isloop items="${pdict.meta}" var="metaTag">
-            <isprint value="${metaTag}" encoding="off" />
-        </isloop>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    
+    <isif condition="${pdict.viteTags}">
+        <isprint value="${pdict.viteTags}" encoding="off"/>
     </isif>
-
-    <isif condition="${pdict.canonicalUrl}">
-        <link rel="canonical" href="${pdict.canonicalUrl}" />
-    </isif>
-
-    <isinclude url="${URLUtils.url('Inertia-Head')}" />
 </head>
-
 <body>
-    <div id="app" data-page="${JSON.stringify(pdict.page)}"></div>
+    <div id="app" data-page="<isprint value="${JSON.stringify(pdict.page)}" encoding="htmlsinglequote"/>"></div>
 </body>
-
 </html>
