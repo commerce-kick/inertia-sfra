@@ -1,10 +1,23 @@
 import { InfiniteScroll } from "@inertiajs/react";
 
+// Scroll props now arrive in the Laravel paginator wire shape: the prop is the
+// full paginator object and the item array lives under the `data` wrapper key
+// (which is also where the client merges new pages — mergeProps: ["products.data"]).
+type ScrollPaginator<T> = {
+  data: T[];
+  meta: {
+    pageName: string;
+    previousPage: number | null;
+    nextPage: number | null;
+    currentPage: number | null;
+  };
+};
+
 export default function SearchShowPage({
   products,
   ...rest
 }: {
-  products: unknown[];
+  products: ScrollPaginator<{ id: string }>;
 }) {
   console.log(rest);
 
@@ -20,7 +33,7 @@ export default function SearchShowPage({
             )
         )}
     >
-      {products.map((p) => {
+      {products.data.map((p) => {
         return <p key={p.id}>{p.id}</p>;
       })}
     </InfiniteScroll>

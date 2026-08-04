@@ -4,12 +4,18 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-    
+
     <isif condition="${pdict.viteTags}">
         <isprint value="${pdict.viteTags}" encoding="off"/>
     </isif>
 </head>
 <body>
-    <div id="app" data-page="<isprint value="${JSON.stringify(pdict.page)}" encoding="htmlsinglequote"/>"></div>
+    <iscomment>
+        The @inertiajs v3.6 client boots from this JSON script tag
+        (script[data-page="app"][type="application/json"]) and mounts into the
+        empty #app div. pageJson is pre-escaped by the adapter (angle brackets are JSON-escaped so a prop value can never break out of this script tag).
+    </iscomment>
+    <script data-page="app" type="application/json"><isprint value="${pdict.pageJson}" encoding="off"/></script>
+    <div id="app"></div>
 </body>
 </html>

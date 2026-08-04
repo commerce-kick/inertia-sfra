@@ -10,5 +10,9 @@
   {
     "id": "X-SF-CC-Inertia-Location",
     "value": ""
+  },
+  {
+    "id": "X-SF-CC-Inertia-Redirect",
+    "value": ""
   }
 ]

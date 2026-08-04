@@ -8,7 +8,8 @@
     "deploy": "npx b2c-tools code deploy",
     "build:ssr": "tsc --noEmit  --skipLibCheck && bun run scripts/generate-routes.js && vite build --ssr --config ssr.config.js",
     "type-check": "tsc --noEmit  --skipLibCheck",
-    "build:force": "vite build"
+    "build:force": "vite build",
+    "test": "bun test test/unit"
   },
   "private": true,
   "devDependencies": {
@@ -34,7 +35,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
-    "@inertiajs/react": "^2.3.4",
+    "@inertiajs/react": "^3.6.1",
     "@legendapp/state": "^3.0.0-beta.42",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/react-query": "^5.90.12",

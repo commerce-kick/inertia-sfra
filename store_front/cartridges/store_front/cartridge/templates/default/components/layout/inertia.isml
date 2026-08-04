@@ -11,12 +11,18 @@
             <isprint value="${metaTag}" encoding="off" />
         </isloop>
     </isif>
-    
+
     <isinclude url="${URLUtils.url('Inertia-Head', 'component', pdict.page.component)}" />
 </head>
 
 <body>
-    <div id="app" data-page="${JSON.stringify(pdict.page)}"></div>
+    <iscomment>
+        The @inertiajs v3.6 client boots from this JSON script tag
+        (script[data-page="app"][type="application/json"]) and mounts into the
+        empty #app div. pageJson is pre-escaped by the adapter (angle brackets are JSON-escaped so a prop value can never break out of this script tag).
+    </iscomment>
+    <script data-page="app" type="application/json"><isprint value="${pdict.pageJson}" encoding="off"/></script>
+    <div id="app"></div>
 </body>
 
 </html>

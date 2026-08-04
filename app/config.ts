@@ -1,119 +1,44 @@
+import { http } from "@inertiajs/react";
 import axios from "axios";
 
-axios.defaults.headers.common["X-Inertia"] = true;
+// axios serves the app's PLAIN SFRA JSON endpoints (suggestions, mini-cart,
+// wishlist, checkout forms) — it is NOT involved in Inertia visits. Inertia v3
+// ships its own XhrHttpClient; its customization points are http.onRequest /
+// onResponse / onError below. Never set X-Inertia on axios: that would make
+// ordinary AJAX calls masquerade as Inertia visits.
 axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 
-function findHeaderKey(headers: any, key: string): string | null {
+// SFCC delivers custom response headers only with the X-SF-CC- prefix
+// (cartridge httpHeadersConf.json); copy them back to the names the Inertia
+// client reads. Empty values are skipped: httpHeadersConf.json emits the
+// declared headers with empty defaults on every response, and an empty
+// x-inertia-location must not look like a real location header.
+const RESPONSE_HEADER_BRIDGE: Array<[string, string]> = [
+  ["x-sf-cc-inertia", "x-inertia"],
+  ["x-sf-cc-inertia-version", "x-inertia-version"],
+  ["x-sf-cc-inertia-location", "x-inertia-location"],
+  ["x-sf-cc-inertia-redirect", "x-inertia-redirect"],
+];
+
+function bridgePrefixedHeaders(headers: Record<string, string> | undefined) {
   if (!headers) {
-    return null;
+    return;
   }
-
-  if (typeof headers.get === "function") {
-    return key;
-  }
-
-  if (headers[key] !== undefined) {
-    return key;
-  }
-
-  var lower = key.toLowerCase();
-  if (headers[lower] !== undefined) {
-    return lower;
-  }
-
-  var keys = Object.keys(headers);
-  for (var i = 0; i < keys.length; i++) {
-    if (String(keys[i]).toLowerCase() === lower) {
-      return keys[i];
+  for (const [from, to] of RESPONSE_HEADER_BRIDGE) {
+    const value = headers[from];
+    if (value !== undefined && value !== "" && headers[to] === undefined) {
+      headers[to] = value;
     }
   }
-
-  return null;
 }
 
-function getHeader(headers: any, key: string) {
-  if (!headers) {
-    return undefined;
-  }
-
-  if (typeof headers.get === "function") {
-    return headers.get(key);
-  }
-
-  var foundKey = findHeaderKey(headers, key);
-  return foundKey ? headers[foundKey] : undefined;
-}
-
-function setHeader(headers: any, key: string, value: any) {
-  if (!headers) {
-    return;
-  }
-
-  if (getHeader(headers, key) !== undefined) {
-    return;
-  }
-
-  if (typeof headers.set === "function") {
-    headers.set(key, value);
-    return;
-  }
-
-  headers[key] = value;
-}
-
-function copyHeader(headers: any, from: string, to: string) {
-  if (!headers) {
-    return;
-  }
-  var value = getHeader(headers, from);
-  if (value === undefined) {
-    return;
-  }
-  setHeader(headers, to, value);
-}
-
-function syncRequestHeaders(headers: any) {
-  if (!headers) {
-    return;
-  }
-
-  copyHeader(headers, "X-Inertia", "X-SF-CC-Inertia");
-  copyHeader(headers, "X-Inertia-Version", "X-SF-CC-Inertia-Version");
-  copyHeader(headers, "X-Inertia-Partial-Component", "X-SF-CC-Inertia-Partial-Component");
-  copyHeader(headers, "X-Inertia-Partial-Data", "X-SF-CC-Inertia-Partial-Data");
-  copyHeader(headers, "X-Inertia-Partial-Except", "X-SF-CC-Inertia-Partial-Except");
-  copyHeader(headers, "X-Inertia-Reset", "X-SF-CC-Inertia-Reset");
-  copyHeader(headers, "X-Inertia-Error-Bag", "X-SF-CC-Inertia-Error-Bag");
-  copyHeader(headers, "X-Inertia-Except-Once-Props", "X-SF-CC-Inertia-Except-Once-Props");
-  copyHeader(
-    headers,
-    "X-Inertia-Infinite-Scroll-Merge-Intent",
-    "X-SF-CC-Inertia-Infinite-Scroll-Merge-Intent"
-  );
-}
-
-function syncResponseHeaders(headers: any) {
-  if (!headers) {
-    return headers;
-  }
-
-  copyHeader(headers, "x-sf-cc-inertia", "x-inertia");
-  copyHeader(headers, "x-sf-cc-inertia-version", "x-inertia-version");
-  copyHeader(headers, "x-sf-cc-inertia-location", "x-inertia-location");
-
-  return headers;
-}
-
-axios.interceptors.request.use((config: any) => {
-  config.headers = config.headers || {};
-  syncRequestHeaders(config.headers);
-  return config;
+http.onResponse((response) => {
+  bridgePrefixedHeaders(response.headers as Record<string, string>);
+  return response;
 });
 
-axios.interceptors.response.use((response: any) => {
-  response.headers = syncResponseHeaders(response.headers || {});
-
-  return response;
+http.onError((error: any) => {
+  bridgePrefixedHeaders(error?.response?.headers);
 });
 
 export default axios;
