@@ -16,6 +16,20 @@
 </head>
 
 <body>
+    <!--
+    THESIS: The store as the moment of wrapping — every product a ticketed,
+    tissue-wrapped good; refuses the minimal-luxury white-hero default.
+    OWN-WORLD: Tissue ground, kraft fields, rubber-stamp red accents, near-black
+    ink; Archivo wdth axis (condensed ticket caps / expanded stamp display),
+    Spline Sans Mono meta; swing tags, punched tickets, barcode strips, twine rules.
+    STORY: A shopper lands in a wrapping room, reads the season stamped on kraft,
+    pulls a category ticket, and browses ticketed goods they can refine and sort.
+    FIRST VIEWPORT: Full-bleed kraft hero; stamped headline left at display scale,
+    swing-tag CTA beneath it, barcode strip grounding the fold; nav tickets above.
+    FORM: Hangtag & garment-bag packaging — grounded candidate 4, seed df4b12fa.
+    FINISH: unreviewed and undocumented is unfinished; this build ends with the
+    finish review, the verdict, and DESIGN.md
+    -->
     <iscomment>
         The @inertiajs v3.6 client boots from this JSON script tag
         (script[data-page="app"][type="application/json"]) and mounts into the

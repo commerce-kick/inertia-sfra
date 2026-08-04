@@ -29,9 +29,9 @@ function toSwatchValue(value) {
 var SearchTileData = BaseData.extend({
   schema: {
     /** @type {string} product ID */
-    id: { type: "string" },
+    id: { type: "string", default: "" },
     /** @type {string} display name */
-    productName: { type: "string" },
+    productName: { type: "string", default: "" },
     /** @type {string} Product-Show URL for this tile */
     url: { type: "string", default: "" },
     /** @type {{sales: {value: number, formatted: string}|null, list: {value: number, formatted: string}|null, min: {value: number, formatted: string}|null, max: {value: number, formatted: string}|null, isRange: boolean} | null} normalized price */

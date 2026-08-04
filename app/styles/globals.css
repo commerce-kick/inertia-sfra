@@ -219,3 +219,20 @@ html {
   letter-spacing: -0.01em;
   font-weight: 800;
 }
+
+/* Swing tag silhouette: pointed left end; pair with a punched-hole element. */
+@utility tag-shape {
+  clip-path: polygon(16px 0, 100% 0, 100% 100%, 16px 100%, 0 50%);
+}
+
+/* Mirrored swing tag: pointed right end. */
+@utility tag-shape-right {
+  clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 50%, calc(100% - 16px) 100%, 0 100%);
+}
+
+/* Ticket notches: half-circle punches on the left and right edges. */
+@utility ticket-notch {
+  mask-image: radial-gradient(circle 7px at 0 50%, transparent 98%, black),
+    radial-gradient(circle 7px at 100% 50%, transparent 98%, black);
+  mask-composite: intersect;
+}
