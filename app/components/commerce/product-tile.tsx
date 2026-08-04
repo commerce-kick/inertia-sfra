@@ -5,6 +5,7 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { cn } from "@/lib/utils";
 import type { ISearchTileData } from "@/generated/data";
 import { Star } from "lucide-react";
+import { useState } from "react";
 
 function TilePrice({ price }: { price: ISearchTileData["price"] }) {
   if (!price) return null;
@@ -42,6 +43,8 @@ export function ProductTile({
   className?: string;
 }) {
   const colors = product.variationAttributes.find((attr) => attr.swatchable);
+  const [imageBroken, setImageBroken] = useState(false);
+  const image = imageBroken ? null : product.image;
 
   return (
     <Link
@@ -53,11 +56,12 @@ export function ProductTile({
     >
       <div className="relative bg-card shadow-xs transition-shadow duration-300 group-hover:shadow-md">
         <AspectRatio ratio={4 / 5}>
-          {product.image ? (
+          {image ? (
             <img
-              src={product.image.url}
-              alt={product.image.alt || product.productName}
+              src={image.url}
+              alt={image.alt || product.productName}
               loading="lazy"
+              onError={() => setImageBroken(true)}
               className="size-full object-contain p-6 transition-transform duration-300 ease-out group-hover:scale-[1.03]"
             />
           ) : (

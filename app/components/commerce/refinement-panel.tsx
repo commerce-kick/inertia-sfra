@@ -11,7 +11,7 @@ import type { IRefinementData } from "@/generated/data";
 import { router } from "@inertiajs/react";
 import { useState } from "react";
 
-const PRICE_CEILING = 500;
+const PRICE_CEILING = 1000;
 
 function visit(url: string) {
   router.get(url, {}, { preserveState: true, preserveScroll: true });

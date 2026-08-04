@@ -18,29 +18,43 @@ import type { HomeShowProps, ShowcaseRow } from "@/types/home";
 import { Deferred, Head, usePage } from "@inertiajs/react";
 import { ArrowRight } from "lucide-react";
 
-/** Authored hero art: a tissue-wrapped parcel tied with twine, CSS-only. */
+/** Authored hero art: a kraft parcel wrapped in tissue, tied with twine. */
 function WrappedParcel() {
   return (
     <div aria-hidden className="relative mx-auto w-full max-w-sm">
-      {/* tissue sheets under the parcel */}
-      <div className="absolute inset-4 -rotate-6 bg-card/60 shadow-sm" />
-      <div className="absolute inset-2 rotate-3 bg-card/80 shadow-sm" />
-      {/* the parcel */}
-      <div className="relative aspect-[4/3] -rotate-1 bg-card shadow-lg">
-        {/* folded flap */}
-        <div className="absolute inset-x-0 top-0 h-1/3 bg-gradient-to-b from-background/70 to-transparent" />
-        {/* twine cross */}
-        <div className="absolute left-1/2 top-0 h-full w-0.5 -translate-x-1/2 bg-secondary-foreground/50" />
-        <div className="absolute left-0 top-1/2 h-0.5 w-full -translate-y-1/2 bg-secondary-foreground/50" />
-        {/* knot */}
-        <div className="absolute left-1/2 top-1/2 size-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-secondary-foreground/60 bg-card" />
-        <HangTag tilt={8} className="absolute -right-5 top-2/3">
-          <span className="flex flex-col items-start gap-0.5 py-0.5">
-            <span className="ticket-caps text-[10px]">Para ti</span>
-            <Barcode value="MERIDIAN" showLabel={false} className="w-14 text-foreground/40" />
+      {/* loose tissue sheets under the parcel */}
+      <div className="absolute inset-4 -rotate-6 bg-card/50 shadow-sm" />
+      <div className="absolute inset-2 rotate-3 bg-card/70 shadow-sm" />
+      {/* the parcel: kraft paper with visible fold planes */}
+      <div className="relative aspect-[4/3] -rotate-1 overflow-hidden shadow-xl [background:linear-gradient(135deg,oklch(0.76_0.06_72)_0%,oklch(0.7_0.065_70)_55%,oklch(0.65_0.07_68)_100%)] dark:[background:linear-gradient(135deg,oklch(0.45_0.05_70),oklch(0.38_0.045_70))]">
+        {/* fold creases */}
+        <div className="absolute left-0 top-[18%] h-px w-full bg-black/10" />
+        <div className="absolute left-0 top-[18%] h-px w-full translate-y-px bg-white/20" />
+        <div className="absolute bottom-[14%] left-0 h-px w-full bg-black/10" />
+        {/* tissue peeking out of the top fold */}
+        <div className="absolute -top-1 left-[12%] h-4 w-[30%] -rotate-2 bg-card shadow-xs" />
+        <div className="absolute -top-1 right-[18%] h-3 w-[22%] rotate-3 bg-card/90 shadow-xs" />
+        {/* twine cross with woven shadow */}
+        <div className="absolute left-1/2 top-0 h-full w-1 -translate-x-1/2 bg-secondary-foreground/55 shadow-[1px_0_0_rgba(255,255,255,0.25)]" />
+        <div className="absolute left-0 top-1/2 h-1 w-full -translate-y-1/2 bg-secondary-foreground/55 shadow-[0_1px_0_rgba(255,255,255,0.25)]" />
+        {/* bow: two loops + knot */}
+        <div className="absolute left-1/2 top-1/2 size-9 -translate-x-[85%] -translate-y-1/2 rounded-full border-[3px] border-secondary-foreground/55 bg-transparent [clip-path:polygon(0_0,78%_0,78%_100%,0_100%)]" />
+        <div className="absolute left-1/2 top-1/2 size-9 -translate-x-[15%] -translate-y-1/2 rounded-full border-[3px] border-secondary-foreground/55 bg-transparent [clip-path:polygon(22%_0,100%_0,100%_100%,22%_100%)]" />
+        <div className="absolute left-1/2 top-1/2 size-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-secondary-foreground/70 shadow-sm" />
+        {/* postage stamp corner */}
+        <div className="absolute right-[7%] top-[6%] rotate-2 border-2 border-dashed border-primary/70 px-2 py-1">
+          <span className="stamp-display text-[10px] text-primary/80">
+            Meridian
           </span>
-        </HangTag>
+        </div>
       </div>
+      {/* the tag, hanging off the twine */}
+      <HangTag tilt={9} className="absolute -right-6 top-[70%] scale-110">
+        <span className="flex flex-col items-start gap-0.5 py-0.5">
+          <span className="ticket-caps text-[10px]">Para ti</span>
+          <Barcode value="MERIDIAN" showLabel={false} className="w-16 text-foreground/40" />
+        </span>
+      </HangTag>
     </div>
   );
 }
@@ -58,8 +72,8 @@ function ShowcaseCarousel({ row }: { row: ShowcaseRow }) {
           </CarouselItem>
         ))}
       </CarouselContent>
-      <CarouselPrevious className="-left-3 rounded-none" />
-      <CarouselNext className="-right-3 rounded-none" />
+      <CarouselPrevious className="-left-3 hidden rounded-none sm:inline-flex" />
+      <CarouselNext className="-right-3 hidden rounded-none sm:inline-flex" />
     </Carousel>
   );
 }
