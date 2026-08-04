@@ -28,7 +28,6 @@ var shareData = require("*/cartridge/scripts/middleware/shareData");
  * @queryParam pmax optional number maximum price filter
  */
 server.append("Show", initInertia.init, shareData, function (req, res, next) {
-  var URLUtils = require("dw/web/URLUtils");
   var SearchTileData = require("*/cartridge/scripts/data/SearchTileData");
   var RefinementData = require("*/cartridge/scripts/data/RefinementData");
   var SelectedFilterData = require("*/cartridge/scripts/data/SelectedFilterData");
@@ -43,28 +42,9 @@ server.append("Show", initInertia.init, shareData, function (req, res, next) {
     var ProductFactory = require("*/cartridge/scripts/factories/product");
 
     var tiles = productSearch.productIds.map(function (product) {
-      var tile = ProductFactory.get({ pid: product.productID, pview: "tile" });
-      // Catalogs differ in which view types exist; the tile model override
-      // requests all three, first hit wins.
-      var image = null;
-      ["medium", "large", "small"].some(function (type) {
-        var group = tile.images && tile.images[type];
-        if (group && group.length) {
-          image = group[0];
-          return true;
-        }
-        return false;
-      });
-
-      return SearchTileData.from({
-        id: tile.id,
-        productName: tile.productName,
-        url: URLUtils.url("Product-Show", "pid", tile.id).toString(),
-        price: tile.price,
-        image: image,
-        rating: tile.rating,
-        variationAttributes: tile.variationAttributes,
-      });
+      return SearchTileData.fromTile(
+        ProductFactory.get({ pid: product.productID, pview: "tile" })
+      );
     });
 
     return res.inertia.createPaginator(tiles, productSearch.count);

@@ -79,4 +79,36 @@ var SearchTileData = BaseData.extend({
   },
 });
 
+/**
+ * Map a tile product model (ProductFactory pview: 'tile') to a plain
+ * SearchTileData object. Handles the image view-type fallback (catalogs
+ * differ in which of medium/large/small exist) and injects the
+ * Product-Show URL.
+ * @param {Object} tile - tile product model
+ * @returns {Object} plain SearchTileData object
+ */
+SearchTileData.fromTile = function (tile) {
+  var URLUtils = require("dw/web/URLUtils");
+
+  var image = null;
+  ["medium", "large", "small"].some(function (type) {
+    var group = tile.images && tile.images[type];
+    if (group && group.length) {
+      image = group[0];
+      return true;
+    }
+    return false;
+  });
+
+  return SearchTileData.from({
+    id: tile.id,
+    productName: tile.productName,
+    url: URLUtils.url("Product-Show", "pid", tile.id).toString(),
+    price: tile.price,
+    image: image,
+    rating: tile.rating,
+    variationAttributes: tile.variationAttributes,
+  });
+};
+
 module.exports = SearchTileData;
