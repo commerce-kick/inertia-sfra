@@ -25,11 +25,7 @@ export function SortSelect({ sort }: { sort: SortState }) {
         }
       }}
     >
-      <SelectTrigger
-        size="sm"
-        className="ticket-caps w-auto gap-2 rounded-none border-dashed text-xs"
-        aria-label="Ordenar por"
-      >
+      <SelectTrigger size="sm" className="w-auto gap-2" aria-label="Ordenar por">
         <SelectValue placeholder="Ordenar" />
       </SelectTrigger>
       <SelectContent>

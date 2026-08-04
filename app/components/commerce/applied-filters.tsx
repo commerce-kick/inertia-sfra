@@ -1,4 +1,4 @@
-import { Ticket } from "@/components/commerce/ticket";
+import { Badge } from "@/components/ui/badge";
 import type { ISelectedFilterData } from "@/generated/data";
 import { router } from "@inertiajs/react";
 import { X } from "lucide-react";
@@ -7,10 +7,7 @@ function visit(url: string) {
   router.get(url, {}, { preserveState: true, preserveScroll: true });
 }
 
-/**
- * Applied filters as torn-off tickets; the perforated stub removes one,
- * the reset link tears them all off.
- */
+/** Applied filters as removable pills, with a clear-all link. */
 export function AppliedFilters({
   filters,
   resetLink,
@@ -23,26 +20,26 @@ export function AppliedFilters({
   return (
     <div className="flex flex-wrap items-center gap-2">
       {filters.map((filter) => (
-        <Ticket
+        <Badge
           key={`${filter.id}-${filter.displayValue}`}
-          trailing={
-            <button
-              type="button"
-              onClick={() => filter.url && visit(filter.url)}
-              aria-label={`Quitar filtro ${filter.displayValue}`}
-              className="text-muted-foreground transition-colors hover:text-primary"
-            >
-              <X className="size-3" />
-            </button>
-          }
+          variant="secondary"
+          className="gap-1 rounded-full pr-1.5 font-normal"
         >
           {filter.displayValue}
-        </Ticket>
+          <button
+            type="button"
+            onClick={() => filter.url && visit(filter.url)}
+            aria-label={`Quitar filtro ${filter.displayValue}`}
+            className="rounded-full p-0.5 text-muted-foreground transition-colors hover:bg-background hover:text-foreground"
+          >
+            <X className="size-3" />
+          </button>
+        </Badge>
       ))}
       <button
         type="button"
         onClick={() => visit(resetLink)}
-        className="ticket-caps text-xs text-primary underline-offset-4 hover:underline"
+        className="text-sm font-medium text-link underline-offset-4 hover:underline"
       >
         Limpiar todo
       </button>

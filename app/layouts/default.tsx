@@ -1,12 +1,9 @@
 /**
- * Storefront shell — Hangtag & Garment Bag world (direction contract lives
- * as the first child of <body> in components/layout/inertia.isml).
- * Header: stamped brand, category tickets, search, account/bag. Footer:
- * kraft field. Flash entries surface as toasts.
+ * Storefront shell — clean enterprise-web system (Cloudflare-inspired,
+ * user-pinned; direction contract lives as the first child of <body> in
+ * components/layout/inertia.isml). White sticky header with wordmark, nav
+ * links, search, account/bag; dark graphite footer. Flash → toasts.
  */
-import { Barcode } from "@/components/commerce/barcode";
-import { Stamp } from "@/components/commerce/stamp";
-import { Ticket } from "@/components/commerce/ticket";
 import { Link } from "@/components/link";
 import { useTheme } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
@@ -33,6 +30,15 @@ import {
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
+function Wordmark({ className }: { className?: string }) {
+  return (
+    <span className={`inline-flex items-baseline gap-1 ${className ?? ""}`}>
+      <span className="text-lg font-bold tracking-tight">meridian</span>
+      <span className="size-1.5 rounded-[2px] bg-primary" aria-hidden />
+    </span>
+  );
+}
+
 function SearchForm({ onSubmitted }: { onSubmitted?: () => void }) {
   const [phrase, setPhrase] = useState("");
 
@@ -48,14 +54,14 @@ function SearchForm({ onSubmitted }: { onSubmitted?: () => void }) {
         onSubmitted?.();
       }}
     >
-      <Search className="pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
+      <Search className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
       <Input
         type="search"
         value={phrase}
         onChange={(event) => setPhrase(event.target.value)}
-        placeholder="Buscar en el catálogo"
+        placeholder="Buscar productos"
         aria-label="Buscar productos"
-        className="h-8 w-44 rounded-none border-dashed pl-8 font-mono text-xs md:w-56"
+        className="h-9 w-44 pl-8 text-sm md:w-56"
       />
     </form>
   );
@@ -87,8 +93,8 @@ function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-dashed border-secondary-foreground/25 bg-background/95 backdrop-blur-sm">
-      <div className="container flex h-16 items-center gap-5">
+    <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur-sm">
+      <div className="container flex h-16 items-center gap-6">
         <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
           <SheetTrigger asChild className="md:hidden">
             <Button variant="ghost" size="icon" aria-label="Abrir menú">
@@ -97,17 +103,17 @@ function Header() {
           </SheetTrigger>
           <SheetContent side="left" className="w-72">
             <SheetHeader>
-              <SheetTitle className="stamp-display text-left text-lg">
-                Meridian
+              <SheetTitle className="text-left">
+                <Wordmark />
               </SheetTitle>
             </SheetHeader>
-            <nav aria-label="Categorías" className="flex flex-col gap-3 px-4">
+            <nav aria-label="Categorías" className="flex flex-col gap-1 px-4">
               {categories.map((category) => (
                 <Link
                   key={category.id}
                   href={category.url}
                   onClick={() => setMobileOpen(false)}
-                  className="ticket-caps border-b border-dashed border-border pb-3 text-sm"
+                  className="rounded-md px-2 py-2.5 text-sm font-medium transition-colors hover:bg-accent"
                 >
                   {category.name}
                 </Link>
@@ -120,20 +126,20 @@ function Header() {
         </Sheet>
 
         <Link href={homeShow({})} aria-label="Meridian — inicio">
-          <Stamp tilt={-2} className="text-sm">
-            Meridian
-          </Stamp>
+          <Wordmark />
         </Link>
 
         <nav
           aria-label="Categorías"
-          className="hidden items-center gap-2 md:flex"
+          className="hidden items-center gap-1 md:flex"
         >
           {categories.map((category) => (
-            <Link key={category.id} href={category.url}>
-              <Ticket className="transition-colors hover:text-primary">
-                {category.name}
-              </Ticket>
+            <Link
+              key={category.id}
+              href={category.url}
+              className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+            >
+              {category.name}
             </Link>
           ))}
         </nav>
@@ -147,11 +153,13 @@ function Header() {
             variant="ghost"
             size="icon"
             aria-label={
-              auth.user
-                ? `Cuenta de ${auth.user.firstName}`
-                : "Iniciar sesión"
+              auth.user ? `Cuenta de ${auth.user.firstName}` : "Iniciar sesión"
             }
-            title={auth.user ? `${auth.user.firstName} ${auth.user.lastName}` : undefined}
+            title={
+              auth.user
+                ? `${auth.user.firstName} ${auth.user.lastName}`
+                : undefined
+            }
           >
             <UserRound className="size-4" />
           </Button>
@@ -169,41 +177,46 @@ function Footer() {
   const categories = navBar?.categories ?? [];
 
   return (
-    <footer className="mt-24 bg-secondary text-secondary-foreground">
+    <footer className="mt-24 bg-[oklch(0.2_0.008_260)] text-[oklch(0.95_0.005_250)]">
       <div className="container grid gap-10 py-14 md:grid-cols-[2fr_1fr_1fr]">
         <div className="flex flex-col items-start gap-4">
-          <span className="stamp-display text-2xl">Meridian</span>
-          <p className="max-w-sm text-sm leading-relaxed opacity-80">
-            Cada buen objeto llega envuelto: papel de seda, cordel y una
-            etiqueta con tu nombre.
+          <Wordmark />
+          <p className="max-w-sm text-sm leading-relaxed text-[oklch(0.72_0.01_255)]">
+            Relojes y accesorios seleccionados para el día a día.
           </p>
         </div>
         <nav aria-label="Categorías" className="flex flex-col gap-2.5">
-          <span className="ticket-caps text-xs opacity-70">Colecciones</span>
+          <span className="text-xs font-semibold uppercase tracking-wider text-[oklch(0.6_0.01_255)]">
+            Colecciones
+          </span>
           {categories.map((category) => (
             <Link
               key={category.id}
               href={category.url}
-              className="w-fit text-sm underline-offset-4 hover:underline"
+              className="w-fit text-sm text-[oklch(0.8_0.01_255)] transition-colors hover:text-white"
             >
               {category.name}
             </Link>
           ))}
         </nav>
         <div className="flex flex-col gap-2.5">
-          <span className="ticket-caps text-xs opacity-70">El proyecto</span>
-          <p className="text-sm leading-relaxed opacity-80">
+          <span className="text-xs font-semibold uppercase tracking-wider text-[oklch(0.6_0.01_255)]">
+            El proyecto
+          </span>
+          <p className="text-sm leading-relaxed text-[oklch(0.72_0.01_255)]">
             Escaparate de referencia del adaptador Inertia.js para Salesforce
             B2C Commerce (SFRA).
           </p>
         </div>
       </div>
-      <div className="border-t border-secondary-foreground/20">
+      <div className="border-t border-white/10">
         <div className="container flex items-center justify-between gap-4 py-4">
-          <span className="font-mono text-[11px] uppercase tracking-widest opacity-70">
+          <span className="meta-caps text-[oklch(0.6_0.01_255)]">
             {locale} · demo
           </span>
-          <Barcode value="MERIDIAN-STORE" className="w-28 opacity-50" />
+          <span className="meta-caps text-[oklch(0.6_0.01_255)]">
+            inertia-sfra
+          </span>
         </div>
       </div>
     </footer>

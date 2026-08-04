@@ -1,4 +1,3 @@
-import { Barcode } from "@/components/commerce/barcode";
 import {
   Accordion,
   AccordionContent,
@@ -48,9 +47,11 @@ function PriceRange({ currentUrl }: { currentUrl: string }) {
         }
         aria-label="Rango de precio"
       />
-      <div className="flex items-center justify-between font-mono text-xs text-muted-foreground">
+      <div className="flex items-center justify-between text-xs text-muted-foreground">
         <span>${range[0]}</span>
-        <span>{range[1] >= PRICE_CEILING ? `$${PRICE_CEILING}+` : `$${range[1]}`}</span>
+        <span>
+          {range[1] >= PRICE_CEILING ? `$${PRICE_CEILING}+` : `$${range[1]}`}
+        </span>
       </div>
     </div>
   );
@@ -58,9 +59,8 @@ function PriceRange({ currentUrl }: { currentUrl: string }) {
 
 /**
  * The refinement rail: server-defined groups render data-driven (checkbox
- * lists with hit counts, tear-off ticket look); the price range rides along
- * always since pmin/pmax filter regardless of Business Manager refinement
- * definitions.
+ * lists with hit counts); the price range rides along always since
+ * pmin/pmax filter regardless of Business Manager refinement definitions.
  */
 export function RefinementPanel({
   refinements,
@@ -79,7 +79,7 @@ export function RefinementPanel({
     >
       {groups.map((group, i) => (
         <AccordionItem key={group.displayName} value={`group-${i}`}>
-          <AccordionTrigger className="ticket-caps text-xs hover:no-underline">
+          <AccordionTrigger className="text-sm font-medium hover:no-underline">
             {group.displayName}
           </AccordionTrigger>
           <AccordionContent>
@@ -94,7 +94,7 @@ export function RefinementPanel({
                     />
                     <span className="flex-1">{value.displayValue}</span>
                     {value.hitCount > 0 && (
-                      <span className="font-mono text-[11px] text-muted-foreground">
+                      <span className="text-xs text-muted-foreground">
                         {value.hitCount}
                       </span>
                     )}
@@ -107,17 +107,13 @@ export function RefinementPanel({
       ))}
 
       <AccordionItem value="price">
-        <AccordionTrigger className="ticket-caps text-xs hover:no-underline">
+        <AccordionTrigger className="text-sm font-medium hover:no-underline">
           Precio
         </AccordionTrigger>
         <AccordionContent>
           <PriceRange currentUrl={currentUrl} />
         </AccordionContent>
       </AccordionItem>
-
-      <div className="flex justify-center pt-6">
-        <Barcode value="FILTER-TICKET" className="w-24 text-foreground/20" />
-      </div>
     </Accordion>
   );
 }

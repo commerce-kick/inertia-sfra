@@ -1,9 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-/* Archivo carries the whole storefront voice: the wdth axis spans condensed
-   ticket caps through expanded stamp display from one file. */
-@import "@fontsource-variable/archivo/wdth.css";
+@import "@fontsource-variable/inter";
 @import "@fontsource-variable/spline-sans-mono";
 
 @custom-variant dark (&:is(.dark *));
@@ -13,102 +11,103 @@ html {
 }
 
 /* ---------------------------------------------------------------------------
-   Hangtag & Garment Bag world — kraft stock, tissue, rubber-stamp red, ink.
-   Light is the daylight shop floor (tissue ground); dark is the after-hours
-   stockroom (ink ground). Warm hues throughout — secondary text is tinted
-   from the kraft hue, never gray.
+   Meridian — clean enterprise-web system (Cloudflare-inspired, user-pinned).
+   White ground, deep neutral ink, one confident orange accent, blue for
+   links/interactive states, hairline borders, soft shadows, tidy radius.
+   Dark mode is the same system on a graphite ground.
 --------------------------------------------------------------------------- */
 
 :root {
-  --radius: 0.375rem;
-  --background: oklch(0.955 0.013 92);
-  --foreground: oklch(0.235 0.012 75);
-  --card: oklch(0.975 0.008 92);
-  --card-foreground: oklch(0.235 0.012 75);
-  --popover: oklch(0.975 0.008 92);
-  --popover-foreground: oklch(0.235 0.012 75);
-  --primary: oklch(0.55 0.19 32);
-  --primary-foreground: oklch(0.975 0.008 92);
-  --secondary: oklch(0.72 0.065 72);
-  --secondary-foreground: oklch(0.235 0.012 75);
-  --muted: oklch(0.92 0.03 85);
-  --muted-foreground: oklch(0.46 0.045 68);
-  --accent: oklch(0.88 0.045 78);
-  --accent-foreground: oklch(0.235 0.012 75);
-  --destructive: oklch(0.5 0.19 20);
-  --destructive-foreground: oklch(0.975 0.008 92);
-  --border: oklch(0.84 0.035 80);
-  --input: oklch(0.9 0.025 85);
-  --ring: oklch(0.55 0.19 32);
-  --chart-1: oklch(0.55 0.19 32);
-  --chart-2: oklch(0.685 0.075 70);
-  --chart-3: oklch(0.52 0.07 130);
-  --chart-4: oklch(0.7 0.11 60);
-  --chart-5: oklch(0.4 0.02 75);
-  --sidebar: oklch(0.955 0.013 92);
-  --sidebar-foreground: oklch(0.235 0.012 75);
-  --sidebar-primary: oklch(0.55 0.19 32);
-  --sidebar-primary-foreground: oklch(0.975 0.008 92);
-  --sidebar-accent: oklch(0.88 0.045 78);
-  --sidebar-accent-foreground: oklch(0.235 0.012 75);
-  --sidebar-border: oklch(0.84 0.035 80);
-  --sidebar-ring: oklch(0.55 0.19 32);
-  --font-sans: "Archivo Variable", "Archivo", ui-sans-serif, system-ui,
-    sans-serif;
+  --radius: 0.5rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.26 0.01 260);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.26 0.01 260);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.26 0.01 260);
+  --primary: oklch(0.72 0.17 55);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.96 0.005 250);
+  --secondary-foreground: oklch(0.26 0.01 260);
+  --muted: oklch(0.97 0.003 250);
+  --muted-foreground: oklch(0.5 0.012 258);
+  --accent: oklch(0.95 0.015 250);
+  --accent-foreground: oklch(0.42 0.16 258);
+  --destructive: oklch(0.55 0.2 26);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.9 0.004 255);
+  --input: oklch(0.9 0.004 255);
+  --ring: oklch(0.72 0.17 55);
+  --link: oklch(0.5 0.19 258);
+  --chart-1: oklch(0.72 0.17 55);
+  --chart-2: oklch(0.5 0.19 258);
+  --chart-3: oklch(0.62 0.13 155);
+  --chart-4: oklch(0.8 0.14 80);
+  --chart-5: oklch(0.45 0.01 260);
+  --sidebar: oklch(0.985 0.002 250);
+  --sidebar-foreground: oklch(0.26 0.01 260);
+  --sidebar-primary: oklch(0.72 0.17 55);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.95 0.015 250);
+  --sidebar-accent-foreground: oklch(0.26 0.01 260);
+  --sidebar-border: oklch(0.9 0.004 255);
+  --sidebar-ring: oklch(0.72 0.17 55);
+  --font-sans: "Inter Variable", "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Spline Sans Mono Variable", "Spline Sans Mono", ui-monospace,
     monospace;
-  --shadow-color: hsl(30 30% 12%);
-  --shadow-2xs: 0px 1px 2px 0px hsl(30 30% 12% / 0.06);
-  --shadow-xs: 0px 1px 3px 0px hsl(30 30% 12% / 0.08);
-  --shadow-sm: 0px 2px 4px -1px hsl(30 30% 12% / 0.1),
-    0px 1px 2px -1px hsl(30 30% 12% / 0.08);
-  --shadow: 0px 3px 6px -2px hsl(30 30% 12% / 0.12),
-    0px 1px 3px -1px hsl(30 30% 12% / 0.08);
-  --shadow-md: 0px 5px 10px -3px hsl(30 30% 12% / 0.14),
-    0px 2px 4px -2px hsl(30 30% 12% / 0.08);
-  --shadow-lg: 0px 8px 18px -4px hsl(30 30% 12% / 0.16),
-    0px 3px 6px -3px hsl(30 30% 12% / 0.08);
-  --shadow-xl: 0px 14px 28px -6px hsl(30 30% 12% / 0.18),
-    0px 5px 10px -4px hsl(30 30% 12% / 0.1);
-  --shadow-2xl: 0px 22px 44px -8px hsl(30 30% 12% / 0.22);
-  --tracking-normal: 0em;
+  --shadow-color: hsl(240 10% 20%);
+  --shadow-2xs: 0px 1px 2px 0px hsl(240 10% 20% / 0.05);
+  --shadow-xs: 0px 1px 3px 0px hsl(240 10% 20% / 0.07);
+  --shadow-sm: 0px 2px 4px -1px hsl(240 10% 20% / 0.08),
+    0px 1px 2px -1px hsl(240 10% 20% / 0.06);
+  --shadow: 0px 3px 8px -2px hsl(240 10% 20% / 0.09),
+    0px 1px 3px -1px hsl(240 10% 20% / 0.06);
+  --shadow-md: 0px 6px 14px -3px hsl(240 10% 20% / 0.1),
+    0px 2px 5px -2px hsl(240 10% 20% / 0.06);
+  --shadow-lg: 0px 10px 22px -4px hsl(240 10% 20% / 0.12),
+    0px 4px 8px -3px hsl(240 10% 20% / 0.06);
+  --shadow-xl: 0px 16px 32px -6px hsl(240 10% 20% / 0.14),
+    0px 6px 12px -4px hsl(240 10% 20% / 0.08);
+  --shadow-2xl: 0px 24px 48px -8px hsl(240 10% 20% / 0.18);
+  --tracking-normal: -0.011em;
   --spacing: 0.25rem;
 }
 
 .dark {
-  --background: oklch(0.22 0.012 70);
-  --foreground: oklch(0.94 0.012 90);
-  --card: oklch(0.27 0.015 70);
-  --card-foreground: oklch(0.94 0.012 90);
-  --popover: oklch(0.27 0.015 70);
-  --popover-foreground: oklch(0.94 0.012 90);
-  --primary: oklch(0.62 0.18 32);
-  --primary-foreground: oklch(0.97 0.01 90);
-  --secondary: oklch(0.4 0.05 70);
-  --secondary-foreground: oklch(0.94 0.012 90);
-  --muted: oklch(0.3 0.02 70);
-  --muted-foreground: oklch(0.72 0.035 80);
-  --accent: oklch(0.34 0.03 72);
-  --accent-foreground: oklch(0.94 0.012 90);
-  --destructive: oklch(0.58 0.18 22);
-  --destructive-foreground: oklch(0.97 0.01 90);
-  --border: oklch(0.34 0.025 72);
-  --input: oklch(0.32 0.02 72);
-  --ring: oklch(0.62 0.18 32);
-  --chart-1: oklch(0.62 0.18 32);
-  --chart-2: oklch(0.685 0.075 70);
-  --chart-3: oklch(0.62 0.08 130);
-  --chart-4: oklch(0.74 0.11 60);
-  --chart-5: oklch(0.8 0.02 80);
-  --sidebar: oklch(0.22 0.012 70);
-  --sidebar-foreground: oklch(0.94 0.012 90);
-  --sidebar-primary: oklch(0.62 0.18 32);
-  --sidebar-primary-foreground: oklch(0.97 0.01 90);
-  --sidebar-accent: oklch(0.34 0.03 72);
-  --sidebar-accent-foreground: oklch(0.94 0.012 90);
-  --sidebar-border: oklch(0.34 0.025 72);
-  --sidebar-ring: oklch(0.62 0.18 32);
-  --shadow-color: hsl(30 40% 4%);
+  --background: oklch(0.18 0.006 260);
+  --foreground: oklch(0.95 0.005 250);
+  --card: oklch(0.22 0.007 260);
+  --card-foreground: oklch(0.95 0.005 250);
+  --popover: oklch(0.22 0.007 260);
+  --popover-foreground: oklch(0.95 0.005 250);
+  --primary: oklch(0.74 0.16 55);
+  --primary-foreground: oklch(0.16 0.01 260);
+  --secondary: oklch(0.26 0.008 260);
+  --secondary-foreground: oklch(0.95 0.005 250);
+  --muted: oklch(0.24 0.007 260);
+  --muted-foreground: oklch(0.68 0.01 255);
+  --accent: oklch(0.28 0.02 258);
+  --accent-foreground: oklch(0.78 0.11 258);
+  --destructive: oklch(0.62 0.19 26);
+  --destructive-foreground: oklch(0.97 0.005 250);
+  --border: oklch(0.3 0.008 260);
+  --input: oklch(0.3 0.008 260);
+  --ring: oklch(0.74 0.16 55);
+  --link: oklch(0.72 0.13 258);
+  --chart-1: oklch(0.74 0.16 55);
+  --chart-2: oklch(0.66 0.15 258);
+  --chart-3: oklch(0.68 0.13 155);
+  --chart-4: oklch(0.82 0.13 80);
+  --chart-5: oklch(0.75 0.01 255);
+  --sidebar: oklch(0.18 0.006 260);
+  --sidebar-foreground: oklch(0.95 0.005 250);
+  --sidebar-primary: oklch(0.74 0.16 55);
+  --sidebar-primary-foreground: oklch(0.16 0.01 260);
+  --sidebar-accent: oklch(0.28 0.02 258);
+  --sidebar-accent-foreground: oklch(0.95 0.005 250);
+  --sidebar-border: oklch(0.3 0.008 260);
+  --sidebar-ring: oklch(0.74 0.16 55);
+  --shadow-color: hsl(240 20% 2%);
 }
 
 @theme inline {
@@ -135,6 +134,7 @@ html {
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-link: var(--link);
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
@@ -201,38 +201,13 @@ html {
 @utility container {
   margin-inline: auto;
   padding-inline: 2rem;
+  max-width: 80rem;
 }
 
-/* Ticket caps: the condensed stamped-label voice used on category tickets,
-   refinement chips, and hangtag meta. */
-@utility ticket-caps {
-  font-variation-settings: "wdth" 75;
+/* Small uppercase label voice for eyebrow-less meta (counts, SKUs). */
+@utility meta-caps {
+  font-family: var(--font-mono);
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  font-weight: 600;
-}
-
-/* Stamp display: the expanded heavy voice for stamped headlines. */
-@utility stamp-display {
-  font-variation-settings: "wdth" 118;
-  text-transform: uppercase;
-  letter-spacing: -0.01em;
-  font-weight: 800;
-}
-
-/* Swing tag silhouette: pointed left end; pair with a punched-hole element. */
-@utility tag-shape {
-  clip-path: polygon(16px 0, 100% 0, 100% 100%, 16px 100%, 0 50%);
-}
-
-/* Mirrored swing tag: pointed right end. */
-@utility tag-shape-right {
-  clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 50%, calc(100% - 16px) 100%, 0 100%);
-}
-
-/* Ticket notches: half-circle punches on the left and right edges. */
-@utility ticket-notch {
-  mask-image: radial-gradient(circle 7px at 0 50%, transparent 98%, black),
-    radial-gradient(circle 7px at 100% 50%, transparent 98%, black);
-  mask-composite: intersect;
+  font-size: 0.6875rem;
 }

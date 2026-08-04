@@ -1,12 +1,11 @@
-import { Barcode } from "@/components/commerce/barcode";
 import { CategoryCard } from "@/components/commerce/category-card";
-import { HangTag } from "@/components/commerce/hang-tag";
 import {
   ProductTile,
   ProductTileSkeleton,
 } from "@/components/commerce/product-tile";
 import { Section } from "@/components/commerce/section";
 import { Link } from "@/components/link";
+import { Button } from "@/components/ui/button";
 import {
   Carousel,
   CarouselContent,
@@ -16,45 +15,34 @@ import {
 } from "@/components/ui/carousel";
 import type { HomeShowProps, ShowcaseRow } from "@/types/home";
 import { Deferred, Head, usePage } from "@inertiajs/react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Blocks, Layers, Zap } from "lucide-react";
 
-/** Authored hero art: a kraft parcel wrapped in tissue, tied with twine. */
-function WrappedParcel() {
+/**
+ * Authored hero visual: a soft gradient panel with floating product-card
+ * silhouettes — the storefront's own UI as illustration.
+ */
+function HeroVisual() {
   return (
-    <div aria-hidden className="relative mx-auto w-full max-w-sm">
-      {/* loose tissue sheets under the parcel */}
-      <div className="absolute inset-4 -rotate-6 bg-card/50 shadow-sm" />
-      <div className="absolute inset-2 rotate-3 bg-card/70 shadow-sm" />
-      {/* the parcel: kraft paper with visible fold planes */}
-      <div className="relative aspect-[4/3] -rotate-1 overflow-hidden shadow-xl [background:linear-gradient(135deg,oklch(0.76_0.06_72)_0%,oklch(0.7_0.065_70)_55%,oklch(0.65_0.07_68)_100%)] dark:[background:linear-gradient(135deg,oklch(0.45_0.05_70),oklch(0.38_0.045_70))]">
-        {/* fold creases */}
-        <div className="absolute left-0 top-[18%] h-px w-full bg-black/10" />
-        <div className="absolute left-0 top-[18%] h-px w-full translate-y-px bg-white/20" />
-        <div className="absolute bottom-[14%] left-0 h-px w-full bg-black/10" />
-        {/* tissue peeking out of the top fold */}
-        <div className="absolute -top-1 left-[12%] h-4 w-[30%] -rotate-2 bg-card shadow-xs" />
-        <div className="absolute -top-1 right-[18%] h-3 w-[22%] rotate-3 bg-card/90 shadow-xs" />
-        {/* twine cross with woven shadow */}
-        <div className="absolute left-1/2 top-0 h-full w-1 -translate-x-1/2 bg-secondary-foreground/55 shadow-[1px_0_0_rgba(255,255,255,0.25)]" />
-        <div className="absolute left-0 top-1/2 h-1 w-full -translate-y-1/2 bg-secondary-foreground/55 shadow-[0_1px_0_rgba(255,255,255,0.25)]" />
-        {/* bow: two loops + knot */}
-        <div className="absolute left-1/2 top-1/2 size-9 -translate-x-[85%] -translate-y-1/2 rounded-full border-[3px] border-secondary-foreground/55 bg-transparent [clip-path:polygon(0_0,78%_0,78%_100%,0_100%)]" />
-        <div className="absolute left-1/2 top-1/2 size-9 -translate-x-[15%] -translate-y-1/2 rounded-full border-[3px] border-secondary-foreground/55 bg-transparent [clip-path:polygon(22%_0,100%_0,100%_100%,22%_100%)]" />
-        <div className="absolute left-1/2 top-1/2 size-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-secondary-foreground/70 shadow-sm" />
-        {/* postage stamp corner */}
-        <div className="absolute right-[7%] top-[6%] rotate-2 border-2 border-dashed border-primary/70 px-2 py-1">
-          <span className="stamp-display text-[10px] text-primary/80">
-            Meridian
-          </span>
+    <div aria-hidden className="relative mx-auto w-full max-w-md">
+      <div className="absolute -inset-8 rounded-full bg-[radial-gradient(closest-side,oklch(0.72_0.17_55/0.18),transparent)]" />
+      <div className="relative aspect-square rounded-2xl bg-gradient-to-br from-primary/90 via-primary to-[oklch(0.62_0.19_40)] p-6 shadow-xl">
+        {/* floating card silhouettes */}
+        <div className="absolute left-6 top-8 flex w-36 flex-col gap-2 rounded-lg bg-background p-3 shadow-lg">
+          <div className="aspect-[4/3] rounded-md bg-muted" />
+          <div className="h-2.5 w-3/4 rounded bg-muted" />
+          <div className="h-2.5 w-1/3 rounded bg-primary/30" />
+        </div>
+        <div className="absolute bottom-10 right-6 flex w-40 flex-col gap-2 rounded-lg bg-background p-3 shadow-lg">
+          <div className="aspect-[4/3] rounded-md bg-muted" />
+          <div className="h-2.5 w-2/3 rounded bg-muted" />
+          <div className="h-2.5 w-1/2 rounded bg-primary/30" />
+        </div>
+        <div className="absolute bottom-24 left-16 flex w-32 flex-col gap-2 rounded-lg bg-background/95 p-3 shadow-md">
+          <div className="h-2.5 w-full rounded bg-muted" />
+          <div className="h-2.5 w-2/3 rounded bg-muted" />
+          <div className="mt-1 h-6 w-20 rounded-md bg-primary/80" />
         </div>
       </div>
-      {/* the tag, hanging off the twine */}
-      <HangTag tilt={9} className="absolute -right-6 top-[70%] scale-110">
-        <span className="flex flex-col items-start gap-0.5 py-0.5">
-          <span className="ticket-caps text-[10px]">Para ti</span>
-          <Barcode value="MERIDIAN" showLabel={false} className="w-16 text-foreground/40" />
-        </span>
-      </HangTag>
     </div>
   );
 }
@@ -72,8 +60,8 @@ function ShowcaseCarousel({ row }: { row: ShowcaseRow }) {
           </CarouselItem>
         ))}
       </CarouselContent>
-      <CarouselPrevious className="-left-3 hidden rounded-none sm:inline-flex" />
-      <CarouselNext className="-right-3 hidden rounded-none sm:inline-flex" />
+      <CarouselPrevious className="-left-4 hidden sm:inline-flex" />
+      <CarouselNext className="-right-4 hidden sm:inline-flex" />
     </Carousel>
   );
 }
@@ -88,56 +76,70 @@ function ShowcaseSkeleton() {
   );
 }
 
+const STACK_CARDS = [
+  {
+    icon: Blocks,
+    title: "Controladores SFRA",
+    body: "Los controladores, middleware y sesión de Salesforce B2C Commerce siguen intactos en el servidor.",
+  },
+  {
+    icon: Layers,
+    title: "Protocolo Inertia v2",
+    body: "Partial reloads, props diferidas, scroll infinito y flash — el protocolo completo, adaptado a SFCC.",
+  },
+  {
+    icon: Zap,
+    title: "React 19 + Vite",
+    body: "Frontend moderno con HMR, TypeScript de punta a punta y componentes shadcn/ui.",
+  },
+];
+
 export default function Show() {
   const { categoryShowcase, showcases } = usePage<HomeShowProps>().props;
-  const firstCategory = categoryShowcase[0];
+  const [firstCategory, secondCategory] = categoryShowcase;
 
   return (
     <>
-      <Head title="Meridian — todo lo bueno llega envuelto" />
+      <Head title="Meridian — relojes y accesorios" />
 
-      {/* HERO — full-bleed kraft field, the wrapping room */}
-      <section className="bg-secondary text-secondary-foreground">
-        <div className="container grid min-h-[70vh] items-center gap-12 py-16 lg:grid-cols-[3fr_2fr] lg:py-20">
-          <div className="flex max-w-2xl flex-col items-start gap-8">
-            <h1 className="stamp-display text-[clamp(2.5rem,7vw,5.5rem)] leading-[0.95]">
-              Todo lo bueno llega envuelto
+      {/* HERO */}
+      <section className="border-b bg-gradient-to-b from-muted/60 to-background">
+        <div className="container grid items-center gap-12 py-16 lg:grid-cols-[3fr_2fr] lg:py-24">
+          <div className="flex max-w-2xl flex-col items-start gap-6">
+            <h1 className="text-4xl font-bold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl">
+              El tiempo, bien&nbsp;elegido.
             </h1>
-            <p className="max-w-md text-base leading-relaxed opacity-85 sm:text-lg">
-              Relojes y accesorios etiquetados a mano: papel de seda, cordel y
-              una etiqueta con tu nombre.
+            <p className="max-w-lg text-lg leading-relaxed text-muted-foreground">
+              Relojes y accesorios seleccionados para el día a día — un
+              catálogo corto, elegido con criterio.
             </p>
-            {firstCategory && (
-              <Link
-                href={firstCategory.url}
-                className="group focus-visible:outline-2 focus-visible:outline-offset-4"
-              >
-                <HangTag
-                  tilt={-2}
-                  className="text-primary transition-transform duration-300 ease-out group-hover:rotate-0"
-                >
-                  <span className="ticket-caps flex items-center gap-2 py-0.5 text-sm">
-                    Abrir la colección
-                    <ArrowRight className="size-4 transition-transform duration-300 ease-out group-hover:translate-x-1" />
-                  </span>
-                </HangTag>
-              </Link>
-            )}
+            <div className="flex flex-wrap items-center gap-3 pt-2">
+              {firstCategory && (
+                <Button asChild size="lg" className="font-semibold">
+                  <Link href={firstCategory.url}>
+                    Explorar {firstCategory.name.toLowerCase()}
+                    <ArrowRight className="size-4" aria-hidden />
+                  </Link>
+                </Button>
+              )}
+              {secondCategory && (
+                <Button asChild size="lg" variant="outline">
+                  <Link href={secondCategory.url}>
+                    Ver {secondCategory.name.toLowerCase()}
+                  </Link>
+                </Button>
+              )}
+            </div>
           </div>
-          <WrappedParcel />
-        </div>
-        <div className="border-t border-secondary-foreground/20">
-          <div className="container flex items-center justify-between gap-6 py-3">
-            <span className="font-mono text-[11px] uppercase tracking-widest opacity-70">
-              Temporada actual · envuelto a mano
-            </span>
-            <Barcode value="EDICION-DE-OTONO" className="w-32 opacity-50" />
-          </div>
+          <HeroVisual />
         </div>
       </section>
 
-      {/* CATEGORY TICKETS */}
-      <Section title="Colecciones" meta={`${categoryShowcase.length} tickets`}>
+      {/* CATEGORIES */}
+      <Section
+        title="Colecciones"
+        subtitle="Dos líneas, elegidas con criterio."
+      >
         <div className="grid gap-5 sm:grid-cols-2">
           {categoryShowcase.map((category) => (
             <CategoryCard key={category.id} category={category} />
@@ -149,7 +151,7 @@ export default function Show() {
       <Deferred
         data="showcases"
         fallback={
-          <Section title="Recién etiquetado" meta="cargando">
+          <Section title="Novedades" meta="cargando">
             <ShowcaseSkeleton />
           </Section>
         }
@@ -163,9 +165,10 @@ export default function Show() {
               action={
                 <Link
                   href={row.url}
-                  className="ticket-caps text-xs text-primary underline-offset-4 hover:underline"
+                  className="inline-flex items-center gap-1.5 text-sm font-medium text-link underline-offset-4 hover:underline"
                 >
                   Ver todo
+                  <ArrowRight className="size-4" aria-hidden />
                 </Link>
               }
             >
@@ -175,23 +178,28 @@ export default function Show() {
         </>
       </Deferred>
 
-      {/* EDITORIAL CLOSE */}
-      <section className="container pt-24">
-        <div className="relative mx-auto max-w-3xl bg-card px-8 py-14 text-center shadow-sm sm:px-16">
-          <div className="absolute inset-x-8 top-0 border-t-2 border-dashed border-secondary-foreground/30 sm:inset-x-16" />
-          <p className="stamp-display text-xl leading-snug text-foreground sm:text-2xl">
-            Envolver es una forma de decir: esto importa.
-          </p>
-          <p className="mx-auto mt-5 max-w-md text-sm leading-relaxed text-muted-foreground">
-            Cada pedido sale de nuestro taller con papel de seda, cordel y su
-            ticket numerado — la misma atención con la que elegiste lo que hay
-            dentro.
-          </p>
-          <div className="mt-8 flex justify-center">
-            <Barcode value="HECHO-CON-CUIDADO" className="w-28 text-foreground/30" />
-          </div>
+      {/* THE STACK — the honest pitch to the storefront's real audience */}
+      <Section
+        title="Construido sobre Inertia + SFRA"
+        subtitle="Este escaparate es la implementación de referencia open-source del adaptador Inertia.js para Salesforce B2C Commerce."
+      >
+        <div className="grid gap-5 md:grid-cols-3">
+          {STACK_CARDS.map((card) => (
+            <div
+              key={card.title}
+              className="flex flex-col gap-3 rounded-lg border bg-card p-6"
+            >
+              <span className="flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                <card.icon className="size-5" aria-hidden />
+              </span>
+              <h3 className="font-semibold">{card.title}</h3>
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                {card.body}
+              </p>
+            </div>
+          ))}
         </div>
-      </section>
+      </Section>
     </>
   );
 }

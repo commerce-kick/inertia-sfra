@@ -1,8 +1,6 @@
-import { Barcode } from "@/components/commerce/barcode";
-import { HangTag } from "@/components/commerce/hang-tag";
-import { Ticket } from "@/components/commerce/ticket";
 import { Link } from "@/components/link";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { Badge } from "@/components/ui/badge";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -16,26 +14,22 @@ import type { IProductDetailData } from "@/generated/data";
 import { homeShow } from "@/generated/routes/home-show";
 import type { ProductShowProps } from "@/types/product";
 import { Head, usePage } from "@inertiajs/react";
-import { Star } from "lucide-react";
+import { ImageOff, Star } from "lucide-react";
 import { Fragment, useState } from "react";
 
 function PdpPrice({ price }: { price: IProductDetailData["price"] }) {
   if (!price) return null;
   return (
-    <HangTag tilt={-3} className="text-lg">
-      <span className="inline-flex items-baseline gap-2 py-0.5">
-        <span className="font-mono font-semibold">
-          {price.isRange && price.min && price.max
-            ? `${price.min.formatted}–${price.max.formatted}`
-            : price.sales?.formatted}
-        </span>
-        {price.list && (
-          <s className="font-mono text-sm text-muted-foreground decoration-primary decoration-2">
-            {price.list.formatted}
-          </s>
-        )}
+    <div className="flex items-baseline gap-2.5">
+      <span className="text-2xl font-bold">
+        {price.isRange && price.min && price.max
+          ? `${price.min.formatted}–${price.max.formatted}`
+          : price.sales?.formatted}
       </span>
-    </HangTag>
+      {price.list && (
+        <s className="text-base text-muted-foreground">{price.list.formatted}</s>
+      )}
+    </div>
   );
 }
 
@@ -45,7 +39,7 @@ function Gallery({ product }: { product: IProductDetailData }) {
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="bg-card shadow-xs">
+      <div className="overflow-hidden rounded-lg border bg-muted/40">
         <AspectRatio ratio={1}>
           {image ? (
             <img
@@ -54,8 +48,9 @@ function Gallery({ product }: { product: IProductDetailData }) {
               className="size-full object-contain p-10"
             />
           ) : (
-            <div className="flex size-full items-center justify-center">
-              <span className="ticket-caps text-muted-foreground">Sin foto</span>
+            <div className="flex size-full flex-col items-center justify-center gap-2 text-muted-foreground">
+              <ImageOff className="size-6" aria-hidden />
+              <span className="text-xs">Sin foto</span>
             </div>
           )}
         </AspectRatio>
@@ -68,8 +63,10 @@ function Gallery({ product }: { product: IProductDetailData }) {
               type="button"
               onClick={() => setActive(i)}
               aria-label={`Foto ${i + 1}`}
-              className={`size-16 bg-card p-2 shadow-xs transition-shadow ${
-                i === active ? "ring-2 ring-ring" : "hover:shadow-sm"
+              className={`size-16 overflow-hidden rounded-md border bg-card p-2 transition-all ${
+                i === active
+                  ? "border-primary ring-1 ring-primary"
+                  : "hover:border-primary/40"
               }`}
             >
               <img src={img.url} alt="" className="size-full object-contain" />
@@ -90,7 +87,7 @@ export default function Show() {
 
       <div className="container flex flex-col gap-8 py-8">
         <Breadcrumb>
-          <BreadcrumbList className="font-mono text-[11px] uppercase tracking-widest">
+          <BreadcrumbList className="text-xs">
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
                 <Link href={homeShow({})}>Inicio</Link>
@@ -117,15 +114,20 @@ export default function Show() {
           <Gallery product={product} />
 
           <div className="flex max-w-xl flex-col items-start gap-6">
-            <div className="flex flex-col gap-3">
-              <h1 className="stamp-display text-3xl leading-none sm:text-4xl">
+            <div className="flex flex-col gap-2">
+              <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
                 {product.productName}
               </h1>
               <div className="flex items-center gap-3">
-                <Barcode value={product.id} className="w-24 text-foreground/40" />
+                <span className="meta-caps text-muted-foreground">
+                  {product.id}
+                </span>
                 {product.rating > 0 && (
-                  <span className="inline-flex items-center gap-1 font-mono text-xs text-muted-foreground">
-                    <Star className="size-3.5 fill-current text-secondary-foreground/70" />
+                  <span className="inline-flex items-center gap-1 text-sm text-muted-foreground">
+                    <Star
+                      className="size-4 fill-primary text-primary"
+                      aria-hidden
+                    />
                     {product.rating.toFixed(1)}
                   </span>
                 )}
@@ -136,7 +138,7 @@ export default function Show() {
 
             {product.variationAttributes.map((attr) => (
               <div key={attr.id} className="flex flex-col gap-2">
-                <span className="ticket-caps text-xs text-muted-foreground">
+                <span className="text-sm font-medium">
                   {attr.displayName || attr.id}
                 </span>
                 <div className="flex flex-wrap gap-2">
@@ -145,8 +147,10 @@ export default function Show() {
                       <span
                         key={value.id}
                         title={value.displayValue}
-                        className={`size-8 overflow-hidden rounded-full border ${
-                          value.selected ? "ring-2 ring-ring" : "border-border"
+                        className={`size-9 overflow-hidden rounded-full border-2 ${
+                          value.selected
+                            ? "border-primary"
+                            : "border-transparent shadow-xs"
                         }`}
                       >
                         <img
@@ -156,35 +160,38 @@ export default function Show() {
                         />
                       </span>
                     ) : (
-                      <Ticket
+                      <Badge
                         key={value.id}
-                        className={value.selected ? "ring-1 ring-ring" : ""}
+                        variant={value.selected ? "default" : "outline"}
+                        className="rounded-md px-3 py-1"
                       >
                         {value.displayValue}
-                      </Ticket>
+                      </Badge>
                     )
                   )}
                 </div>
               </div>
             ))}
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               <span
                 className={`size-2 rounded-full ${
-                  product.availability.available ? "bg-chart-3" : "bg-destructive"
+                  product.availability.available
+                    ? "bg-chart-3"
+                    : "bg-destructive"
                 }`}
                 aria-hidden
               />
-              <span className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
+              <span className="text-sm text-muted-foreground">
                 {product.availability.available
-                  ? "En el taller, listo para envolver"
+                  ? "En stock"
                   : product.availability.messages[0] || "No disponible"}
               </span>
             </div>
 
             {product.description && (
               <div
-                className="prose prose-sm max-w-none text-sm leading-relaxed text-muted-foreground"
+                className="max-w-none text-sm leading-relaxed text-muted-foreground"
                 // Server-authored catalog markup (Business Manager content).
                 dangerouslySetInnerHTML={{ __html: product.description }}
               />
@@ -192,13 +199,14 @@ export default function Show() {
 
             <div className="flex flex-col items-start gap-2 pt-2">
               <Button
+                size="lg"
                 disabled
-                className="ticket-caps rounded-none text-xs"
+                className="font-semibold"
                 title="El flujo de carrito llega en la próxima fase"
               >
                 Añadir a la bolsa
               </Button>
-              <span className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
+              <span className="text-xs text-muted-foreground">
                 Carrito próximamente — demo en construcción
               </span>
             </div>
