@@ -6,6 +6,7 @@ import { defineConfig } from "vite";
 
 import mkcert from "vite-plugin-mkcert";
 
+import dtoTypesPlugin from "./plugins/vite-dto-types-plugin";
 import viteHotFilePlugin from "./plugins/vite-hot-file-plugin";
 import routesPlugin from "./plugins/vite-routes-plugin";
 
@@ -56,6 +57,7 @@ export default defineConfig({
         mergeStrategy: "merge", // Combines unique params from both cartridges
       },
     }),
+    dtoTypesPlugin(),
   ],
   esbuild: {
     jsx: "automatic",

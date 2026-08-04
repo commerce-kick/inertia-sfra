@@ -27,7 +27,7 @@ The only Inertia.js adapter for Salesforce B2C Commerce. Neighboring approaches 
 
 ## Operating Context
 
-- Runs against an SFCC sandbox (RefArch demo data; credentials in `dw.json`, deploy via `b2c-tools`). Developers work locally with Vite dev server + HMR (`bun run dev`) against the remote sandbox.
+- Runs against an SFCC sandbox (credentials in `dw.json`, deploy via `b2c-tools`). The RefArch site shell hosts a small custom demo catalog ("Sites-my-catalog": Spanish watches/accessories — `relojes`, `accesorios`; products carry `large`/`small`/swatch image view types, no `medium`; no search refinement definitions are configured in Business Manager yet). Developers work locally with Vite dev server + HMR (`bun run dev`) against the remote sandbox.
 - Bun is the package manager and test runner (`bun test test/unit`); TypeScript type-checks gate builds; SSR builds via `ssr.config.js` with a route-generation script.
 - SFRA cartridge path mechanics govern the server side: `inertia_plugin` (reusable adapter) and `store_front` (reference implementation) are separate cartridges by design — adopters take the plugin without the storefront.
 

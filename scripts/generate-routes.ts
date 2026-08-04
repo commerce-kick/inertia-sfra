@@ -1,3 +1,4 @@
+import sfccDtoTypesGenerator from "../plugins/vite-dto-types-plugin.ts";
 import sfccRoutesGenerator from "../plugins/vite-routes-plugin.ts";
 
 // Create an instance of the plugin
@@ -8,7 +9,10 @@ const plugin = sfccRoutesGenerator({
   generateIndex: true,
 });
 
-// Call the plugin's generateRoutes function directly
-console.log("[Pre-SSR-Build] Manually generating routes...");
+const dtoPlugin = sfccDtoTypesGenerator();
+
+// Call the plugins' generate functions directly
+console.log("[Pre-SSR-Build] Manually generating routes and DTO types...");
 
 plugin.buildStart();
+dtoPlugin.buildStart();
