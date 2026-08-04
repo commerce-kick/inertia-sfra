@@ -13,12 +13,18 @@ createServer((page) =>
     page,
     render: ReactDOMServer.renderToString,
     title: (title) => `${title} - SSR`,
-    resolve: (name) =>
-      resolvePageComponent(
+    resolve: async (name) => {
+      const page = (await resolvePageComponent(
         `./pages/${name}.tsx`,
-        //@ts-ignore
         import.meta.glob("./pages/**/*.tsx")
-      ),
+      )) as {
+        default: React.ComponentType & {
+          layout?: (page: React.ReactNode) => React.ReactNode;
+        };
+      };
+
+      return page.default;
+    },
     setup: ({ App, props }) => {
       return (
         <QueryClientProvider client={new QueryClient()}>

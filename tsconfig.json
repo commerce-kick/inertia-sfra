@@ -23,6 +23,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noPropertyAccessFromIndexSignature": false,
+    "types": ["vite/client"],
 
     /* Shadcn/ui */
     "baseUrl": "./app",

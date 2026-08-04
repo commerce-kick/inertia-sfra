@@ -10,44 +10,35 @@ import { Toaster } from "./components/ui/sonner";
 
 import Layout from "@/layouts/default";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { NuqsAdapter } from "nuqs/adapters/react";
+
+type PageModule = {
+  default: React.ComponentType & {
+    layout?: (page: React.ReactNode) => React.ReactNode;
+  };
+};
 
 createInertiaApp({
   resolve: async (name) => {
-    const page = await resolvePageComponent(
+    const page = (await resolvePageComponent(
       `./pages/${name}.tsx`,
-      //@ts-ignore
       import.meta.glob("./pages/**/*.tsx")
-    );
+    )) as PageModule;
 
-    //@ts-ignore
     page.default.layout =
-      //@ts-ignore
       page.default.layout || ((page) => <Layout children={page} />);
 
-    return page;
+    return page.default;
   },
   setup({ el, App, props }) {
     const root = createRoot(el);
     root.render(
-      <NuqsAdapter>
-        <ThemeProvider>
-          <QueryClientProvider client={new QueryClient()}>
-            {import.meta.env.DEV && (
-              <div className="bg-destructive text-destructive-foreground h-10 flex justify-center items-center border-b-4 border-red-700">
-                <span className="text-base font-bold">
-                  🚧 LIVE MAINTENANCE IN PROGRESS - Errors expected
-                </span>
-              </div>
-            )}
-            <App {...props} />
-            <Toaster />
-            {import.meta.env.DEV && (
-              <ReactQueryDevtools initialIsOpen={false} />
-            )}
-          </QueryClientProvider>
-        </ThemeProvider>
-      </NuqsAdapter>
+      <ThemeProvider>
+        <QueryClientProvider client={new QueryClient()}>
+          <App {...props} />
+          <Toaster />
+          {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}
+        </QueryClientProvider>
+      </ThemeProvider>
     );
   },
   progress: {

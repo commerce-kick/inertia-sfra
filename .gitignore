@@ -39,3 +39,6 @@ hot.json
 bootstrap/
 app/generated
 .vscode
+# impeccable transient session state
+.impeccable/questions/
+.impeccable/sketches/
