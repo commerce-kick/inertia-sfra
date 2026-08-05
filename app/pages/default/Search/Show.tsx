@@ -30,20 +30,17 @@ import { PackageSearch, SlidersHorizontal } from "lucide-react";
 
 function EmptyState({ resetLink }: { resetLink: string }) {
   return (
-    <div className="flex flex-col items-center gap-4 py-24 text-center">
-      <span className="flex size-14 items-center justify-center rounded-full bg-muted text-muted-foreground">
-        <PackageSearch className="size-6" aria-hidden />
-      </span>
-      <h2 className="text-lg font-semibold">Sin resultados</h2>
+    <div className="flex flex-col items-center gap-5 py-24 text-center">
+      <PackageSearch className="size-8 text-muted-foreground" aria-hidden />
+      <h2 className="display-caps text-2xl">No results</h2>
       <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">
-        Ningún artículo coincide con esta búsqueda. Prueba con otra palabra o
-        quita algún filtro.
+        Nothing matches this search. Try another word or remove a filter.
       </p>
       <Link
         href={resetLink}
-        className="text-sm font-medium text-link underline-offset-4 hover:underline"
+        className="label-caps underline underline-offset-8 transition-opacity hover:opacity-60"
       >
-        Ver todo el catálogo
+        View the full catalog
       </Link>
     </div>
   );
@@ -56,21 +53,21 @@ export default function Show() {
   const title =
     search.category?.pageTitle ||
     search.category?.name ||
-    (search.keywords ? `“${search.keywords}”` : "Catálogo");
+    (search.keywords ? `“${search.keywords}”` : "Catalog");
   const hasFilters = selectedFilters.length > 0;
 
   return (
     <>
       <Head title={`${title} — Meridian`} />
 
-      {/* PAGE HEAD */}
-      <div className="border-b bg-muted/40">
-        <div className="container flex flex-col gap-3 py-8">
+      {/* PAGE HEAD — the collection title at architectural scale */}
+      <div className="border-b">
+        <div className="container flex flex-col gap-5 pb-8 pt-10">
           <Breadcrumb>
-            <BreadcrumbList className="text-xs">
+            <BreadcrumbList className="meta-caps">
               <BreadcrumbItem>
                 <BreadcrumbLink asChild>
-                  <Link href={homeShow({})}>Inicio</Link>
+                  <Link href={homeShow({})}>Home</Link>
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
@@ -80,11 +77,11 @@ export default function Show() {
             </BreadcrumbList>
           </Breadcrumb>
           <div className="flex flex-wrap items-end justify-between gap-4">
-            <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
+            <h1 className="display-caps text-[clamp(2.75rem,7vw,6rem)]">
               {title}
             </h1>
-            <span className="meta-caps text-muted-foreground">
-              {search.count} {search.count === 1 ? "artículo" : "artículos"}
+            <span className="meta-caps pb-2 text-muted-foreground">
+              {search.count} {search.count === 1 ? "item" : "items"}
             </span>
           </div>
         </div>
@@ -96,11 +93,11 @@ export default function Show() {
           <div className="flex flex-wrap items-center gap-3">
             <Sheet>
               <SheetTrigger asChild className="lg:hidden">
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" className="label-caps">
                   <SlidersHorizontal className="size-4" aria-hidden />
-                  Filtrar
+                  Filter
                   {hasFilters && (
-                    <Badge className="ml-1 rounded-full px-1.5 text-[10px]">
+                    <Badge className="ml-1 px-1.5 text-[10px]">
                       {selectedFilters.length}
                     </Badge>
                   )}
@@ -109,7 +106,7 @@ export default function Show() {
               <SheetContent side="left" className="w-80 overflow-y-auto">
                 <SheetHeader>
                   <SheetTitle className="text-left text-base">
-                    Filtrar el catálogo
+                    Filter the catalog
                   </SheetTitle>
                 </SheetHeader>
                 <div className="px-4 pb-8">
@@ -156,8 +153,9 @@ export default function Show() {
                         variant="outline"
                         onClick={fetch}
                         disabled={loading}
+                        className="label-caps h-11 px-8"
                       >
-                        {loading ? "Cargando…" : "Cargar más artículos"}
+                        {loading ? "Loading…" : "Load more items"}
                       </Button>
                     </div>
                   ) : null
@@ -172,8 +170,8 @@ export default function Show() {
             )}
 
             {products.data.length > 0 && products.meta.nextPage === null && (
-              <p className="pt-14 text-center text-sm text-muted-foreground">
-                Has visto los {search.count} artículos.
+              <p className="meta-caps border-t pt-6 text-center text-muted-foreground mt-14">
+                You have seen all {search.count} items
               </p>
             )}
           </div>

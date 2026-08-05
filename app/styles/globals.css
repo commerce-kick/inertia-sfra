@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-@import "@fontsource-variable/inter";
+@import "@fontsource-variable/archivo/wdth.css";
 @import "@fontsource-variable/spline-sans-mono";
 
 @custom-variant dark (&:is(.dark *));
@@ -10,111 +10,122 @@ html {
   scroll-behavior: smooth;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 /* ---------------------------------------------------------------------------
-   Meridian — clean enterprise-web system (Cloudflare-inspired, user-pinned).
-   White ground, deep neutral ink, one confident orange accent, blue for
-   links/interactive states, hairline borders, soft shadows, tidy radius.
-   Dark mode is the same system on a graphite ground.
+   Meridian — stark atelier system (user-pinned: high-fashion design agency).
+   Strict black & white. Type at architectural scale is the interface:
+   expanded-caps Archivo display, hairline rules, zero radius, no shadows —
+   depth comes from inversion and line, never from elevation. Mono is
+   reserved for data (counts, SKUs, prices, code). Dark mode is the same
+   world inverted. The only non-neutral is the functional destructive red.
 --------------------------------------------------------------------------- */
 
 :root {
-  --radius: 0.5rem;
+  --radius: 0rem;
   --background: oklch(1 0 0);
-  --foreground: oklch(0.26 0.01 260);
+  --foreground: oklch(0.05 0 0);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.26 0.01 260);
+  --card-foreground: oklch(0.05 0 0);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.26 0.01 260);
-  --primary: oklch(0.72 0.17 55);
+  --popover-foreground: oklch(0.05 0 0);
+  --primary: oklch(0.05 0 0);
   --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.96 0.005 250);
-  --secondary-foreground: oklch(0.26 0.01 260);
-  --muted: oklch(0.97 0.003 250);
-  --muted-foreground: oklch(0.5 0.012 258);
-  --accent: oklch(0.95 0.015 250);
-  --accent-foreground: oklch(0.42 0.16 258);
+  --secondary: oklch(0.96 0 0);
+  --secondary-foreground: oklch(0.05 0 0);
+  --muted: oklch(0.96 0 0);
+  --muted-foreground: oklch(0.42 0 0);
+  --accent: oklch(0.94 0 0);
+  --accent-foreground: oklch(0.05 0 0);
   --destructive: oklch(0.55 0.2 26);
   --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.9 0.004 255);
-  --input: oklch(0.9 0.004 255);
-  --ring: oklch(0.72 0.17 55);
-  --link: oklch(0.5 0.19 258);
-  --chart-1: oklch(0.72 0.17 55);
-  --chart-2: oklch(0.5 0.19 258);
-  --chart-3: oklch(0.62 0.13 155);
-  --chart-4: oklch(0.8 0.14 80);
-  --chart-5: oklch(0.45 0.01 260);
-  --sidebar: oklch(0.985 0.002 250);
-  --sidebar-foreground: oklch(0.26 0.01 260);
-  --sidebar-primary: oklch(0.72 0.17 55);
+  --border: oklch(0.87 0 0);
+  --input: oklch(0.87 0 0);
+  --ring: oklch(0.05 0 0);
+  --link: oklch(0.05 0 0);
+  --chart-1: oklch(0.05 0 0);
+  --chart-2: oklch(0.35 0 0);
+  --chart-3: oklch(0.55 0 0);
+  --chart-4: oklch(0.72 0 0);
+  --chart-5: oklch(0.87 0 0);
+  --sidebar: oklch(1 0 0);
+  --sidebar-foreground: oklch(0.05 0 0);
+  --sidebar-primary: oklch(0.05 0 0);
   --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.95 0.015 250);
-  --sidebar-accent-foreground: oklch(0.26 0.01 260);
-  --sidebar-border: oklch(0.9 0.004 255);
-  --sidebar-ring: oklch(0.72 0.17 55);
-  --font-sans: "Inter Variable", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --sidebar-accent: oklch(0.94 0 0);
+  --sidebar-accent-foreground: oklch(0.05 0 0);
+  --sidebar-border: oklch(0.87 0 0);
+  --sidebar-ring: oklch(0.05 0 0);
+  --font-sans: "Archivo Variable", "Archivo", ui-sans-serif, system-ui,
+    sans-serif;
   --font-mono: "Spline Sans Mono Variable", "Spline Sans Mono", ui-monospace,
     monospace;
-  --shadow-color: hsl(240 10% 20%);
-  --shadow-2xs: 0px 1px 2px 0px hsl(240 10% 20% / 0.05);
-  --shadow-xs: 0px 1px 3px 0px hsl(240 10% 20% / 0.07);
-  --shadow-sm: 0px 2px 4px -1px hsl(240 10% 20% / 0.08),
-    0px 1px 2px -1px hsl(240 10% 20% / 0.06);
-  --shadow: 0px 3px 8px -2px hsl(240 10% 20% / 0.09),
-    0px 1px 3px -1px hsl(240 10% 20% / 0.06);
-  --shadow-md: 0px 6px 14px -3px hsl(240 10% 20% / 0.1),
-    0px 2px 5px -2px hsl(240 10% 20% / 0.06);
-  --shadow-lg: 0px 10px 22px -4px hsl(240 10% 20% / 0.12),
-    0px 4px 8px -3px hsl(240 10% 20% / 0.06);
-  --shadow-xl: 0px 16px 32px -6px hsl(240 10% 20% / 0.14),
-    0px 6px 12px -4px hsl(240 10% 20% / 0.08);
-  --shadow-2xl: 0px 24px 48px -8px hsl(240 10% 20% / 0.18);
-  --tracking-normal: -0.011em;
+  /* Flat world: no elevation. Separation is drawn with hairlines. */
+  --shadow-color: transparent;
+  --shadow-2xs: 0 0 #0000;
+  --shadow-xs: 0 0 #0000;
+  --shadow-sm: 0 0 #0000;
+  --shadow: 0 0 #0000;
+  --shadow-md: 0 0 #0000;
+  --shadow-lg: 0 0 #0000;
+  --shadow-xl: 0 0 #0000;
+  --shadow-2xl: 0 0 #0000;
+  --tracking-normal: 0em;
   --spacing: 0.25rem;
+  /* Motion scale — the only timing/easing values components may use.
+     Mirrored numerically in app/lib/motion.ts for anime.js. */
+  --motion-fast: 150ms;
+  --motion-base: 250ms;
+  --motion-slow: 400ms;
+  --motion-hero: 700ms;
+  --motion-ease: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .dark {
-  --background: oklch(0.18 0.006 260);
-  --foreground: oklch(0.95 0.005 250);
-  --card: oklch(0.22 0.007 260);
-  --card-foreground: oklch(0.95 0.005 250);
-  --popover: oklch(0.22 0.007 260);
-  --popover-foreground: oklch(0.95 0.005 250);
-  --primary: oklch(0.74 0.16 55);
-  --primary-foreground: oklch(0.16 0.01 260);
-  --secondary: oklch(0.26 0.008 260);
-  --secondary-foreground: oklch(0.95 0.005 250);
-  --muted: oklch(0.24 0.007 260);
-  --muted-foreground: oklch(0.68 0.01 255);
-  --accent: oklch(0.28 0.02 258);
-  --accent-foreground: oklch(0.78 0.11 258);
+  --background: oklch(0.05 0 0);
+  --foreground: oklch(0.99 0 0);
+  --card: oklch(0.05 0 0);
+  --card-foreground: oklch(0.99 0 0);
+  --popover: oklch(0.05 0 0);
+  --popover-foreground: oklch(0.99 0 0);
+  --primary: oklch(0.99 0 0);
+  --primary-foreground: oklch(0.05 0 0);
+  --secondary: oklch(0.16 0 0);
+  --secondary-foreground: oklch(0.99 0 0);
+  --muted: oklch(0.16 0 0);
+  --muted-foreground: oklch(0.68 0 0);
+  --accent: oklch(0.2 0 0);
+  --accent-foreground: oklch(0.99 0 0);
   --destructive: oklch(0.62 0.19 26);
-  --destructive-foreground: oklch(0.97 0.005 250);
-  --border: oklch(0.3 0.008 260);
-  --input: oklch(0.3 0.008 260);
-  --ring: oklch(0.74 0.16 55);
-  --link: oklch(0.72 0.13 258);
-  --chart-1: oklch(0.74 0.16 55);
-  --chart-2: oklch(0.66 0.15 258);
-  --chart-3: oklch(0.68 0.13 155);
-  --chart-4: oklch(0.82 0.13 80);
-  --chart-5: oklch(0.75 0.01 255);
-  --sidebar: oklch(0.18 0.006 260);
-  --sidebar-foreground: oklch(0.95 0.005 250);
-  --sidebar-primary: oklch(0.74 0.16 55);
-  --sidebar-primary-foreground: oklch(0.16 0.01 260);
-  --sidebar-accent: oklch(0.28 0.02 258);
-  --sidebar-accent-foreground: oklch(0.95 0.005 250);
-  --sidebar-border: oklch(0.3 0.008 260);
-  --sidebar-ring: oklch(0.74 0.16 55);
-  --shadow-color: hsl(240 20% 2%);
+  --destructive-foreground: oklch(0.99 0 0);
+  --border: oklch(0.28 0 0);
+  --input: oklch(0.28 0 0);
+  --ring: oklch(0.99 0 0);
+  --link: oklch(0.99 0 0);
+  --chart-1: oklch(0.99 0 0);
+  --chart-2: oklch(0.78 0 0);
+  --chart-3: oklch(0.58 0 0);
+  --chart-4: oklch(0.4 0 0);
+  --chart-5: oklch(0.28 0 0);
+  --sidebar: oklch(0.05 0 0);
+  --sidebar-foreground: oklch(0.99 0 0);
+  --sidebar-primary: oklch(0.99 0 0);
+  --sidebar-primary-foreground: oklch(0.05 0 0);
+  --sidebar-accent: oklch(0.2 0 0);
+  --sidebar-accent-foreground: oklch(0.99 0 0);
+  --sidebar-border: oklch(0.28 0 0);
+  --sidebar-ring: oklch(0.99 0 0);
 }
 
 @theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: var(--radius);
+  --radius-md: var(--radius);
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --radius-xl: var(--radius);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -179,13 +190,13 @@ html {
   --shadow-lg: var(--shadow-lg);
   --shadow-xl: var(--shadow-xl);
   --shadow-2xl: var(--shadow-2xl);
-  --tracking-tighter: calc(var(--tracking-normal) - 0.05em);
-  --tracking-tight: calc(var(--tracking-normal) - 0.025em);
-  --tracking-wide: calc(var(--tracking-normal) + 0.025em);
-  --tracking-wider: calc(var(--tracking-normal) + 0.05em);
-  --tracking-widest: calc(var(--tracking-normal) + 0.1em);
+  --tracking-tighter: -0.05em;
+  --tracking-tight: -0.025em;
+  --tracking-wide: 0.025em;
+  --tracking-wider: 0.05em;
+  --tracking-widest: 0.1em;
   --tracking-normal: var(--tracking-normal);
-  --spacing: var(--spacing);
+  --spacing: 0.25rem;
 }
 
 @layer base {
@@ -201,13 +212,168 @@ html {
 @utility container {
   margin-inline: auto;
   padding-inline: 2rem;
-  max-width: 80rem;
+  max-width: 90rem;
 }
 
-/* Small uppercase label voice for eyebrow-less meta (counts, SKUs). */
+/* Small uppercase mono voice for data: counts, SKUs, prices-as-data. */
 @utility meta-caps {
   font-family: var(--font-mono);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   font-size: 0.6875rem;
+}
+
+/* The display voice: expanded-caps Archivo at architectural scale. */
+@utility display-caps {
+  font-family: var(--font-sans);
+  font-variation-settings: "wdth" 125;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 0.92;
+}
+
+/* The label voice: slightly-expanded caps for nav, section labels, CTAs. */
+@utility label-caps {
+  font-family: var(--font-sans);
+  font-variation-settings: "wdth" 112;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.6875rem;
+}
+
+/* Hover underline that draws itself from the left — the hairline-draw
+   extension of the hover device; instant for reduced-motion visitors. */
+@utility link-draw {
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    bottom: -0.25rem;
+    height: 1px;
+    background-color: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--motion-base) var(--motion-ease);
+  }
+  &:hover::after,
+  &:focus-visible::after {
+    transform: scaleX(1);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    &::after {
+      transition: none;
+    }
+  }
+}
+
+/* The line current: a soft segment of foreground light travels down a
+   drafting hairline — a signal moving through the system. One traverse
+   (~40% of the 9s loop), then the line rests; stagger via animation-delay.
+   Invisible and still for reduced-motion visitors. */
+@utility line-current {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 18%;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--color-foreground),
+    transparent
+  );
+  opacity: 0;
+  /* transform-only travel: -100% .. 656% of own height ≈ full track */
+  animation: line-current 9s linear infinite;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@keyframes line-current {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  6% {
+    opacity: 0.9;
+  }
+  34% {
+    opacity: 0.9;
+  }
+  40% {
+    transform: translateY(656%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(656%);
+    opacity: 0;
+  }
+}
+
+/* Horizontal twin of the line current — light sweeping along a horizontal
+   drafting hairline, left to right. */
+@utility line-current-x {
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  width: 18%;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--color-foreground),
+    transparent
+  );
+  opacity: 0;
+  animation: line-current-x 11s linear infinite;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@keyframes line-current-x {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  6% {
+    opacity: 0.9;
+  }
+  34% {
+    opacity: 0.9;
+  }
+  40% {
+    transform: translateX(656%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(656%);
+    opacity: 0;
+  }
+}
+
+/* Slow typographic marquee; stands still for reduced-motion visitors. */
+@utility animate-marquee {
+  animation: marquee 36s linear infinite;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* A page that closes on the always-black band hands off to the footer
+   flush — no paper slab between two inverted surfaces. (Unlayered on
+   purpose: it must win over the footer's mt-32 utility.) */
+main:has([data-band="stack"]:last-child) + footer {
+  margin-top: 0;
 }

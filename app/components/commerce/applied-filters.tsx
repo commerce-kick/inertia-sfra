@@ -23,14 +23,14 @@ export function AppliedFilters({
         <Badge
           key={`${filter.id}-${filter.displayValue}`}
           variant="secondary"
-          className="gap-1 rounded-full pr-1.5 font-normal"
+          className="gap-1 rounded-none pr-1.5 font-normal"
         >
           {filter.displayValue}
           <button
             type="button"
             onClick={() => filter.url && visit(filter.url)}
             aria-label={`Quitar filtro ${filter.displayValue}`}
-            className="rounded-full p-0.5 text-muted-foreground transition-colors hover:bg-background hover:text-foreground"
+            className="rounded-none p-0.5 text-muted-foreground transition-colors hover:bg-background hover:text-foreground"
           >
             <X className="size-3" />
           </button>

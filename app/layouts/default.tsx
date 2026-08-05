@@ -1,8 +1,8 @@
 /**
- * Storefront shell — clean enterprise-web system (Cloudflare-inspired,
- * user-pinned; direction contract lives as the first child of <body> in
- * components/layout/inertia.isml). White sticky header with wordmark, nav
- * links, search, account/bag; dark graphite footer. Flash → toasts.
+ * Storefront shell — stark atelier system (user-pinned: high-fashion design
+ * agency; direction contract lives as the first child of <body> in
+ * components/layout/inertia.isml). Hairline header with caps nav; footer is
+ * the inverse ground carrying a giant wordmark. Flash → toasts.
  */
 import { Link } from "@/components/link";
 import { useTheme } from "@/components/theme-provider";
@@ -17,6 +17,8 @@ import {
 } from "@/components/ui/sheet";
 import { homeShow } from "@/generated/routes/home-show";
 import { searchShow } from "@/generated/routes/search-show";
+import { useMaskedReveal } from "@/lib/motion";
+import { cn } from "@/lib/utils";
 import type { PageWithFlash, SharedProps } from "@/types/shared";
 import { router, usePage } from "@inertiajs/react";
 import {
@@ -27,16 +29,41 @@ import {
   Sun,
   UserRound,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 function Wordmark({ className }: { className?: string }) {
   return (
-    <span className={`inline-flex items-baseline gap-1 ${className ?? ""}`}>
-      <span className="text-lg font-bold tracking-tight">meridian</span>
-      <span className="size-1.5 rounded-[2px] bg-primary" aria-hidden />
+    <span
+      className={cn(
+        "display-caps inline-flex items-center gap-1.5 text-base",
+        className
+      )}
+    >
+      meridian
+      <span
+        className="size-1.5 bg-current transition-transform duration-(--motion-fast) ease-(--motion-ease) group-hover:rotate-45"
+        aria-hidden
+      />
     </span>
   );
+}
+
+/**
+ * A nav category is active when the current page URL points at the same
+ * Search-Show target (pathname + cgid). String-parse only — SSR-safe.
+ */
+function isActiveCategory(pageUrl: string, categoryUrl: string) {
+  try {
+    const current = new URL(pageUrl, "http://x");
+    const target = new URL(categoryUrl, "http://x");
+    return (
+      current.pathname === target.pathname &&
+      current.searchParams.get("cgid") === target.searchParams.get("cgid")
+    );
+  } catch {
+    return false;
+  }
 }
 
 function SearchForm({ onSubmitted }: { onSubmitted?: () => void }) {
@@ -54,14 +81,14 @@ function SearchForm({ onSubmitted }: { onSubmitted?: () => void }) {
         onSubmitted?.();
       }}
     >
-      <Search className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+      <Search className="pointer-events-none absolute left-0 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
       <Input
         type="search"
         value={phrase}
         onChange={(event) => setPhrase(event.target.value)}
-        placeholder="Buscar productos"
-        aria-label="Buscar productos"
-        className="h-9 w-44 pl-8 text-sm md:w-56"
+        placeholder="Search"
+        aria-label="Search products"
+        className="label-caps h-9 w-36 rounded-none border-0 border-b bg-transparent pl-6 shadow-none transition-[width,border-color] duration-(--motion-base) ease-(--motion-ease) placeholder:label-caps placeholder:text-muted-foreground focus-visible:border-foreground focus-visible:ring-0 md:w-40 md:focus:w-56"
       />
     </form>
   );
@@ -79,7 +106,7 @@ function ThemeToggle() {
     <Button
       variant="ghost"
       size="icon"
-      aria-label={isDark ? "Cambiar a tema claro" : "Cambiar a tema oscuro"}
+      aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
       onClick={() => setTheme(isDark ? "light" : "dark")}
     >
       {isDark ? <Sun className="size-4" /> : <Moon className="size-4" />}
@@ -88,16 +115,17 @@ function ThemeToggle() {
 }
 
 function Header() {
-  const { auth, navBar } = usePage<SharedProps>().props;
+  const page = usePage<SharedProps>();
+  const { auth, navBar } = page.props;
   const categories = navBar?.categories ?? [];
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur-sm">
-      <div className="container flex h-16 items-center gap-6">
+    <header className="sticky top-0 z-40 border-b bg-background">
+      <div className="container flex h-16 items-center gap-8">
         <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
           <SheetTrigger asChild className="md:hidden">
-            <Button variant="ghost" size="icon" aria-label="Abrir menú">
+            <Button variant="ghost" size="icon" aria-label="Open menu">
               <Menu className="size-5" />
             </Button>
           </SheetTrigger>
@@ -107,17 +135,24 @@ function Header() {
                 <Wordmark />
               </SheetTitle>
             </SheetHeader>
-            <nav aria-label="Categorías" className="flex flex-col gap-1 px-4">
-              {categories.map((category) => (
-                <Link
-                  key={category.id}
-                  href={category.url}
-                  onClick={() => setMobileOpen(false)}
-                  className="rounded-md px-2 py-2.5 text-sm font-medium transition-colors hover:bg-accent"
-                >
-                  {category.name}
-                </Link>
-              ))}
+            <nav aria-label="Categories" className="flex flex-col px-4">
+              {categories.map((category) => {
+                const active = isActiveCategory(page.url, category.url);
+                return (
+                  <Link
+                    key={category.id}
+                    href={category.url}
+                    onClick={() => setMobileOpen(false)}
+                    aria-current={active ? "page" : undefined}
+                    className={cn(
+                      "label-caps border-b py-4 transition-colors hover:text-foreground",
+                      active ? "text-foreground" : "text-muted-foreground"
+                    )}
+                  >
+                    {category.name}
+                  </Link>
+                );
+              })}
             </nav>
             <div className="mt-auto px-4 pb-6">
               <SearchForm onSubmitted={() => setMobileOpen(false)} />
@@ -125,26 +160,39 @@ function Header() {
           </SheetContent>
         </Sheet>
 
-        <Link href={homeShow({})} aria-label="Meridian — inicio">
+        <Link
+          href={homeShow({})}
+          aria-label="Meridian — home"
+          className="group"
+        >
           <Wordmark />
         </Link>
 
         <nav
-          aria-label="Categorías"
-          className="hidden items-center gap-1 md:flex"
+          aria-label="Categories"
+          className="hidden items-center gap-7 md:flex"
         >
-          {categories.map((category) => (
-            <Link
-              key={category.id}
-              href={category.url}
-              className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-            >
-              {category.name}
-            </Link>
-          ))}
+          {categories.map((category) => {
+            const active = isActiveCategory(page.url, category.url);
+            return (
+              <Link
+                key={category.id}
+                href={category.url}
+                aria-current={active ? "page" : undefined}
+                className={cn(
+                  "label-caps relative py-2 transition-colors",
+                  active
+                    ? "text-foreground after:absolute after:inset-x-0 after:-bottom-[19px] after:h-px after:bg-foreground"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+              >
+                {category.name}
+              </Link>
+            );
+          })}
         </nav>
 
-        <div className="ml-auto flex items-center gap-1.5">
+        <div className="ml-auto flex items-center gap-2">
           <div className="hidden md:block">
             <SearchForm />
           </div>
@@ -153,7 +201,7 @@ function Header() {
             variant="ghost"
             size="icon"
             aria-label={
-              auth.user ? `Cuenta de ${auth.user.firstName}` : "Iniciar sesión"
+              auth.user ? `${auth.user.firstName}’s account` : "Sign in"
             }
             title={
               auth.user
@@ -163,7 +211,7 @@ function Header() {
           >
             <UserRound className="size-4" />
           </Button>
-          <Button variant="ghost" size="icon" aria-label="Bolsa de compra">
+          <Button variant="ghost" size="icon" aria-label="Shopping bag">
             <ShoppingBag className="size-4" />
           </Button>
         </div>
@@ -175,48 +223,51 @@ function Header() {
 function Footer() {
   const { navBar, locale } = usePage<SharedProps>().props;
   const categories = navBar?.categories ?? [];
+  const signatureRef = useRef<HTMLDivElement>(null);
+  // The closing echo of the hero: the signature rises once, on first sight.
+  useMaskedReveal(signatureRef, { whenInView: true });
 
   return (
-    <footer className="mt-24 bg-[oklch(0.2_0.008_260)] text-[oklch(0.95_0.005_250)]">
-      <div className="container grid gap-10 py-14 md:grid-cols-[2fr_1fr_1fr]">
-        <div className="flex flex-col items-start gap-4">
-          <Wordmark />
-          <p className="max-w-sm text-sm leading-relaxed text-[oklch(0.72_0.01_255)]">
-            Relojes y accesorios seleccionados para el día a día.
-          </p>
-        </div>
-        <nav aria-label="Categorías" className="flex flex-col gap-2.5">
-          <span className="text-xs font-semibold uppercase tracking-wider text-[oklch(0.6_0.01_255)]">
-            Colecciones
-          </span>
+    <footer className="mt-32 bg-foreground text-background">
+      <div className="container grid gap-12 py-16 md:grid-cols-[2fr_1fr_1fr]">
+        <p className="max-w-sm text-sm leading-relaxed opacity-70">
+          A full-catalog storefront, composed the modern way. Reference
+          implementation of the Inertia.js adapter for Salesforce B2C Commerce
+          (SFRA).
+        </p>
+        <nav aria-label="Categories" className="flex flex-col gap-3">
+          <span className="label-caps opacity-50">Collections</span>
           {categories.map((category) => (
             <Link
               key={category.id}
               href={category.url}
-              className="w-fit text-sm text-[oklch(0.8_0.01_255)] transition-colors hover:text-white"
+              className="link-draw label-caps w-fit opacity-80 transition-opacity hover:opacity-100"
             >
               {category.name}
             </Link>
           ))}
         </nav>
-        <div className="flex flex-col gap-2.5">
-          <span className="text-xs font-semibold uppercase tracking-wider text-[oklch(0.6_0.01_255)]">
-            El proyecto
+        <div className="flex flex-col gap-3">
+          <span className="label-caps opacity-50">The project</span>
+          <span className="meta-caps opacity-70">
+            Built with Inertia v2 · SFRA · React 19
           </span>
-          <p className="text-sm leading-relaxed text-[oklch(0.72_0.01_255)]">
-            Escaparate de referencia del adaptador Inertia.js para Salesforce
-            B2C Commerce (SFRA).
-          </p>
+          <span className="meta-caps opacity-70">open source</span>
         </div>
       </div>
-      <div className="border-t border-white/10">
+      {/* The house signature: the wordmark at architectural scale. */}
+      <div ref={signatureRef} className="overflow-hidden px-2" aria-hidden>
+        <div
+          data-anim="line"
+          className="display-caps -mb-[0.16em] select-none text-center text-[clamp(3.25rem,15vw,15rem)] leading-none"
+        >
+          meridian
+        </div>
+      </div>
+      <div className="border-t border-background/20">
         <div className="container flex items-center justify-between gap-4 py-4">
-          <span className="meta-caps text-[oklch(0.6_0.01_255)]">
-            {locale} · demo
-          </span>
-          <span className="meta-caps text-[oklch(0.6_0.01_255)]">
-            inertia-sfra
-          </span>
+          <span className="meta-caps opacity-60">{locale} · demo</span>
+          <span className="meta-caps opacity-60">inertia-sfra</span>
         </div>
       </div>
     </footer>

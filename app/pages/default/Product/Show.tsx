@@ -20,14 +20,16 @@ import { Fragment, useState } from "react";
 function PdpPrice({ price }: { price: IProductDetailData["price"] }) {
   if (!price) return null;
   return (
-    <div className="flex items-baseline gap-2.5">
-      <span className="text-2xl font-bold">
+    <div className="flex items-baseline gap-3">
+      <span className="font-mono text-xl tracking-[0.04em]">
         {price.isRange && price.min && price.max
           ? `${price.min.formatted}–${price.max.formatted}`
           : price.sales?.formatted}
       </span>
       {price.list && (
-        <s className="text-base text-muted-foreground">{price.list.formatted}</s>
+        <s className="font-mono text-sm text-muted-foreground">
+          {price.list.formatted}
+        </s>
       )}
     </div>
   );
@@ -39,18 +41,19 @@ function Gallery({ product }: { product: IProductDetailData }) {
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="overflow-hidden rounded-lg border bg-muted/40">
+      <div className="overflow-hidden bg-muted">
         <AspectRatio ratio={1}>
           {image ? (
             <img
+              key={image.url}
               src={image.url}
               alt={image.alt || product.productName}
-              className="size-full object-contain p-10"
+              className="size-full object-cover motion-safe:animate-in motion-safe:fade-in motion-safe:duration-(--motion-base)"
             />
           ) : (
             <div className="flex size-full flex-col items-center justify-center gap-2 text-muted-foreground">
               <ImageOff className="size-6" aria-hidden />
-              <span className="text-xs">Sin foto</span>
+              <span className="text-xs">No photo</span>
             </div>
           )}
         </AspectRatio>
@@ -62,14 +65,15 @@ function Gallery({ product }: { product: IProductDetailData }) {
               key={img.url}
               type="button"
               onClick={() => setActive(i)}
-              aria-label={`Foto ${i + 1}`}
-              className={`size-16 overflow-hidden rounded-md border bg-card p-2 transition-all ${
+              aria-label={`Photo ${i + 1}`}
+              aria-pressed={i === active}
+              className={`size-16 overflow-hidden border bg-muted transition-colors duration-(--motion-fast) ease-(--motion-ease) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring ${
                 i === active
-                  ? "border-primary ring-1 ring-primary"
-                  : "hover:border-primary/40"
+                  ? "border-foreground"
+                  : "border-transparent hover:border-border"
               }`}
             >
-              <img src={img.url} alt="" className="size-full object-contain" />
+              <img src={img.url} alt="" className="size-full object-cover" />
             </button>
           ))}
         </div>
@@ -80,17 +84,19 @@ function Gallery({ product }: { product: IProductDetailData }) {
 
 export default function Show() {
   const { product, breadcrumbs } = usePage<ProductShowProps>().props;
+  // Deepest category crumb — PDP breadcrumbs carry the category path.
+  const categoryCrumb = [...breadcrumbs].reverse().find((crumb) => crumb.url);
 
   return (
     <>
       <Head title={`${product.productName} — Meridian`} />
 
-      <div className="container flex flex-col gap-8 py-8">
+      <div className="container flex flex-col gap-8 py-8 pb-20">
         <Breadcrumb>
-          <BreadcrumbList className="text-xs">
+          <BreadcrumbList className="meta-caps">
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <Link href={homeShow({})}>Inicio</Link>
+                <Link href={homeShow({})}>Home</Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
             {breadcrumbs.map((crumb) => (
@@ -113,9 +119,9 @@ export default function Show() {
         <div className="grid gap-10 lg:grid-cols-2">
           <Gallery product={product} />
 
-          <div className="flex max-w-xl flex-col items-start gap-6">
-            <div className="flex flex-col gap-2">
-              <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
+          <div className="flex max-w-xl flex-col items-start gap-6 lg:sticky lg:top-24 lg:self-start">
+            <div className="flex flex-col gap-3">
+              <h1 className="display-caps text-3xl sm:text-4xl">
                 {product.productName}
               </h1>
               <div className="flex items-center gap-3">
@@ -137,8 +143,8 @@ export default function Show() {
             <PdpPrice price={product.price} />
 
             {product.variationAttributes.map((attr) => (
-              <div key={attr.id} className="flex flex-col gap-2">
-                <span className="text-sm font-medium">
+              <div key={attr.id} className="flex flex-col gap-2.5">
+                <span className="label-caps text-muted-foreground">
                   {attr.displayName || attr.id}
                 </span>
                 <div className="flex flex-wrap gap-2">
@@ -147,10 +153,10 @@ export default function Show() {
                       <span
                         key={value.id}
                         title={value.displayValue}
-                        className={`size-9 overflow-hidden rounded-full border-2 ${
+                        className={`size-10 overflow-hidden border p-0.5 ${
                           value.selected
-                            ? "border-primary"
-                            : "border-transparent shadow-xs"
+                            ? "border-foreground"
+                            : "border-transparent"
                         }`}
                       >
                         <img
@@ -163,7 +169,7 @@ export default function Show() {
                       <Badge
                         key={value.id}
                         variant={value.selected ? "default" : "outline"}
-                        className="rounded-md px-3 py-1"
+                        className="label-caps px-3 py-1.5"
                       >
                         {value.displayValue}
                       </Badge>
@@ -175,40 +181,78 @@ export default function Show() {
 
             <div className="flex items-center gap-2">
               <span
-                className={`size-2 rounded-full ${
+                className={`size-2 ${
                   product.availability.available
-                    ? "bg-chart-3"
+                    ? "bg-foreground"
                     : "bg-destructive"
                 }`}
                 aria-hidden
               />
               <span className="text-sm text-muted-foreground">
                 {product.availability.available
-                  ? "En stock"
-                  : product.availability.messages[0] || "No disponible"}
+                  ? "In stock"
+                  : product.availability.messages[0] || "Unavailable"}
+              </span>
+            </div>
+
+            <div className="flex w-full flex-col items-start gap-2.5 pt-2">
+              <Button
+                size="lg"
+                disabled
+                className="label-caps h-13 w-full max-w-sm"
+                title="The cart flow arrives in the next phase"
+              >
+                Add to bag
+              </Button>
+              <span className="meta-caps text-muted-foreground">
+                Cart coming soon · demo in progress
               </span>
             </div>
 
             {product.description && (
-              <div
-                className="max-w-none text-sm leading-relaxed text-muted-foreground"
-                // Server-authored catalog markup (Business Manager content).
-                dangerouslySetInnerHTML={{ __html: product.description }}
-              />
+              <div className="flex w-full flex-col gap-3 border-t pt-6">
+                <h2 className="label-caps">Description</h2>
+                <div
+                  className="max-w-none text-sm leading-relaxed text-muted-foreground"
+                  // Server-authored catalog markup (Business Manager content).
+                  dangerouslySetInnerHTML={{ __html: product.description }}
+                />
+              </div>
             )}
 
-            <div className="flex flex-col items-start gap-2 pt-2">
-              <Button
-                size="lg"
-                disabled
-                className="font-semibold"
-                title="El flujo de carrito llega en la próxima fase"
-              >
-                Añadir a la bolsa
-              </Button>
-              <span className="text-xs text-muted-foreground">
-                Carrito próximamente — demo en construcción
-              </span>
+            <div className="flex w-full flex-col gap-3 border-t pt-6">
+              <h2 className="label-caps">Details</h2>
+              <dl className="w-full text-sm">
+                <div className="flex items-center justify-between gap-4 border-b py-2.5 last:border-b-0">
+                  <dt className="label-caps text-muted-foreground">Reference</dt>
+                  <dd className="meta-caps">{product.id}</dd>
+                </div>
+                <div className="flex items-center justify-between gap-4 border-b py-2.5 last:border-b-0">
+                  <dt className="label-caps text-muted-foreground">Availability</dt>
+                  <dd>
+                    {product.availability.available
+                      ? "In stock"
+                      : "Unavailable"}
+                  </dd>
+                </div>
+                {categoryCrumb && (
+                  <div className="flex items-center justify-between gap-4 border-b py-2.5 last:border-b-0">
+                    <dt className="label-caps text-muted-foreground">Category</dt>
+                    <dd>
+                      {categoryCrumb.url ? (
+                        <Link
+                          href={categoryCrumb.url}
+                          className="text-link underline-offset-4 hover:underline"
+                        >
+                          {categoryCrumb.htmlValue}
+                        </Link>
+                      ) : (
+                        categoryCrumb.htmlValue
+                      )}
+                    </dd>
+                  </div>
+                )}
+              </dl>
             </div>
           </div>
         </div>

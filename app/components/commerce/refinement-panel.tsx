@@ -34,6 +34,8 @@ function PriceRange({ currentUrl }: { currentUrl: string }) {
     Number(params.get("pmax")) || PRICE_CEILING,
   ]);
 
+  const untouched = range[0] === 0 && range[1] === PRICE_CEILING;
+
   return (
     <div className="flex flex-col gap-3 px-1 pt-1">
       <Slider
@@ -45,7 +47,13 @@ function PriceRange({ currentUrl }: { currentUrl: string }) {
         onValueCommit={(value) =>
           visit(priceUrl(currentUrl, value[0] ?? 0, value[1] ?? PRICE_CEILING))
         }
-        aria-label="Rango de precio"
+        aria-label="Price range"
+        // Ink fill only once the range actually filters something.
+        className={
+          untouched
+            ? "[&_[data-slot=slider-range]]:bg-muted-foreground/25"
+            : undefined
+        }
       />
       <div className="flex items-center justify-between text-xs text-muted-foreground">
         <span>${range[0]}</span>
@@ -79,7 +87,7 @@ export function RefinementPanel({
     >
       {groups.map((group, i) => (
         <AccordionItem key={group.displayName} value={`group-${i}`}>
-          <AccordionTrigger className="text-sm font-medium hover:no-underline">
+          <AccordionTrigger className="label-caps hover:no-underline">
             {group.displayName}
           </AccordionTrigger>
           <AccordionContent>
@@ -107,8 +115,8 @@ export function RefinementPanel({
       ))}
 
       <AccordionItem value="price">
-        <AccordionTrigger className="text-sm font-medium hover:no-underline">
-          Precio
+        <AccordionTrigger className="label-caps hover:no-underline">
+          Price
         </AccordionTrigger>
         <AccordionContent>
           <PriceRange currentUrl={currentUrl} />

@@ -9,24 +9,25 @@ function TilePrice({ price }: { price: ISearchTileData["price"] }) {
   if (!price) return null;
   if (price.isRange && price.min && price.max) {
     return (
-      <span className="text-sm font-semibold">
+      <span className="meta-caps">
         {price.min.formatted}–{price.max.formatted}
       </span>
     );
   }
   return (
-    <span className="inline-flex items-baseline gap-1.5">
-      <span className="text-sm font-semibold">{price.sales?.formatted}</span>
+    <span className="inline-flex items-baseline gap-2">
+      <span className="meta-caps">{price.sales?.formatted}</span>
       {price.list && (
-        <s className="text-xs text-muted-foreground">{price.list.formatted}</s>
+        <s className="meta-caps text-muted-foreground">{price.list.formatted}</s>
       )}
     </span>
   );
 }
 
 /**
- * Product card: bordered white card, product photo on a soft ground, name,
- * price, color swatches, rating. Hover lifts the card and warms the border.
+ * Lookbook tile: bare photograph on a quiet ground, caps name and mono
+ * price beneath — no card chrome. Hover scales the image and underlines
+ * the name; depth never comes from elevation in this world.
  */
 export function ProductTile({
   product,
@@ -43,12 +44,13 @@ export function ProductTile({
     <Link
       href={product.url}
       className={cn(
-        "group flex flex-col overflow-hidden rounded-lg border bg-card transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-md",
-        "focus-visible:outline-2 focus-visible:outline-offset-2",
+        "group flex flex-col gap-3",
+        "motion-safe:animate-in motion-safe:fade-in motion-safe:duration-(--motion-base)",
+        "focus-visible:outline-2 focus-visible:outline-offset-4",
         className
       )}
     >
-      <div className="border-b bg-muted/50">
+      <div className="overflow-hidden bg-muted">
         <AspectRatio ratio={4 / 5}>
           {image ? (
             <img
@@ -56,59 +58,35 @@ export function ProductTile({
               alt={image.alt || product.productName}
               loading="lazy"
               onError={() => setImageBroken(true)}
-              className="size-full object-contain p-6 transition-transform duration-200 ease-out group-hover:scale-[1.03]"
+              className="size-full object-cover transition-transform duration-(--motion-slow) ease-(--motion-ease) group-hover:scale-[1.04]"
             />
           ) : (
             <div className="flex size-full flex-col items-center justify-center gap-2 text-muted-foreground">
               <ImageOff className="size-6" aria-hidden />
-              <span className="text-xs">Sin foto</span>
+              <span className="label-caps">No photo</span>
             </div>
           )}
         </AspectRatio>
       </div>
 
-      <div className="flex flex-1 flex-col gap-2 p-4">
-        <div className="flex items-start justify-between gap-2">
-          <h3 className="text-sm font-medium leading-snug">
+      <div className="flex flex-col gap-1.5">
+        <div className="flex items-start justify-between gap-3">
+          <h3 className="label-caps -ml-1 inline-block px-1 py-0.5 leading-relaxed transition-colors duration-(--motion-fast) group-hover:bg-foreground group-hover:text-background">
             {product.productName}
           </h3>
           {product.rating > 0 && (
-            <span className="inline-flex shrink-0 items-center gap-1 text-xs text-muted-foreground">
-              <Star
-                className="size-3.5 fill-primary text-primary"
-                aria-hidden
-              />
+            <span className="meta-caps inline-flex shrink-0 items-center gap-1 text-muted-foreground">
+              <Star className="size-3 fill-current" aria-hidden />
               {product.rating.toFixed(1)}
             </span>
           )}
         </div>
-
-        <div className="mt-auto flex items-end justify-between gap-2 pt-1">
+        <div className="flex items-baseline justify-between gap-2">
           <TilePrice price={product.price} />
           {colors && colors.values.length > 0 && (
-            <span className="flex items-center gap-1" aria-label="Colores">
-              {colors.values.slice(0, 5).map((value) =>
-                value.image ? (
-                  <img
-                    key={value.id}
-                    src={value.image.url}
-                    alt={value.displayValue}
-                    title={value.displayValue}
-                    className="size-4 rounded-full border object-cover"
-                  />
-                ) : (
-                  <span
-                    key={value.id}
-                    title={value.displayValue}
-                    className="size-4 rounded-full border bg-muted"
-                  />
-                )
-              )}
-              {colors.values.length > 5 && (
-                <span className="text-[10px] text-muted-foreground">
-                  +{colors.values.length - 5}
-                </span>
-              )}
+            <span className="meta-caps text-muted-foreground">
+              {colors.values.length}{" "}
+              {colors.values.length === 1 ? "color" : "colors"}
             </span>
           )}
         </div>
@@ -119,18 +97,13 @@ export function ProductTile({
 
 export function ProductTileSkeleton({ className }: { className?: string }) {
   return (
-    <div
-      className={cn(
-        "flex animate-pulse flex-col overflow-hidden rounded-lg border bg-card",
-        className
-      )}
-    >
-      <div className="border-b bg-muted">
+    <div className={cn("flex animate-pulse flex-col gap-3", className)}>
+      <div className="bg-muted">
         <AspectRatio ratio={4 / 5} />
       </div>
-      <div className="flex flex-col gap-2.5 p-4">
-        <div className="h-3.5 w-3/4 rounded bg-muted" />
-        <div className="h-3.5 w-1/3 rounded bg-muted" />
+      <div className="flex flex-col gap-2">
+        <div className="h-3 w-3/4 bg-muted" />
+        <div className="h-3 w-1/3 bg-muted" />
       </div>
     </div>
   );

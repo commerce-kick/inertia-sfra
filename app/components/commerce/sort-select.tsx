@@ -9,6 +9,21 @@ import type { SortState } from "@/types/search";
 import { router } from "@inertiajs/react";
 
 /**
+ * Labels for the stock SFCC sorting rule ids; unknown rules fall back to
+ * the server-authored displayName.
+ */
+const SORT_LABELS: Record<string, string> = {
+  "best-matches": "Relevance",
+  "price-low-to-high": "Price: low to high",
+  "price-high-to-low": "Price: high to low",
+  "product-name-ascending": "Name A–Z",
+  "product-name-descending": "Name Z–A",
+  "most-popular": "Most popular",
+  "top-sellers": "Top sellers",
+  brand: "Brand",
+};
+
+/**
  * Sorting rule picker; each option carries its server-authored Search-Show
  * URL, so choosing one is a plain Inertia visit.
  */
@@ -25,13 +40,17 @@ export function SortSelect({ sort }: { sort: SortState }) {
         }
       }}
     >
-      <SelectTrigger size="sm" className="w-auto gap-2" aria-label="Ordenar por">
-        <SelectValue placeholder="Ordenar" />
+      <SelectTrigger
+        size="sm"
+        className="label-caps w-auto gap-2"
+        aria-label="Sort by"
+      >
+        <SelectValue placeholder="Sort" />
       </SelectTrigger>
       <SelectContent>
         {sort.options.map((option) => (
           <SelectItem key={option.id} value={option.id ?? ""}>
-            {option.displayName}
+            {SORT_LABELS[option.id ?? ""] ?? option.displayName}
           </SelectItem>
         ))}
       </SelectContent>
