@@ -294,4 +294,34 @@ server.append("DoSetNewPassword", initInertia.init, shareData, function (req, re
   return next();
 });
 
+/**
+ * Account-SetNewPassword: where the emailed reset link lands.
+ *
+ * The link carries the token as a query parameter, and base's whole reason
+ * for this route is to get it out of there: it renders a form that posts the
+ * token to Account-DoSetNewPassword and clicks it with a line of script, so
+ * the address bar the shopper is left on holds no token. The port keeps the
+ * same move — the page hands the token straight on and the URL becomes
+ * Account-DoSetNewPassword — with base's own "Continue" button standing
+ * behind it rather than a script that must run for the flow to proceed.
+ *
+ * A token that resolves to nobody is base's redirect to Account-PasswordReset,
+ * untouched: a pending redirect breaks the middleware chain before this step.
+ *
+ * @queryParam Token required string the reset token from the emailed link
+ */
+server.append("SetNewPassword", initInertia.init, shareData, function (req, res, next) {
+  var NewPasswordFormData = require("*/cartridge/scripts/data/NewPasswordFormData");
+
+  var viewData = res.getViewData();
+
+  res.inertia.render("Account/SetNewPassword", {
+    token: viewData.token || "",
+    form: NewPasswordFormData.fromForm(server.forms.getForm("newPasswords")),
+    redirecting: true,
+  });
+
+  return next();
+});
+
 module.exports = server.exports();
