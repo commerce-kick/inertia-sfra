@@ -1,5 +1,6 @@
 import { useSfraRequest } from "./sfra";
-import type { IFormResultData } from "@/generated/data";
+import type { IAddressDeletedData, IFormResultData } from "@/generated/data";
+import { addressDeleteAddress } from "@/generated/routes/address-deleteaddress";
 import { addressSaveAddress } from "@/generated/routes/address-saveaddress";
 import { router } from "@inertiajs/react";
 import { useMutation } from "@tanstack/react-query";
@@ -22,5 +23,27 @@ export function useSaveAddress(addressId?: string) {
     onSuccess: (result) => {
       if (result.redirectUrl) router.visit(result.redirectUrl);
     },
+  });
+}
+
+/**
+ * Remove an address from the book.
+ *
+ * Base told its jQuery which row to delete from the DOM; here the page
+ * reloads the prop it just invalidated, which also picks up whichever address
+ * inherited "default" when the removed one held it.
+ */
+export function useDeleteAddress() {
+  const request = useSfraRequest();
+
+  return useMutation({
+    mutationFn: (vars: { addressId: string; isDefault?: boolean }) =>
+      request<IAddressDeletedData>(
+        addressDeleteAddress({
+          addressId: vars.addressId,
+          isDefault: vars.isDefault || undefined,
+        })
+      ),
+    onSuccess: () => router.reload({ only: ["addresses"] }),
   });
 }
