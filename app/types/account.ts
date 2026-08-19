@@ -1,6 +1,7 @@
 import type {
   IAccountData,
   INewPasswordFormData,
+  IPasswordChangeFormData,
   IProfileFormData,
 } from "@/generated/data";
 import type { SharedProps } from "./shared";
@@ -13,6 +14,15 @@ export interface AccountShowProps extends SharedProps {
 /** Props of default/Account/EditProfile — the `profile` form, prefilled. */
 export interface AccountEditProfileProps extends SharedProps {
   form: IProfileFormData;
+}
+
+/**
+ * Props of default/Account/EditPassword — the signed-in password change.
+ * Its sibling below is the token-authorized one; different form, different
+ * authorization.
+ */
+export interface AccountEditPasswordProps extends SharedProps {
+  form: IPasswordChangeFormData;
 }
 
 /**

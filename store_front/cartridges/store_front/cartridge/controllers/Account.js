@@ -418,4 +418,51 @@ server.append("EditProfile", initInertia.init, shareData, function (req, res, ne
   return next();
 });
 
+/**
+ * Account-SavePassword: change the password from inside the account.
+ *
+ * The sibling of 3.9, and a different thing: that one is authorized by an
+ * emailed token, this one by the current password. Base checks both halves in
+ * one call — `setPassword(new, current, true)` — and then reads the failure
+ * apart: if the *new* password is not acceptable to the site's policy the
+ * message belongs on the new field, otherwise the current one was wrong. That
+ * distinction is the whole usefulness of the error, and it is base's.
+ *
+ * The work is in base's own `route:BeforeComplete`, so this registers one
+ * after it, as 3.4 and 4.3 do. `AuthResultData` again.
+ *
+ * @formParam dwfrm_profile_login_currentpassword required string the password in force now
+ * @formParam dwfrm_profile_login_newpasswords_newpassword required string the new password
+ * @formParam dwfrm_profile_login_newpasswords_newpasswordconfirm required string the new password again
+ */
+server.append("SavePassword", function (req, res, next) {
+  this.on("route:BeforeComplete", function (beforeReq, beforeRes) {
+    var AuthResultData = require("*/cartridge/scripts/data/AuthResultData");
+
+    answer(beforeRes, AuthResultData.fromViewData(beforeRes.getViewData()));
+  });
+
+  return next();
+});
+
+/**
+ * Account-EditPassword: the change-password form.
+ *
+ * Base clears the `profile` form and renders three of its fields — the
+ * current password and the `newpasswords` group the form definition includes
+ * into it. `PasswordChangeFormData` is that trio; the profile's other fields
+ * are 4.2's.
+ */
+server.append("EditPassword", initInertia.init, shareData, function (req, res, next) {
+  var PasswordChangeFormData = require("*/cartridge/scripts/data/PasswordChangeFormData");
+
+  var viewData = res.getViewData();
+
+  res.inertia.render("Account/EditPassword", {
+    form: PasswordChangeFormData.fromForm(viewData.profileForm),
+  });
+
+  return next();
+});
+
 module.exports = server.exports();

@@ -3,6 +3,7 @@ import type { IAuthResultData } from "@/generated/data";
 import { accountLogin } from "@/generated/routes/account-login";
 import { accountPasswordResetDialogForm } from "@/generated/routes/account-passwordresetdialogform";
 import { accountSaveNewPassword } from "@/generated/routes/account-savenewpassword";
+import { accountSavePassword } from "@/generated/routes/account-savepassword";
 import { accountSaveProfile } from "@/generated/routes/account-saveprofile";
 import { accountSubmitRegistration } from "@/generated/routes/account-submitregistration";
 import { router } from "@inertiajs/react";
@@ -127,6 +128,27 @@ export function useSaveProfile() {
   return useMutation({
     mutationFn: (fields: Record<string, string>) =>
       request<IAuthResultData>(accountSaveProfile({}), fields),
+    onSuccess: (result) => {
+      if (result.redirectUrl) router.visit(result.redirectUrl);
+    },
+  });
+}
+
+/**
+ * Change the password from inside the account.
+ *
+ * Authorized by the current password rather than by an emailed token, which
+ * is what separates it from `useSaveNewPassword`. Base tells the two failures
+ * apart — a new password the site's policy refuses lands on the new field, a
+ * wrong current password on that one — so the verdict arrives per field and
+ * the form renders it where it belongs.
+ */
+export function useSavePassword() {
+  const request = useSfraRequest();
+
+  return useMutation({
+    mutationFn: (fields: Record<string, string>) =>
+      request<IAuthResultData>(accountSavePassword({}), fields),
     onSuccess: (result) => {
       if (result.redirectUrl) router.visit(result.redirectUrl);
     },
