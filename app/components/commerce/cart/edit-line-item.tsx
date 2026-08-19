@@ -1,9 +1,6 @@
 import { ProductAvailability } from "@/components/commerce/product/product-availability";
 import { ProductPrice } from "@/components/commerce/product/product-price";
-import {
-  OptionSelects,
-  QuantitySelect,
-} from "@/components/commerce/product/product-selects";
+import { QuantitySelect } from "@/components/commerce/product/product-selects";
 import { VariationSwatches } from "@/components/commerce/product/variation-swatches";
 import { Button } from "@/components/ui/button";
 import {
@@ -87,7 +84,6 @@ export function EditLineItem({ item }: { item: ICartLineItemData }) {
               onSelect={setVariationUrl}
             />
             <QuantitySelect product={product} onSelect={setVariationUrl} />
-            <OptionSelects product={product} onSelect={setVariationUrl} />
             <ProductAvailability availability={product.availability} />
           </div>
         )}
