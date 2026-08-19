@@ -23,7 +23,7 @@ Success: SFCC developers can clone it, see a working modern storefront on their 
 
 ## Positioning
 
-The only Inertia.js adapter for Salesforce B2C Commerce. Neighboring approaches (headless PWA Kit, raw SFRA/ISML) either abandon SFRA controllers entirely or abandon modern frontend DX; this keeps SFRA's controller/middleware model and server-side session/auth intact while delivering an SPA React frontend — no separate API layer, no re-implementation of commerce logic. Ported faithfully from `inertia-laravel` (vendored in-repo as the protocol reference), with Inertia v3.3.0 feature parity (DevTools support pending — requires a forked browser extension because SFCC constrains custom headers to an `X-SF-CC` prefix).
+The only Inertia.js adapter for Salesforce B2C Commerce. Neighboring approaches (headless PWA Kit, raw SFRA/ISML) either abandon SFRA controllers entirely or abandon modern frontend DX; this keeps SFRA's controller/middleware model and server-side session/auth intact while delivering an SPA React frontend — no separate API layer, no re-implementation of commerce logic. Ported faithfully from [inertia-laravel](https://github.com/inertiajs/inertia-laravel) as the protocol reference, with Inertia v3.3.0 feature parity (DevTools support pending — requires a forked browser extension because SFCC constrains custom headers to an `X-SF-CC` prefix).
 
 ## Operating Context
 
@@ -45,7 +45,7 @@ None. The reference storefront runs on RefArch demo data with no merchant identi
 
 ## Evidence on Hand
 
-- The vendored `inertia-laravel/` source is the protocol ground truth the adapter is ported against.
+- [inertia-laravel](https://github.com/inertiajs/inertia-laravel) v3.3.0 is the protocol ground truth the adapter is ported against. It was vendored in-repo while the port was written and has since been removed; each module names the upstream file it came from in its own header (e.g. `PropsResolver.js` — "near-literal port of inertia-laravel/src/PropsResolver.php (v3.3.0)"), so the trail survives without carrying 2.3MB of PHP.
 - Working unit test suite for the adapter core.
 - No testimonials, adopters, benchmarks, or case studies exist yet — future marketing/docs surfaces must not fabricate any.
 - Product content is RefArch placeholder data — real merchandising imagery/copy does not exist.
