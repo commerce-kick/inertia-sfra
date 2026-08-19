@@ -360,4 +360,35 @@ server.append("Show", initInertia.init, shareData, function (req, res, next) {
   return next();
 });
 
+/**
+ * Account-SaveProfile: save the edited profile.
+ *
+ * Base makes the change conditional on the account's own password, and does
+ * it in a way worth naming: it calls `setPassword(password, password, true)`
+ * — setting the password to itself — purely to have the platform verify it
+ * before `setLogin` moves the email. That is the check, and it stays.
+ *
+ * Like registration, the work happens in base's own `route:BeforeComplete`,
+ * so this registers one of its own to retype what base decided. The three
+ * answers reduce to `AuthResultData` again: saved (with where to go next),
+ * refused per field (a mismatched email confirmation, a password that does
+ * not match, an email the platform will not accept as a login).
+ *
+ * @formParam dwfrm_profile_customer_firstname required string given name
+ * @formParam dwfrm_profile_customer_lastname required string family name
+ * @formParam dwfrm_profile_customer_phone required string phone number
+ * @formParam dwfrm_profile_customer_email required string email address, which is also the login
+ * @formParam dwfrm_profile_customer_emailconfirm required string the email address again
+ * @formParam dwfrm_profile_login_password required string the account's current password, which authorizes the change
+ */
+server.append("SaveProfile", function (req, res, next) {
+  this.on("route:BeforeComplete", function (beforeReq, beforeRes) {
+    var AuthResultData = require("*/cartridge/scripts/data/AuthResultData");
+
+    answer(beforeRes, AuthResultData.fromViewData(beforeRes.getViewData()));
+  });
+
+  return next();
+});
+
 module.exports = server.exports();

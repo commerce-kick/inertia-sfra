@@ -3,6 +3,7 @@ import type { IAuthResultData } from "@/generated/data";
 import { accountLogin } from "@/generated/routes/account-login";
 import { accountPasswordResetDialogForm } from "@/generated/routes/account-passwordresetdialogform";
 import { accountSaveNewPassword } from "@/generated/routes/account-savenewpassword";
+import { accountSaveProfile } from "@/generated/routes/account-saveprofile";
 import { accountSubmitRegistration } from "@/generated/routes/account-submitregistration";
 import { router } from "@inertiajs/react";
 import { useMutation } from "@tanstack/react-query";
@@ -106,6 +107,26 @@ export function useSaveNewPassword() {
   return useMutation({
     mutationFn: (fields: Record<string, string>) =>
       request<IAuthResultData>(accountSaveNewPassword({}), fields),
+    onSuccess: (result) => {
+      if (result.redirectUrl) router.visit(result.redirectUrl);
+    },
+  });
+}
+
+/**
+ * Save the edited profile.
+ *
+ * The account's current password rides along with the rest of the fields:
+ * base will not move a name, phone or login email without it, and the field
+ * it is refused under is the one the form renders it in. Success carries
+ * where to go next — back to the dashboard, which is base's own destination.
+ */
+export function useSaveProfile() {
+  const request = useSfraRequest();
+
+  return useMutation({
+    mutationFn: (fields: Record<string, string>) =>
+      request<IAuthResultData>(accountSaveProfile({}), fields),
     onSuccess: (result) => {
       if (result.redirectUrl) router.visit(result.redirectUrl);
     },
