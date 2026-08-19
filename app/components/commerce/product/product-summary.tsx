@@ -71,7 +71,7 @@ function ProductSummary({
         <div className="flex w-full flex-col gap-3 border-t pt-6">
           <h2 className="label-caps">Description</h2>
           <div
-            className="max-w-none text-sm leading-relaxed text-muted-foreground"
+            className="cms-body max-w-none"
             // Server-authored catalog markup (Business Manager content).
             dangerouslySetInnerHTML={{ __html: product.description }}
           />
