@@ -1,6 +1,7 @@
 import { useSfraRequest } from "./sfra";
 import type { IAuthResultData } from "@/generated/data";
 import { accountLogin } from "@/generated/routes/account-login";
+import { accountPasswordResetDialogForm } from "@/generated/routes/account-passwordresetdialogform";
 import { accountSubmitRegistration } from "@/generated/routes/account-submitregistration";
 import { router } from "@inertiajs/react";
 import { useMutation } from "@tanstack/react-query";
@@ -67,5 +68,23 @@ export function useRegister(rurl?: number) {
     onSuccess: (result) => {
       if (result.redirectUrl) router.visit(result.redirectUrl);
     },
+  });
+}
+
+/**
+ * Ask for a password-reset link.
+ *
+ * The answer is the same whether or not an account exists at that address —
+ * base is deliberately silent about it, and so is this — so a resolved
+ * mutation means "if that address has an account, the link is on its way",
+ * never "that address has an account". Only a malformed address comes back
+ * with something to say, under `fields.loginEmail`.
+ */
+export function useRequestPasswordReset() {
+  const request = useSfraRequest();
+
+  return useMutation({
+    mutationFn: (vars: { loginEmail: string }) =>
+      request<IAuthResultData>(accountPasswordResetDialogForm({}), vars),
   });
 }

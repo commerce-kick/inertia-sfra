@@ -105,4 +105,39 @@ server.append("SubmitRegistration", function (req, res, next) {
   return next();
 });
 
+/**
+ * Account-PasswordResetDialogForm: ask for a reset link.
+ *
+ * Base validates the address, looks the customer up and — only if one exists
+ * — emails the reset link, while answering the *same* success either way. That
+ * silence is the feature: an answer that differed would turn the form into a
+ * test for whether an address has an account here. It is kept exactly.
+ *
+ * `AuthResultData` again: the shape is the one it already describes — a
+ * verdict, somewhere to go next (base's `returnUrl`, back to sign-in), and a
+ * per-field message when the address itself will not do. Base's four copy
+ * fields (`receivedMsgHeading`, `receivedMsgBody`, `buttonText`) and its
+ * `mobile` echo are gone: copy is English and written in the component, and
+ * `mobile` only ever told base's jQuery whether it was answering the modal or
+ * the page — the port has one surface for both.
+ *
+ * @formParam loginEmail required string the address to send the reset link to
+ */
+server.append("PasswordResetDialogForm", function (req, res, next) {
+  var AuthResultData = require("*/cartridge/scripts/data/AuthResultData");
+
+  var viewData = res.getViewData();
+
+  answer(
+    res,
+    AuthResultData.from({
+      success: viewData.success,
+      redirectUrl: viewData.returnUrl,
+      fields: viewData.fields,
+    })
+  );
+
+  return next();
+});
+
 module.exports = server.exports();
