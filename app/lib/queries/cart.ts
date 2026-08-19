@@ -5,6 +5,7 @@ import type {
   IMiniCartData,
 } from "@/generated/data";
 import { cartAddProduct } from "@/generated/routes/cart-addproduct";
+import { cartEditProductLineItem } from "@/generated/routes/cart-editproductlineitem";
 import { cartMiniCart } from "@/generated/routes/cart-minicart";
 import { cartMiniCartShow } from "@/generated/routes/cart-minicartshow";
 import { cartRemoveProductLineItem } from "@/generated/routes/cart-removeproductlineitem";
@@ -134,6 +135,38 @@ export function useRemoveLineItem() {
   return useMutation({
     mutationFn: (vars: { pid: string; uuid: string }) =>
       request<ICartData>(cartRemoveProductLineItem(vars)),
+    onSuccess: refresh,
+  });
+}
+
+/**
+ * Change which variant, how many, or which option a line carries.
+ *
+ * The dialog this belongs to arrives with Cart-GetProduct, which is what
+ * supplies the product to edit.
+ */
+export function useEditLineItem() {
+  const request = useSfraRequest();
+  const refresh = useCartRefresh();
+
+  return useMutation({
+    mutationFn: (vars: {
+      uuid: string;
+      pid: string;
+      quantity: number;
+      selectedOptionValueId?: string;
+    }) => {
+      const body: Record<string, string | number> = {
+        uuid: vars.uuid,
+        pid: vars.pid,
+        quantity: vars.quantity,
+      };
+      if (vars.selectedOptionValueId) {
+        body.selectedOptionValueId = vars.selectedOptionValueId;
+      }
+
+      return request<ICartData>(cartEditProductLineItem(), body);
+    },
     onSuccess: refresh,
   });
 }

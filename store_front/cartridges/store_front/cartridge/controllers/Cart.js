@@ -211,6 +211,32 @@ server.append("RemoveProductLineItem", function (req, res, next) {
 });
 
 /**
+ * Cart-EditProductLineItem: change which variant, how many, or which option a
+ * line carries, without leaving the bag.
+ *
+ * Base does the work — it merges the line into an existing one when the new
+ * product is already in the basket (summing the quantities and removing the
+ * duplicate), replaces the product on the line unless it is a bundle, moves
+ * the option value across, revalidates against inventory and recalculates.
+ * This appends and retypes.
+ *
+ * Base answered `{cartModel, newProductId, uuidToBeDeleted, renderedTemplate}`
+ * — a rendered product card for jQuery to swap in, plus the two ids it needed
+ * to know which node to swap and which to delete. All three are DOM
+ * bookkeeping; only the basket survives.
+ *
+ * @formParam uuid required string UUID of the line being edited
+ * @formParam pid required string the product ID the line should carry
+ * @formParam quantity required number the quantity the line should carry
+ * @formParam selectedOptionValueId optional string chosen product-option value
+ */
+server.append("EditProductLineItem", function (req, res, next) {
+  answerCart(res, res.getViewData().cartModel);
+
+  next();
+});
+
+/**
  * Cart-MiniCart: the bag count in the header.
  *
  * Base rendered components/header/miniCart.isml — the bag glyph, the count,
