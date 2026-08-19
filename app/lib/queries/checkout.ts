@@ -9,7 +9,7 @@ import { checkoutServicesSubmitPayment } from "@/generated/routes/checkoutservic
 import { checkoutShippingServicesSelectShippingMethod } from "@/generated/routes/checkoutshippingservices-selectshippingmethod";
 import { checkoutShippingServicesSubmitShipping } from "@/generated/routes/checkoutshippingservices-submitshipping";
 import { checkoutShippingServicesUpdateShippingMethodsList } from "@/generated/routes/checkoutshippingservices-updateshippingmethodslist";
-import { router } from "@inertiajs/react";
+import { router, usePage } from "@inertiajs/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 /** Every checkout query hangs off this key. */
@@ -38,12 +38,19 @@ export function useCheckout(enabled = true) {
  * names, the answer comes back with `order` (the totals as they now stand)
  * and `fields` (anything refused, per field).
  *
+ * The page renders from its Inertia `order` prop, not from this answer, so
+ * the prop is what has to move: every mutation reloads it, exactly as a cart
+ * mutation reloads `cart`. Without that the totals on screen keep whatever
+ * the page was built with — a shipping method would be chosen and the price
+ * beside it would not change.
+ *
  * The basket queries are invalidated alongside, since the header's bag count
- * is reading the same basket this is changing.
+ * reads the same basket this is changing.
  */
 function useCheckoutMutation(url: string) {
   const request = useSfraRequest();
   const queryClient = useQueryClient();
+  const rendersOrder = Boolean(usePage().props.order);
 
   return useMutation({
     mutationFn: (fields: Record<string, string>) =>
@@ -51,7 +58,13 @@ function useCheckoutMutation(url: string) {
     onSuccess: (result) => {
       queryClient.invalidateQueries({ queryKey: CART_KEY });
       queryClient.setQueryData(CHECKOUT_KEY, result);
-      if (result.redirectUrl) router.visit(result.redirectUrl);
+
+      if (result.redirectUrl) {
+        router.visit(result.redirectUrl);
+        return;
+      }
+
+      if (rendersOrder) router.reload({ only: ["order"] });
     },
   });
 }

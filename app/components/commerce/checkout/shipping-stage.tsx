@@ -8,7 +8,11 @@ import type {
   IShippingMethodData,
 } from "@/generated/data";
 import { checkoutBegin } from "@/generated/routes/checkout-begin";
-import { useShippingMethods, useSubmitShipping } from "@/lib/queries/checkout";
+import {
+  useSelectCheckoutShipping,
+  useShippingMethods,
+  useSubmitShipping,
+} from "@/lib/queries/checkout";
 import { cn } from "@/lib/utils";
 import { router } from "@inertiajs/react";
 import { useState } from "react";
@@ -17,10 +21,12 @@ import { useState } from "react";
 function MethodOption({
   method,
   checked,
+  disabled,
   onSelect,
 }: {
   method: IShippingMethodData;
   checked: boolean;
+  disabled?: boolean;
   onSelect: () => void;
 }) {
   return (
@@ -35,6 +41,7 @@ function MethodOption({
           type="radio"
           name="shippingMethod"
           checked={checked}
+          disabled={disabled}
           onChange={onSelect}
           className="size-3 accent-foreground"
         />
@@ -103,6 +110,7 @@ export function ShippingStage({
   const shipment = order.shipping[0];
   const submit = useSubmitShipping();
   const refreshMethods = useShippingMethods();
+  const selectMethod = useSelectCheckoutShipping();
 
   const [values, setValues] = useState<Record<string, string>>({});
   const [methodId, setMethodId] = useState(
@@ -110,15 +118,20 @@ export function ShippingStage({
   );
   const [billSame, setBillSame] = useState(true);
 
-  const methods =
-    refreshMethods.data?.order?.shipping?.[0]?.applicableShippingMethods
-    ?? shipment?.applicableShippingMethods
-    ?? [];
+  const methods = shipment?.applicableShippingMethods ?? [];
 
   const set = (name: string, value: string) =>
     setValues((current) => ({ ...current, [name]: value }));
 
-  const addressPayload = () => {
+  const valueOf = (field: { name: string; value: string }) =>
+    values[field.name] ?? field.value;
+
+  /**
+   * The address under the field names Address-SaveAddress and
+   * CheckoutShippingServices-SubmitShipping expect: the form definition's
+   * own `dwfrm_` names.
+   */
+  const formNamedAddress = () => {
     const form = forms.shippingAddress;
     const fields = [
       form.firstName,
@@ -132,10 +145,34 @@ export function ShippingStage({
       form.stateCode,
     ];
     const payload: Record<string, string> = {};
-    for (const field of fields) {
-      payload[field.name] = values[field.name] ?? field.value;
-    }
+    for (const field of fields) payload[field.name] = valueOf(field);
     return payload;
+  };
+
+  /**
+   * The same address under *plain* names.
+   *
+   * SelectShippingMethod and UpdateShippingMethodsList do not read the form
+   * definition — they read `firstName`, `address1`, `stateCode`,
+   * `countryCode`, `phone` straight off the request
+   * (shippingHelpers.getAddressFromRequest) — and they write every one of
+   * them onto the shipment, nulling whatever is absent. So these two calls
+   * must carry the whole address in these names, or they erase it.
+   */
+  const plainAddress = () => {
+    const form = forms.shippingAddress;
+    return {
+      firstName: valueOf(form.firstName),
+      lastName: valueOf(form.lastName),
+      address1: valueOf(form.address1),
+      address2: valueOf(form.address2),
+      city: valueOf(form.city),
+      stateCode: valueOf(form.stateCode),
+      postalCode: valueOf(form.postalCode),
+      countryCode: valueOf(form.country),
+      phone: valueOf(form.phone),
+      ...(shipment?.uuid ? { shipmentUUID: shipment.uuid } : {}),
+    };
   };
 
   const errors = submit.data?.fields ?? {};
@@ -148,7 +185,7 @@ export function ShippingStage({
 
         submit.mutate(
           {
-            ...addressPayload(),
+            ...formNamedAddress(),
             [forms.shippingMethodId.name]: methodId,
             ...(billSame ? { [forms.useAsBilling.name]: "true" } : {}),
           },
@@ -181,7 +218,7 @@ export function ShippingStage({
             [form.country.name]: address.countryCode,
             [form.stateCode.name]: address.stateCode,
           });
-          refreshMethods.mutate(addressPayload());
+          refreshMethods.mutate(plainAddress());
         }}
       />
 
@@ -190,7 +227,7 @@ export function ShippingStage({
         values={values}
         errors={errors}
         onChange={set}
-        onAddressChanged={() => refreshMethods.mutate(addressPayload())}
+        onAddressChanged={() => refreshMethods.mutate(plainAddress())}
       />
 
       <div className="flex flex-col gap-3">
@@ -200,16 +237,40 @@ export function ShippingStage({
             Fill in the address and the delivery options for it appear here.
           </p>
         ) : (
-          <div className="flex flex-col">
+          <div
+            className="flex flex-col"
+            aria-busy={selectMethod.isPending || undefined}
+          >
             {methods.map((method) => (
               <MethodOption
                 key={method.id}
                 method={method}
                 checked={method.id === methodId}
-                onSelect={() => setMethodId(method.id)}
+                disabled={selectMethod.isPending}
+                onSelect={() => {
+                  setMethodId(method.id);
+                  // Base applies the method as soon as it is picked, because
+                  // choosing is what lets the platform price shipping and tax
+                  // at all — the totals beside it move on the answer.
+                  selectMethod.mutate({
+                    ...plainAddress(),
+                    methodID: method.id,
+                  });
+                }}
               />
             ))}
           </div>
+        )}
+
+        {selectMethod.isPending && (
+          <p role="status" className="text-sm text-muted-foreground">
+            Repricing…
+          </p>
+        )}
+        {selectMethod.isError && (
+          <p role="alert" className="text-sm text-destructive">
+            {selectMethod.error.message}
+          </p>
         )}
       </div>
 
