@@ -10,6 +10,8 @@ import { accountEditPassword } from "@/generated/routes/account-editpassword";
 import { accountEditProfile } from "@/generated/routes/account-editprofile";
 import { addressAddAddress } from "@/generated/routes/address-addaddress";
 import { addressList } from "@/generated/routes/address-list";
+import { paymentInstrumentsAddPayment } from "@/generated/routes/paymentinstruments-addpayment";
+import { paymentInstrumentsList } from "@/generated/routes/paymentinstruments-list";
 
 /** Who the shopper is. Base hid the phone on an externally-authenticated account. */
 export function ProfilePanel({ account }: { account: IAccountData }) {
@@ -95,12 +97,18 @@ export function AddressPanel({ account }: { account: IAccountData }) {
   );
 }
 
-/** The first card in the wallet — the platform never shows a storefront more. */
+/**
+ * The first card in the wallet — the platform never shows a storefront more.
+ * Base's "View" and "Add new" links, which 5.7/5.8 made reachable.
+ */
 export function PaymentPanel({ account }: { account: IAccountData }) {
   const card = account.payment;
 
   return (
-    <AccountPanel title="Payment">
+    <AccountPanel
+      title="Payment"
+      action={card ? { label: "View", href: paymentInstrumentsList({}) } : undefined}
+    >
       {card ? (
         <dl className="flex flex-col gap-4">
           <PanelFact label={card.cardType}>
@@ -116,6 +124,12 @@ export function PaymentPanel({ account }: { account: IAccountData }) {
       ) : (
         <PanelEmpty>No card saved.</PanelEmpty>
       )}
+      <Link
+        href={paymentInstrumentsAddPayment({})}
+        className="link-draw label-caps w-fit text-muted-foreground transition-colors hover:text-foreground"
+      >
+        Add new
+      </Link>
     </AccountPanel>
   );
 }

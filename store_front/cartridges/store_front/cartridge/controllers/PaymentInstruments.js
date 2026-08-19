@@ -7,6 +7,9 @@
 const server = require("server");
 server.extend(module.superModule);
 
+var initInertia = require("*/cartridge/scripts/middleware/initInertia");
+var shareData = require("*/cartridge/scripts/middleware/shareData");
+
 // The reset-then-json seam and the failure envelope, shared with Cart.js,
 // Account.js and Address.js.
 var answerJson = require("*/cartridge/scripts/helpers/answerJson");
@@ -98,6 +101,50 @@ server.append("DeletePayment", function (req, res, next) {
         remaining: customer.getProfile().getWallet().getPaymentInstruments().length,
       })
     );
+  });
+
+  return next();
+});
+
+/**
+ * PaymentInstruments-List: the saved cards.
+ *
+ * Base builds the list already, through the same account-model helper the
+ * dashboard uses, so this appends the typed slice: `PaymentCardData`, the DTO
+ * 4.1 built for the dashboard's one-card glance, here as the whole wallet.
+ *
+ * Dropped: the two action URLs (generated helpers), the `noSavedPayments`
+ * flag (an empty array says the same thing), the breadcrumb trail, and base's
+ * `cardTypeImage` — a bundled brand SVG per card, which is chromatic where
+ * this world is not; the card type is named in words instead.
+ */
+server.append("List", initInertia.init, shareData, function (req, res, next) {
+  var PaymentCardData = require("*/cartridge/scripts/data/PaymentCardData");
+
+  var viewData = res.getViewData();
+
+  res.inertia.render("PaymentInstruments/List", {
+    cards: (viewData.paymentInstruments || []).map(PaymentCardData.fromInstrument),
+  });
+
+  return next();
+});
+
+/**
+ * PaymentInstruments-AddPayment: the card form.
+ *
+ * Base clears the form, deselects every month so the select opens on its
+ * placeholder, and computes ten expiry years from the current one. All three
+ * survive: the first two on the form fields themselves, the years merged onto
+ * the year field's options by the DTO.
+ */
+server.append("AddPayment", initInertia.init, shareData, function (req, res, next) {
+  var CreditCardFormData = require("*/cartridge/scripts/data/CreditCardFormData");
+
+  var viewData = res.getViewData();
+
+  res.inertia.render("PaymentInstruments/Add", {
+    form: CreditCardFormData.fromForm(viewData.paymentForm, viewData.expirationYears),
   });
 
   return next();
