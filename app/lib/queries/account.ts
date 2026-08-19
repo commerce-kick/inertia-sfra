@@ -2,6 +2,7 @@ import { useSfraRequest } from "./sfra";
 import type { IAuthResultData } from "@/generated/data";
 import { accountLogin } from "@/generated/routes/account-login";
 import { accountPasswordResetDialogForm } from "@/generated/routes/account-passwordresetdialogform";
+import { accountSaveNewPassword } from "@/generated/routes/account-savenewpassword";
 import { accountSubmitRegistration } from "@/generated/routes/account-submitregistration";
 import { router } from "@inertiajs/react";
 import { useMutation } from "@tanstack/react-query";
@@ -86,5 +87,27 @@ export function useRequestPasswordReset() {
   return useMutation({
     mutationFn: (vars: { loginEmail: string }) =>
       request<IAuthResultData>(accountPasswordResetDialogForm({}), vars),
+  });
+}
+
+/**
+ * Set a new password against a reset token.
+ *
+ * The values are keyed by the server-authored field names, as registration's
+ * are, plus the token the page was opened with. A rejection is the token
+ * failing — expired, already used, unknown — while a resolved result carrying
+ * `fields` is the pair of passwords disagreeing or falling short of the
+ * site's policy. Success carries where to go next, which base reached with a
+ * redirect an XHR would have followed into a whole page.
+ */
+export function useSaveNewPassword() {
+  const request = useSfraRequest();
+
+  return useMutation({
+    mutationFn: (fields: Record<string, string>) =>
+      request<IAuthResultData>(accountSaveNewPassword({}), fields),
+    onSuccess: (result) => {
+      if (result.redirectUrl) router.visit(result.redirectUrl);
+    },
   });
 }

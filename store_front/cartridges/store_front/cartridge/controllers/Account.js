@@ -162,4 +162,108 @@ server.append("PasswordReset", initInertia.init, shareData, function (req, res, 
   return next();
 });
 
+/**
+ * Account-SaveNewPassword: the last step of the forgotten-password flow —
+ * set the new password the emailed token authorizes.
+ *
+ * Replaced rather than appended, for a defect an append cannot reach. Base
+ * does the work inside a `route:BeforeComplete` handler that reads
+ * `CustomerMgr.getCustomerByToken(token).profile` unchecked — and that token
+ * comes from an email, so it expires in the ordinary course of things. A
+ * shopper who opens yesterday's link gets a 500 from a null dereference, and
+ * an appended handler registered after base's never runs to say otherwise.
+ * An expired or unknown token now answers base's own "Invalid entry. Please
+ * try again." through the error envelope.
+ *
+ * Everything else is base's, in base's order: the confirmation match, the
+ * platform's `setPasswordWithToken` (which enforces the site's password
+ * policy and consumes the token), the password-changed email, and Login-Show
+ * as the destination. Base signalled that destination with `res.redirect`,
+ * which an XHR would follow into a whole page; it travels as `redirectUrl`
+ * instead, and the hook visits it.
+ *
+ * @formParam token required string the reset token from the emailed link
+ * @formParam dwfrm_newPasswords_newpassword required string the new password
+ * @formParam dwfrm_newPasswords_newpasswordconfirm required string the new password again
+ */
+server.replace("SaveNewPassword", server.middleware.https, function (req, res, next) {
+  var CustomerMgr = require("dw/customer/CustomerMgr");
+  var Resource = require("dw/web/Resource");
+  var Site = require("dw/system/Site");
+  var Transaction = require("dw/system/Transaction");
+  var URLUtils = require("dw/web/URLUtils");
+  var emailHelpers = require("*/cartridge/scripts/helpers/emailHelpers");
+  var formErrors = require("*/cartridge/scripts/formErrors");
+  var AuthResultData = require("*/cartridge/scripts/data/AuthResultData");
+
+  var passwordForm = server.forms.getForm("newPasswords");
+  // Base moved the token from the query string into the body and kept
+  // accepting both; so does this.
+  var token = req.form.token || req.querystring.Token;
+
+  if (passwordForm.newpassword.value !== passwordForm.newpasswordconfirm.value) {
+    passwordForm.valid = false;
+    passwordForm.newpassword.valid = false;
+    passwordForm.newpasswordconfirm.valid = false;
+    passwordForm.newpasswordconfirm.error = Resource.msg(
+      "error.message.mismatch.newpassword",
+      "forms",
+      null
+    );
+  }
+
+  if (!passwordForm.valid) {
+    answer(res, AuthResultData.from({ fields: formErrors.getFormErrors(passwordForm) }));
+    return next();
+  }
+
+  var invalidToken = Resource.msg("error.message.resetpassword.invalidformentry", "forms", null);
+  var resettingCustomer = CustomerMgr.getCustomerByToken(token);
+
+  if (!resettingCustomer || !resettingCustomer.profile) {
+    answerError(res, invalidToken);
+    return next();
+  }
+
+  var status;
+  Transaction.wrap(function () {
+    status = resettingCustomer.profile.credentials.setPasswordWithToken(
+      token,
+      passwordForm.newpassword.value
+    );
+  });
+
+  if (status.error) {
+    answerError(res, invalidToken);
+    return next();
+  }
+
+  emailHelpers.sendEmail(
+    {
+      to: resettingCustomer.profile.email,
+      subject: Resource.msg("subject.profile.resetpassword.email", "login", null),
+      from:
+        Site.current.getCustomPreferenceValue("customerServiceEmail")
+        || "no-reply@testorganization.com",
+      type: emailHelpers.emailTypes.passwordReset,
+    },
+    "account/password/passwordChangedEmail",
+    {
+      firstName: resettingCustomer.profile.firstName,
+      lastName: resettingCustomer.profile.lastName,
+      url: URLUtils.https("Login-Show"),
+    }
+  );
+
+  answer(
+    res,
+    AuthResultData.from({
+      success: true,
+      redirectUrl: URLUtils.url("Login-Show").toString(),
+    })
+  );
+
+  return next();
+});
+
 module.exports = server.exports();
