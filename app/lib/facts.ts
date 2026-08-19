@@ -7,7 +7,7 @@
  */
 export const FACTS = {
   /** Adapter unit tests under test/unit/inertia_plugin (bun test). */
-  unitTests: 181,
+  unitTests: 214,
   /** Inertia protocol parity target — see PRODUCT.md, "Positioning". */
   protocolParity: "v3.3.0",
   /** Generated route-helper modules in app/generated/routes (minus index). */

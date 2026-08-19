@@ -17,5 +17,13 @@
     </iscomment>
     <script data-page="app" type="application/json"><isprint value="${pdict.pageJson}" encoding="off"/></script>
     <div id="app"></div>
+    <isif condition="${pdict.devtoolsIdJson}">
+        <iscomment>
+            DevTools entry id for the initial page load — the extension's
+            content script reads script[data-inertia-devtools-id]. Only emitted
+            while the recorder is active (Vite hot mode).
+        </iscomment>
+        <script data-inertia-devtools-id type="application/json"><isprint value="${pdict.devtoolsIdJson}" encoding="off"/></script>
+    </isif>
 </body>
 </html>

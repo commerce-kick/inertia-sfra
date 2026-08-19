@@ -20,6 +20,7 @@ var Inertia = require('*/cartridge/scripts/inertia/Inertia');
 var Headers = require('*/cartridge/scripts/inertia/Headers');
 var SessionFlash = require('*/cartridge/scripts/inertia/SessionFlash');
 var utils = require('*/cartridge/scripts/inertia/utils');
+var DevTools = require('*/cartridge/scripts/devtools/DevTools');
 
 function hashString(str) {
     var hash = 5381;
@@ -118,6 +119,20 @@ function init(req, res, next) {
     inertia.setVersion(assetsVersion());
     res.inertia = inertia;
 
+    // DevTools recorder — dev-only (Vite hot mode on a non-production
+    // instance). Attached to the facade so render() can feed it, finalized in
+    // route:BeforeComplete below once status and redirect are settled.
+    var recorder = null;
+    if (DevTools.enabled()) {
+        try {
+            var Recorder = require('*/cartridge/scripts/devtools/Recorder');
+            recorder = new Recorder(req);
+            inertia._recorder = recorder;
+        } catch (e) {
+            Logger.warn('Inertia DevTools: recorder unavailable: {0}', e.message);
+        }
+    }
+
     var headers = (req && req.httpHeaders)
         || (typeof request !== 'undefined' ? request.httpHeaders : null);
     var isInertiaReq = !!utils.getRequestHeader(headers, Headers.INERTIA_REQUEST);
@@ -183,6 +198,11 @@ function init(req, res, next) {
                 && (!target.statusCode || target.statusCode === 200);
             if (isInertiaReq && isEmpty) {
                 inertia.back();
+            }
+
+            // Record last: status, redirect, and rendered page are final here.
+            if (recorder) {
+                recorder.finalize(target);
             }
         });
     }

@@ -28,6 +28,7 @@ function Inertia(req, res) {
     this.version = null;
     this._encryptHistory = false;
     this._urlResolver = null;
+    this._recorder = null;
 }
 
 /* ---------------------------------------------------------------------------
@@ -297,8 +298,15 @@ Inertia.prototype.render = function (component, props) {
         props: props || {},
         version: this.version,
         encryptHistory: this._encryptHistory,
-        urlResolver: this._urlResolver
+        urlResolver: this._urlResolver,
+        reporter: this._recorder
+            ? this._recorder.reporter(Object.keys(this.sharedProps))
+            : null
     });
+
+    if (this._recorder) {
+        this._recorder.pageRendered(resolvedComponent, page, { version: this.version });
+    }
 
     if (isInertiaRequest) {
         res.setHttpHeader(Headers.INERTIA, 'true');
@@ -332,6 +340,10 @@ Inertia.prototype.render = function (component, props) {
         page: page,
         pageJson: pageJson,
         viteTags: viteTags,
+        // The devtools extension reads the initial entry id from this tag
+        // (script[data-inertia-devtools-id]) — the DOM is the only channel a
+        // panel attached after the page load can still read.
+        devtoolsIdJson: this._recorder ? JSON.stringify(this._recorder.id) : null,
         CurrentSession: typeof session !== 'undefined' ? session : null,
         CurrentRequest: typeof request !== 'undefined' ? request : null,
         CurrentCustomer: typeof customer !== 'undefined' ? customer : null
@@ -348,6 +360,9 @@ Inertia.prototype.location = function (url) {
     if (!this.isInertiaRequest()) {
         this.res.redirect(String(url));
         return;
+    }
+    if (this._recorder) {
+        this._recorder.locationCalled(String(url));
     }
     this.res.setStatusCode(409);
     this.res.setHttpHeader(Headers.LOCATION, String(url));

@@ -9,6 +9,13 @@ module.exports = {
     LOCATION: 'X-SF-CC-Inertia-Location',
     REDIRECT: 'X-SF-CC-Inertia-Redirect',
 
+    // DevTools response headers (read by the SFCC build of the Inertia DevTools
+    // extension, which matches them lowercase). Declared with empty defaults in
+    // httpHeadersConf.json — SFCC stamps every declared header on every
+    // response, and the extension skips empty values.
+    DEVTOOLS_ID: 'X-SF-CC-Inertia-Devtools-Id',
+    DEVTOOLS_PARENT_OUT: 'X-SF-CC-Inertia-Devtools-Parent-Out',
+
     // Request Headers (standard, unprefixed — request headers arrive untouched)
     INERTIA_REQUEST: 'x-inertia',
     VERSION_REQUEST: 'x-inertia-version',
@@ -19,6 +26,14 @@ module.exports = {
     EXCEPT_ONCE_PROPS_REQUEST: 'x-inertia-except-once-props',
     ERROR_BAG_REQUEST: 'x-inertia-error-bag',
     INFINITE_SCROLL_MERGE_INTENT: 'x-inertia-infinite-scroll-merge-intent',
+
+    // DevTools request headers, sent by the extension (page-world interceptors
+    // and a declarativeNetRequest rule) — unprefixed like all request headers.
+    DEVTOOLS_TAB_REQUEST: 'x-inertia-devtools-tab',
+    DEVTOOLS_VISIT_REQUEST: 'x-inertia-devtools-visit',
+    DEVTOOLS_PARENT_REQUEST: 'x-inertia-devtools-parent',
+    DEVTOOLS_DEFERRED_REQUEST: 'x-inertia-devtools-deferred',
+    DEVTOOLS_POLL_REQUEST: 'x-inertia-devtools-poll',
 
     // Prefetch detection (Laravel $request->prefetch())
     PURPOSE_REQUEST: 'purpose',

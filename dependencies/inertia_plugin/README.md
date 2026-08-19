@@ -1,8 +1,8 @@
 # inertia_plugin — Inertia.js server adapter for SFRA
 
 A Salesforce B2C Commerce (SFRA) port of the [inertia-laravel](https://github.com/inertiajs/inertia-laravel)
-server adapter, at behavioral parity with **v3.3.0** (DevTools excluded — see
-*Deferred* below). Client: `@inertiajs/react` ^3.6.
+server adapter, at behavioral parity with **v3.3.0**, including a dev-only
+DevTools recorder — see *DevTools* below. Client: `@inertiajs/react` ^3.6.
 
 ## Usage
 
@@ -85,11 +85,45 @@ Tests: `bun test test/unit` at the repo root mirrors the Laravel
   (`{data, meta}`); the item array lives under the `data` wrapper key and the
   client merges at `<prop>.data`. Page components read `prop.data`.
 
-## Deferred: DevTools
+## DevTools
 
-Inertia DevTools (server-side recorder + `/_inertia/devtools/entries` read API
-+ Chrome extension) is not implemented. The `PropsResolver` accepts a
-`reporter` option (`propResolved`/`propRescued`) as the recording seam. Note
-the stock extension discovers entries via the raw `x-inertia-devtools-id`
-response header, which SFCC cannot emit unprefixed — an SFCC build of the
-extension must also match `x-sf-cc-inertia-devtools-id`.
+The server-side recorder for the [SFCC Inertia DevTools extension](https://github.com/FerVillanuevas/sfcc-inertia-devtools)
+(a fork of `inertiajs/inertia-devtools` that matches the SFCC-prefixed
+`x-sf-cc-inertia-devtools-id` / `-parent-out` response headers and fetches
+entries with the id in the query string).
+
+**How it works.** When enabled, `initInertia` creates a per-request
+`scripts/devtools/Recorder.js` (port of Laravel's `RequestRecorder` +
+`IncomingEntryBuilder`). `Inertia.render` feeds it through the `PropsResolver`
+`reporter` seam (prop classification: always/defer/optional/merge/once/scroll,
+shared flags, rescued props) and hands it the built page. On
+`route:BeforeComplete` the recorder stamps `X-SF-CC-Inertia-Devtools-Id` /
+`-Parent-Out` and stores the entry in the `InertiaDevToolsEntries` custom cache
+(`caches.json`, 1 h TTL, 256 KB/entry cap). Full HTML loads also embed
+`<script data-inertia-devtools-id>` in `inertia.isml` so a panel attached after
+the load can read the id. `InertiaDevTools-Entries` serves stored entries as
+JSON.
+
+**Enablement gate** (`scripts/devtools/DevTools.js`): Vite hot mode
+(`hot.json` present in the code version) AND a non-production instance. In
+production, or without the dev server, nothing is recorded, no headers or tags
+are emitted, and the entries endpoint answers 404.
+
+**One-time sandbox setup.** The extension fetches
+`GET {origin}/_inertia/devtools/entries?id={id}`. Business Manager aliases map
+exact paths only (no wildcards — hence the query-string id), so add to the
+storefront hostname alias (Merchant Tools > SEO > Aliases):
+
+```json
+{ "if-site-path": "/_inertia/devtools/entries", "pipeline": "InertiaDevTools-Entries" }
+```
+
+Verify with `curl -s 'https://<sandbox-host>/_inertia/devtools/entries?id=x'` —
+a JSON `{"message":"Not found."}` means the controller answered; the platform
+404 page means the alias didn't match.
+
+**Client side.** `app/app.tsx` pins `dev: import.meta.env.DEV` on
+`createInertiaApp`, which exposes `window.__inertia_interceptors__` — the
+extension's channel for request lineage. The devtools response headers are
+deliberately **not** bridged in `app/config.ts`; the extension reads the
+`x-sf-cc-*` names directly.
