@@ -112,6 +112,28 @@ server.append("MiniCartShow", function (req, res, next) {
 });
 
 /**
+ * Cart-Get: the basket as JSON.
+ *
+ * Base recalculates and answers the cart model; this appends and retypes it
+ * as the same CartData every other cart surface reads.
+ *
+ * Nothing in the storefront calls it. The cart page receives the basket as an
+ * Inertia prop and refreshes it with a partial reload, and the bag flyout has
+ * its own route (Cart-MiniCartShow, which base also gave the currency
+ * revalidation this one lacks) — so a hook here would be an export with no
+ * caller. The route is typed rather than left untyped because it stays part
+ * of the storefront's public surface either way.
+ */
+server.append("Get", function (req, res, next) {
+  var BasketMgr = require("dw/order/BasketMgr");
+  var CartData = require("*/cartridge/scripts/data/CartData");
+
+  answer(res, CartData.fromModel(res.getViewData(), BasketMgr.getCurrentBasket()));
+
+  next();
+});
+
+/**
  * Cart-MiniCart: the bag count in the header.
  *
  * Base rendered components/header/miniCart.isml — the bag glyph, the count,
