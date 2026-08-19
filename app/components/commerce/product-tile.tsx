@@ -1,3 +1,4 @@
+import { QuickView } from "@/components/commerce/product/quick-view";
 import { Link } from "@/components/link";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { cn } from "@/lib/utils";
@@ -41,15 +42,19 @@ export function ProductTile({
   const image = imageBroken ? null : product.image;
 
   return (
-    <Link
-      href={product.url}
+    // The quick-look control is a sibling of the link, never inside it —
+    // nesting a button in an anchor is invalid and breaks keyboard order.
+    <div
       className={cn(
         "group flex flex-col gap-3",
         "motion-safe:animate-in motion-safe:fade-in motion-safe:duration-(--motion-base)",
-        "focus-visible:outline-2 focus-visible:outline-offset-4",
         className
       )}
     >
+      <Link
+        href={product.url}
+        className="flex flex-col gap-3 focus-visible:outline-2 focus-visible:outline-offset-4"
+      >
       <div className="overflow-hidden bg-muted">
         <AspectRatio ratio={4 / 5}>
           {image ? (
@@ -91,7 +96,16 @@ export function ProductTile({
           )}
         </div>
       </div>
-    </Link>
+      </Link>
+
+      {/* Below the photograph, never over it — DESIGN.md's No-Chrome rule.
+          Revealed on hover or keyboard focus, and always present where there
+          is no hover to reveal it. It holds its space either way, so the grid
+          never reflows. */}
+      <div className="opacity-0 transition-opacity duration-(--motion-fast) ease-(--motion-ease) group-focus-within:opacity-100 group-hover:opacity-100 max-sm:opacity-100">
+        <QuickView pid={product.id} name={product.productName} />
+      </div>
+    </div>
   );
 }
 

@@ -1,4 +1,6 @@
+import { ProductAvailability } from "./product-availability";
 import { ProductDetails } from "./product-details";
+import { ProductPromotions } from "./product-promotions";
 import { ProductPrice } from "./product-price";
 import { VariationSwatches } from "./variation-swatches";
 import { Button } from "@/components/ui/button";
@@ -44,21 +46,9 @@ function ProductSummary({
 
       <VariationSwatches attributes={product.variationAttributes} />
 
-      <div className="flex items-center gap-2">
-        <span
-          className={`size-2 ${
-            product.availability.available
-              ? "bg-foreground"
-              : "bg-destructive"
-          }`}
-          aria-hidden
-        />
-        <span className="text-sm text-muted-foreground">
-          {product.availability.available
-            ? "In stock"
-            : product.availability.messages[0] || "Unavailable"}
-        </span>
-      </div>
+      <ProductAvailability availability={product.availability} />
+
+      <ProductPromotions promotions={product.promotions} />
       
       <div className="flex w-full flex-col items-start gap-2.5 pt-2">
         <Button

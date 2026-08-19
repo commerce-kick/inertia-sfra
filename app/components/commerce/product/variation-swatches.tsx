@@ -9,10 +9,18 @@ type Value = Attribute["values"][number];
 const VISIT = { only: ["product"], preserveScroll: true };
 
 /**
+ * How a selection is applied. The PDP navigates — a partial visit to the
+ * value's Product-Show URL, so the choice lands in the address bar. Quickview
+ * cannot navigate away from the PLP, so it passes a handler and swaps the
+ * product in place through the Product-Variation JSON endpoint.
+ */
+type Select = ((variationUrl: string) => void) | undefined;
+
+/**
  * One image swatch. Selectable values are real links — the server owns the
  * selection, so the URL always names the variant on screen.
  */
-function Swatch({ value }: { value: Value }) {
+function Swatch({ value, onSelect }: { value: Value; onSelect: Select }) {
   const image = value.image;
   if (!image) return null;
 
@@ -41,16 +49,31 @@ function Swatch({ value }: { value: Value }) {
     );
   }
 
+  const focus =
+    "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
+
+  if (onSelect) {
+    return (
+      <button
+        type="button"
+        onClick={() => onSelect(value.variationUrl)}
+        title={value.displayValue}
+        aria-pressed={value.selected}
+        className={cn(frame, focus)}
+      >
+        {img}
+        <span className="sr-only">{value.displayValue}</span>
+      </button>
+    );
+  }
+
   return (
     <Link
       href={value.url}
       {...VISIT}
       title={value.displayValue}
       aria-current={value.selected || undefined}
-      className={cn(
-        frame,
-        "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-      )}
+      className={cn(frame, focus)}
     >
       {img}
       <span className="sr-only">{value.displayValue}</span>
@@ -59,7 +82,7 @@ function Swatch({ value }: { value: Value }) {
 }
 
 /** One labelled chip, for attributes without swatch imagery (size, width…). */
-function Chip({ value }: { value: Value }) {
+function Chip({ value, onSelect }: { value: Value; onSelect: Select }) {
   const shape =
     "label-caps inline-flex min-w-11 items-center justify-center border px-3 py-1.5 transition-colors duration-(--motion-fast) ease-(--motion-ease)";
 
@@ -78,18 +101,33 @@ function Chip({ value }: { value: Value }) {
     );
   }
 
+  const skin = cn(
+    shape,
+    "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+    value.selected
+      ? "border-foreground bg-foreground text-background"
+      : "border-border hover:border-foreground"
+  );
+
+  if (onSelect) {
+    return (
+      <button
+        type="button"
+        onClick={() => onSelect(value.variationUrl)}
+        aria-pressed={value.selected}
+        className={skin}
+      >
+        {value.displayValue}
+      </button>
+    );
+  }
+
   return (
     <Link
       href={value.url}
       {...VISIT}
       aria-current={value.selected || undefined}
-      className={cn(
-        shape,
-        "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
-        value.selected
-          ? "border-foreground bg-foreground text-background"
-          : "border-border hover:border-foreground"
-      )}
+      className={skin}
     >
       {value.displayValue}
     </Link>
@@ -107,8 +145,10 @@ function Chip({ value }: { value: Value }) {
  */
 function VariationSwatches({
   attributes,
+  onSelect,
 }: {
   attributes: IProductDetailData["variationAttributes"];
+  onSelect?: (variationUrl: string) => void;
 }) {
   return (
     <>
@@ -121,7 +161,7 @@ function VariationSwatches({
                 <span className="text-foreground"> · {attr.displayValue}</span>
               )}
             </span>
-            {attr.displayValue && attr.resetUrl && (
+            {attr.displayValue && attr.resetUrl && !onSelect && (
               <Link
                 href={attr.resetUrl}
                 {...VISIT}
@@ -134,9 +174,9 @@ function VariationSwatches({
           <div className="flex flex-wrap gap-2">
             {attr.values.map((value) =>
               attr.swatchable && value.image ? (
-                <Swatch key={value.id} value={value} />
+                <Swatch key={value.id} value={value} onSelect={onSelect} />
               ) : (
-                <Chip key={value.id} value={value} />
+                <Chip key={value.id} value={value} onSelect={onSelect} />
               )
             )}
           </div>

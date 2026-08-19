@@ -128,3 +128,34 @@ describe('ProductDetailData variation attributes', () => {
         expect(mapAttributes(null)).toEqual([]);
     });
 });
+
+describe('ProductDetailData quickview additions', () => {
+    it('carries the raw Product-Variation URL alongside the Product-Show one', () => {
+        const [attr] = mapAttributes([COLOR_ATTR]);
+        // The PDP navigates with `url`; quickview fetches `variationUrl` so it
+        // can swap the variant without leaving the grid.
+        expect(attr.values[0].url).toBe('/Product-Show?dwvar_1_color=BLACK');
+        expect(attr.values[0].variationUrl).toBe('/Product-Variation?dwvar_1_color=BLACK');
+    });
+
+    it('leaves variationUrl empty for an unselectable value', () => {
+        const [attr] = mapAttributes([COLOR_ATTR]);
+        expect(attr.values[1].variationUrl).toBe('');
+    });
+
+    it('maps promotion callouts', () => {
+        const data = ProductDetailData.from({
+            promotions: [
+                { id: 'p1', calloutMsg: '<b>20% off</b>', name: 'Spring', details: 'Ends soon' }
+            ]
+        });
+        expect(data.promotions).toEqual([
+            { id: 'p1', calloutMsg: '<b>20% off</b>', name: 'Spring', details: 'Ends soon' }
+        ]);
+    });
+
+    it('defaults promotions to an empty list', () => {
+        expect(ProductDetailData.from({}).promotions).toEqual([]);
+        expect(ProductDetailData.from({ promotions: null }).promotions).toEqual([]);
+    });
+});

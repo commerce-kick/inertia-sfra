@@ -67,7 +67,24 @@ var ProductDetailData = BaseData.extend({
       },
       default: 0,
     },
-    /** @type {Array<{id: string, displayName: string, displayValue: string, swatchable: boolean, resetUrl: string, values: Array<{id: string, displayValue: string, selected: boolean, selectable: boolean, url: string, image: {url: string, alt: string}|null}>}>} variation attributes, each value carrying the Product-Show URL that selects it */
+    /** @type {Array<{id: string, calloutMsg: string, name: string, details: string}>} active promotion callouts */
+    promotions: {
+      transform: function (promotions) {
+        if (!promotions) return [];
+        return (Array.isArray(promotions) ? promotions : []).map(function (promotion) {
+          return {
+            id: promotion.id || "",
+            calloutMsg: promotion.calloutMsg || "",
+            name: promotion.name || "",
+            details: promotion.details || "",
+          };
+        });
+      },
+      default: function () {
+        return [];
+      },
+    },
+    /** @type {Array<{id: string, displayName: string, displayValue: string, swatchable: boolean, resetUrl: string, values: Array<{id: string, displayValue: string, selected: boolean, selectable: boolean, url: string, variationUrl: string, image: {url: string, alt: string}|null}>}>} variation attributes, each value carrying the Product-Show URL that selects it */
     variationAttributes: {
       transform: function (attrs) {
         if (!attrs) return [];
@@ -96,6 +113,9 @@ var ProductDetailData = BaseData.extend({
                 // Base omits `url` entirely in that case.
                 selectable: Boolean(value.selectable),
                 url: productUrls.normalizeVariationUrl(value.url),
+                // The same selection against the JSON endpoint, for callers
+                // that must stay on the current page (quickview).
+                variationUrl: value.url ? value.url.toString() : "",
                 image: swatch
                   ? { url: swatch.url.toString(), alt: swatch.alt || "" }
                   : null,
@@ -129,6 +149,7 @@ ProductDetailData.fromModel = function (product) {
         (product.availability && product.availability.messages) || [],
     },
     rating: product.rating,
+    promotions: product.promotions,
     variationAttributes: product.variationAttributes,
   });
 };

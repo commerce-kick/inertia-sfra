@@ -162,8 +162,8 @@ Sets the composition bar the rest of the loop copies.
 | 1.2 | Search-Show | PAGE | `Search/Show` | DONE | `server.append`; scroll paginator + closure props |
 | 1.3 | Product-Show | PAGE | `Product/Show` | DONE | `server.append`; `ProductDetailData.fromModel` |
 | 1.4 | SearchServices-GetSuggestions | JSON | `useSuggestions` | DONE | fatal require removed; 3 DTOs + `HeaderSearch` combobox with arrow-key nav |
-| 1.5 | Product-Variation | N/A | — | DONE | PDP selection rides Product-Show partial visits instead — DTO now carries per-value `url`/`selectable`. Revisit only if quickview (1.6) needs the JSON endpoint |
-| 1.6 | Product-ShowQuickView | JSON | `useQuickView` | TODO | quickview dialog from PLP tiles |
+| 1.5 | Product-Variation | JSON | `useVariation` | DONE | PDP selection rides Product-Show partial visits (per-value `url`); quickview needs the JSON endpoint to swap variants without navigating, so 1.6 ported it and added per-value `variationUrl` |
+| 1.6 | Product-ShowQuickView | JSON | `useQuickView` | DONE | `server.replace` → typed product + productUrl; QuickView sheet on every PLP tile. Cart CTA disabled until 2.4; quantity/options/mainAttributes deferred with it |
 | 1.7 | Product-SizeChart | JSON | `useSizeChart` | TODO | content-asset body |
 | 1.8 | Product-ShowInCategory | PAGE | `Product/Show` | TODO | same page, category-scoped breadcrumbs |
 | 1.9 | Product-ShowBonusProducts | JSON | `useBonusProducts` | TODO | pairs with Cart-AddBonusProducts (2.11) |
