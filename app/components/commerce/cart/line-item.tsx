@@ -1,8 +1,7 @@
-import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { ProductThumb } from "@/components/commerce/product-thumb";
 import type { ICartBonusLineItemData, ICartLineItemData } from "@/generated/data";
 import { cn } from "@/lib/utils";
-import { ImageOff } from "lucide-react";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext } from "react";
 
 /**
  * One line of the bag, as a compound component: the row supplies the item
@@ -26,39 +25,6 @@ function useLineItem() {
   const item = useContext(LineItemContext);
   if (!item) throw new Error("LineItem parts must render inside <LineItem>");
   return item;
-}
-
-/** Bare photograph on a quiet ground — no card chrome (DESIGN.md). */
-function Thumbnail({
-  image,
-  className,
-}: {
-  image: { url: string; alt: string } | null;
-  className?: string;
-}) {
-  const [broken, setBroken] = useState(false);
-  const shown = broken ? null : image;
-
-  return (
-    <div className={cn("overflow-hidden bg-muted", className)}>
-      <AspectRatio ratio={4 / 5}>
-        {shown ? (
-          <img
-            src={shown.url}
-            alt={shown.alt}
-            loading="lazy"
-            onError={() => setBroken(true)}
-            className="size-full object-cover"
-          />
-        ) : (
-          <div className="flex size-full flex-col items-center justify-center gap-1.5 text-muted-foreground">
-            <ImageOff className="size-4" aria-hidden />
-            <span className="meta-caps">No photo</span>
-          </div>
-        )}
-      </AspectRatio>
-    </div>
-  );
 }
 
 function LineItemRoot({
@@ -86,7 +52,9 @@ function LineItemRoot({
 
 function LineItemMedia() {
   const item = useLineItem();
-  return <Thumbnail image={item.image} />;
+  // The column is 5.5rem, widening to 8rem from `sm`; DIS is asked for the
+  // wider of the two, which the narrower one then draws down into.
+  return <ProductThumb image={item.image} width={128} />;
 }
 
 function LineItemBody({ children }: { children: React.ReactNode }) {
@@ -231,7 +199,7 @@ function LineItemBundle() {
       <ul className="flex flex-col gap-4">
         {item.bundledItems.map((bundled) => (
           <li key={bundled.id} className="grid grid-cols-[3.5rem_1fr] gap-4">
-            <Thumbnail image={bundled.image} />
+            <ProductThumb image={bundled.image} width={56} />
             <div className="flex flex-col gap-1.5">
               <span className="label-caps">{bundled.productName}</span>
               {bundled.variationAttributes.map((attribute) => (
@@ -258,7 +226,7 @@ function LineItemBundle() {
 function BonusRow({ bonus }: { bonus: ICartBonusLineItemData }) {
   return (
     <li className="grid grid-cols-[3.5rem_1fr] gap-4">
-      <Thumbnail image={bonus.image} />
+      <ProductThumb image={bonus.image} width={56} />
       <div className="flex flex-col gap-1.5">
         <span className="label-caps">{bonus.productName}</span>
         {bonus.variationAttributes.map((attribute) => (

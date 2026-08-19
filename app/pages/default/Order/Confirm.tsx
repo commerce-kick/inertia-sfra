@@ -1,6 +1,6 @@
 import { Section } from "@/components/commerce/section";
 import { Link } from "@/components/link";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { ProductThumb } from "@/components/commerce/product-thumb";
 import { Button } from "@/components/ui/button";
 import { homeShow } from "@/generated/routes/home-show";
 import type { OrderConfirmProps } from "@/types/checkout";
@@ -99,18 +99,11 @@ export default function Confirm() {
               <ul className="flex flex-col gap-6">
                 {order.items.map((item) => (
                   <li key={item.uuid} className="flex gap-5">
-                    <div className="w-20 shrink-0 bg-muted">
-                      <AspectRatio ratio={4 / 5}>
-                        {item.image && (
-                          <img
-                            src={item.image.url}
-                            alt={item.image.alt}
-                            loading="lazy"
-                            className="size-full object-cover"
-                          />
-                        )}
-                      </AspectRatio>
-                    </div>
+                    <ProductThumb
+                      image={item.image}
+                      width={80}
+                      className="w-20 shrink-0"
+                    />
                     <div className="flex flex-1 flex-col gap-1">
                       <span className="label-caps">{item.productName}</span>
                       <span className="meta-caps text-muted-foreground">

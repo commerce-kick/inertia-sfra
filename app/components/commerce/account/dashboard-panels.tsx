@@ -4,7 +4,7 @@ import {
   PanelFact,
 } from "@/components/commerce/account/account-panel";
 import { Link } from "@/components/link";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { ProductThumb } from "@/components/commerce/product-thumb";
 import type { IAccountData } from "@/generated/data";
 import { accountEditPassword } from "@/generated/routes/account-editpassword";
 import { accountEditProfile } from "@/generated/routes/account-editprofile";
@@ -146,16 +146,11 @@ export function OrderPanel({ account }: { account: IAccountData }) {
       {order ? (
         <div className="flex gap-6">
           {order.image && (
-            <div className="w-24 shrink-0 bg-muted">
-              <AspectRatio ratio={4 / 5}>
-                <img
-                  src={order.image.url}
-                  alt={order.image.alt}
-                  loading="lazy"
-                  className="size-full object-cover"
-                />
-              </AspectRatio>
-            </div>
+            <ProductThumb
+              image={order.image}
+              width={96}
+              className="w-24 shrink-0"
+            />
           )}
           <dl className="flex flex-col gap-4">
             <PanelFact label="Order">

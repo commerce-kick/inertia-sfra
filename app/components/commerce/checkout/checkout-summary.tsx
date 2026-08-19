@@ -1,5 +1,5 @@
 import { Link } from "@/components/link";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { ProductThumb } from "@/components/commerce/product-thumb";
 import type { ICheckoutOrderData } from "@/generated/data";
 import { cartShow } from "@/generated/routes/cart-show";
 import { cn } from "@/lib/utils";
@@ -49,18 +49,11 @@ export function CheckoutSummary({ order }: { order: ICheckoutOrderData }) {
         <ul className="flex flex-col gap-5">
           {order.items.map((item) => (
             <li key={item.uuid} className="flex gap-4">
-              <div className="w-16 shrink-0 bg-muted">
-                <AspectRatio ratio={4 / 5}>
-                  {item.image && (
-                    <img
-                      src={item.image.url}
-                      alt={item.image.alt}
-                      loading="lazy"
-                      className="size-full object-cover"
-                    />
-                  )}
-                </AspectRatio>
-              </div>
+              <ProductThumb
+                image={item.image}
+                width={64}
+                className="w-16 shrink-0"
+              />
               <div className="flex flex-1 flex-col gap-1">
                 <span className="label-caps">{item.productName}</span>
                 <span className="meta-caps text-muted-foreground">

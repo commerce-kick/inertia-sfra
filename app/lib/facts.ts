@@ -10,8 +10,8 @@ export const FACTS = {
   unitTests: 219,
   /** Inertia protocol parity target — see PRODUCT.md, "Positioning". */
   protocolParity: "v3.3.0",
-  /** Generated route-helper modules in app/generated/routes (minus index). */
-  routeHelpers: 153,
+  /** Generated route helpers in app/generated/routes (excluding support modules and tombstones). */
+  routeHelpers: 151,
   /** Generated DTO type modules in app/generated/data (minus index). */
   dtoTypes: 52,
 } as const;

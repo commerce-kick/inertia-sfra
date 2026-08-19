@@ -1,10 +1,14 @@
 import { QuickView } from "@/components/commerce/product/quick-view";
 import { Link } from "@/components/link";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { disSrcSet, disUrl } from "@/lib/dis";
 import { cn } from "@/lib/utils";
 import type { ISearchTileData } from "@/generated/data";
 import { ImageOff, Star } from "lucide-react";
 import { useState } from "react";
+
+/** The widest a tile is drawn, in the 4:5 crop the lookbook uses. */
+const TILE_SIZE = { width: 460, height: 575 };
 
 function TilePrice({ price }: { price: ISearchTileData["price"] }) {
   if (!price) return null;
@@ -59,7 +63,12 @@ export function ProductTile({
         <AspectRatio ratio={4 / 5}>
           {image ? (
             <img
-              src={image.url}
+              // The grid draws a tile between roughly 180px (two columns on a
+              // phone) and 460px (three on a wide screen); DIS is asked for
+              // the widest, which every narrower one draws down into, plus
+              // the 2x variant for retina.
+              src={disUrl(image.url, TILE_SIZE)}
+              srcSet={disSrcSet(image.url, TILE_SIZE)}
               alt={image.alt || product.productName}
               loading="lazy"
               onError={() => setImageBroken(true)}
