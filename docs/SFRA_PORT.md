@@ -179,7 +179,7 @@ Sets the composition bar the rest of the loop copies.
 
 | # | Endpoint | Kind | Page / Hook | Status | Notes |
 |---|---|---|---|---|---|
-| 2.1 | Cart-Show | PAGE | `Cart/Show` | TODO | line items, totals, coupons, shipping methods, bonus products |
+| 2.1 | Cart-Show | PAGE | `Cart/Show` | DONE | fatal `inertiaMiddleware` require removed; `server.append` → `CartData` (7 modules: Cart/CartLineItem/CartBonusLineItem/CartTotals/CartDiscount/ShippingMethod + a shared `lineItemFields`). Page composes lines (ordinary / bundle / uncategorized as one compound `LineItem`), nested bonus products, applied coupons + promotions, delivery estimate, totals rail, checkout gate. Base assembled the approaching-promo sentence server-side from a resource template — the two facts (`distance`, `calloutMsg`) arrive separately and the sentence is written in the component. Dropped: `actionUrls`/`resources` bags (generated routes + inline English), `discountsHtml` (a server-rendered copy of the same array), `numOfShipments` (base shipped no multi-shipment cart), `reportingURLs` (row 10.4). Added one row base's totals lacked: subtotal. Base never linked a cart line to its PDP — kept as base had it. Controls arrive with their own rows: coupon form 2.9, coupon remove 2.10, qty 2.6, remove 2.7, edit 2.8/2.14, shipping select 2.13, bonus chooser 2.11/2.12 |
 | 2.2 | Cart-MiniCart | JSON | `useMiniCart` | TODO | header bag count; already `server.replace`d to a JSON quantity |
 | 2.3 | Cart-MiniCartShow | JSON | `useMiniCartContents` | TODO | bag flyout contents |
 | 2.4 | Cart-AddProduct | JSON | `useAddToCart` | TODO | POST; unblocks the disabled PDP CTA |

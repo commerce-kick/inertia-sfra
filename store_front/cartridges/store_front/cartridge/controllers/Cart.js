@@ -1,14 +1,43 @@
 "use strict";
 
 /**
- * @namespace Product
+ * @namespace Cart
  */
 
 const server = require("server");
 server.extend(module.superModule);
 
-const inertia = require("*/cartridge/scripts/middleware/inertiaMiddleware");
-const sharedData = require("*/cartridge/scripts/middleware/shareData");
+var initInertia = require("*/cartridge/scripts/middleware/initInertia");
+var shareData = require("*/cartridge/scripts/middleware/shareData");
+
+/**
+ * Cart-Show: the bag.
+ *
+ * Base computes the whole cart model — it revalidates the currency, makes
+ * sure every shipment has a method, recalculates the totals, and renders
+ * cart/cart.isml with the model as view data. All of that is worth keeping,
+ * so this appends and swaps only the render: the same model, typed by
+ * CartData, becomes the page's single prop.
+ *
+ * The prop is named `cart` because every cart mutation refreshes it with
+ * `router.reload({ only: ["cart"] })` — one name, one round trip, whichever
+ * control the shopper touched.
+ *
+ * Base's `reportingURLs` (the analytics beacons it renders into the page) are
+ * not carried over; they are their own row.
+ */
+server.append("Show", initInertia.init, shareData, function (req, res, next) {
+  var BasketMgr = require("dw/order/BasketMgr");
+  var CartData = require("*/cartridge/scripts/data/CartData");
+
+  var viewData = res.getViewData();
+
+  res.inertia.render("Cart/Show", {
+    cart: CartData.fromModel(viewData, BasketMgr.getCurrentBasket()),
+  });
+
+  next();
+});
 
 server.append("MiniCartShow", function (req, res, next) {
   const viewData = res.getViewData();
@@ -21,22 +50,6 @@ server.append("MiniCartShow", function (req, res, next) {
 
   next();
 });
-
-server.append(
-  "Show",
-  function (req, res, next) {
-    const viewData = res.getViewData();
-
-    res.setViewData({
-      template: "Cart/Show",
-      props: viewData,
-    });
-
-    next();
-  },
-  sharedData,
-  inertia.render
-);
 
 server.replace("MiniCart", function (req, res, next) {
   var BasketMgr = require("dw/order/BasketMgr");
