@@ -31,7 +31,7 @@ export function RemoveLineItem({ item }: { item: ICartLineItemData }) {
       <AlertDialogTrigger asChild>
         <Button
           variant="ghost"
-          size="icon-sm"
+          size="icon"
           disabled={remove.isPending}
           aria-label={`Remove ${item.productName}`}
         >

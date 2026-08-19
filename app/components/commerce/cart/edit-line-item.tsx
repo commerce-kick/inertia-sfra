@@ -52,7 +52,7 @@ export function EditLineItem({ item }: { item: ICartLineItemData }) {
       }}
     >
       <DialogTrigger asChild>
-        <Button variant="ghost" size="sm" className="label-caps self-start px-0">
+        <Button variant="ghost" size="sm" className="label-caps -ml-3 self-start">
           Edit
           <span className="sr-only"> {item.productName}</span>
         </Button>

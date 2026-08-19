@@ -102,7 +102,7 @@ function LineItemTitle({ children }: { children?: React.ReactNode }) {
         {item.isBonus && (
           <span className="label-caps text-muted-foreground">Bonus</span>
         )}
-        <h2 className="label-caps">{item.productName}</h2>
+        <h3 className="label-caps">{item.productName}</h3>
         <span className="meta-caps text-muted-foreground">{item.id}</span>
       </div>
       {children}
@@ -124,7 +124,8 @@ function LineItemAttributes() {
         </div>
       ))}
       {item.options.map((option) => (
-        <div key={option.optionId}>
+        <div key={option.optionId} className="flex gap-2">
+          <dt className="sr-only">Option:</dt>
           <dd className="text-foreground">{option.displayName}</dd>
         </div>
       ))}
@@ -189,7 +190,10 @@ function LineItemMoney({ quantity }: { quantity?: React.ReactNode }) {
             ? `${unit.min.formatted}–${unit.max.formatted}`
             : unit?.sales?.formatted}
           {unit?.list && (
-            <s className="ml-2 text-muted-foreground">{unit.list.formatted}</s>
+            <>
+              <span className="sr-only"> was </span>
+              <s className="ml-2 text-muted-foreground">{unit.list.formatted}</s>
+            </>
           )}
         </dd>
       </div>
@@ -201,9 +205,13 @@ function LineItemMoney({ quantity }: { quantity?: React.ReactNode }) {
         <dt className="label-caps text-muted-foreground">Total</dt>
         <dd className="meta-caps">
           {item.totalPriceUndiscounted && (
-            <s className="mr-2 text-muted-foreground">
-              {item.totalPriceUndiscounted}
-            </s>
+            <>
+              <span className="sr-only">Was </span>
+              <s className="mr-2 text-muted-foreground">
+                {item.totalPriceUndiscounted}
+              </s>
+              <span className="sr-only">, now </span>
+            </>
           )}
           {item.totalPrice}
         </dd>

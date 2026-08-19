@@ -24,7 +24,7 @@ export function RemoveCoupon({ discount }: { discount: ICartDiscountData }) {
       <AlertDialogTrigger asChild>
         <Button
           variant="ghost"
-          size="icon-xs"
+          size="icon-sm"
           disabled={remove.isPending}
           aria-label={`Remove coupon ${discount.couponCode}`}
         >

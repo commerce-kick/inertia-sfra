@@ -14,9 +14,14 @@ import { useRef } from "react";
  * Pass `rule={false}` when the preceding region already ends in a
  * full-width hairline (marquee border, carousel progress track) — one
  * line introduces a chapter, never two.
+ *
+ * `titleAs` chooses the heading level. A section inside a page that already
+ * names itself is an h2; a page whose chapter head *is* its title passes
+ * "h1", so the document has exactly one.
  */
 export function Section({
   title,
+  titleAs: Heading = "h2",
   subtitle,
   meta,
   action,
@@ -26,6 +31,7 @@ export function Section({
   children,
 }: {
   title: string;
+  titleAs?: "h1" | "h2";
   subtitle?: string;
   meta?: string;
   action?: React.ReactNode;
@@ -57,15 +63,17 @@ export function Section({
           )}
         >
           {reveal ? (
-            <h2 className="display-caps text-4xl sm:text-5xl">
+            <Heading className="display-caps text-4xl sm:text-5xl">
               <span className="block overflow-hidden">
                 <span data-anim="line" className="block">
                   {title}
                 </span>
               </span>
-            </h2>
+            </Heading>
           ) : (
-            <h2 className="display-caps text-4xl sm:text-5xl">{title}</h2>
+            <Heading className="display-caps text-4xl sm:text-5xl">
+              {title}
+            </Heading>
           )}
           <div
             {...(reveal ? { "data-anim": "fade" } : {})}

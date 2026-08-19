@@ -63,7 +63,11 @@ export function BagFlyout() {
         </Button>
       </SheetTrigger>
 
-      <SheetContent side="right" className="w-full gap-0 sm:max-w-md">
+      <SheetContent
+        side="right"
+        className="w-full gap-0 sm:max-w-md"
+        aria-describedby={undefined}
+      >
         <SheetHeader className="border-b">
           <SheetTitle className="display-caps text-2xl">Bag</SheetTitle>
         </SheetHeader>

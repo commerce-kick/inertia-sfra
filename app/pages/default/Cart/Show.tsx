@@ -19,6 +19,7 @@ export default function Show() {
 
       <Section
         title="Bag"
+        titleAs="h1"
         meta={cart.numItems === 1 ? "1 item" : `${cart.numItems} items`}
         className="pb-20"
       >

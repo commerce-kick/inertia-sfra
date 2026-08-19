@@ -30,7 +30,7 @@ export function QuantityStepper({ item }: { item: ICartLineItemData }) {
     <div className="flex items-center gap-1">
       <Button
         variant="ghost"
-        size="icon-sm"
+        size="icon"
         aria-label={`Decrease quantity of ${item.productName}`}
         disabled={update.isPending || item.quantity <= item.minQuantity}
         onClick={() => set(item.quantity - 1)}
@@ -42,7 +42,7 @@ export function QuantityStepper({ item }: { item: ICartLineItemData }) {
       </span>
       <Button
         variant="ghost"
-        size="icon-sm"
+        size="icon"
         aria-label={`Increase quantity of ${item.productName}`}
         disabled={update.isPending || item.quantity >= item.maxQuantity}
         onClick={() => set(item.quantity + 1)}
