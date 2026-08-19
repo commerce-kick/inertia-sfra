@@ -299,7 +299,7 @@ Sets the composition bar the rest of the loop copies.
 
 | # | Endpoint | Kind | Page / Hook | Status | Notes |
 |---|---|---|---|---|---|
-| 9.1 | Page-Show | PAGE | `Page/Show` | TODO | content asset; body ships as an HTML-string prop |
+| 9.1 | Page-Show | PAGE | `Page/Show` | DONE | Ported out of wave order, because two shipped surfaces already linked here and could not: the Articles tab (1.10) and the header typeahead's content suggestions (1.4) both emit `Page-Show` URLs — base's own `contentSearch.ACTION_ENDPOINT_CONTENT` — so following one was an Inertia visit to an ISML route, which answers markup the client cannot read. `server.append` → `ContentAssetData`; the body ships as an HTML string because that is what a merchant authored into it, rendered under the same `cms-body` voice the size chart's fragment gets (1.7). Left standing: base serves a *Page Designer* page from this same route when `cid` names one (`res.page(...)`), a rendering model with no Inertia equivalent yet, and its offline/not-found branches — this step only takes over when base left a content model in view data |
 | 9.2 | Page-SetLocale | N/A | — | N/A | English-only storefront (user directive) — no locale switcher |
 | 9.3 | Page-Locale | N/A | — | N/A | English-only storefront (user directive) — no locale selector |
 | 9.4 | ContactUs-Landing | PAGE | `ContactUs/Landing` | TODO | |
