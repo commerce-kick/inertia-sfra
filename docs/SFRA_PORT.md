@@ -165,7 +165,7 @@ Sets the composition bar the rest of the loop copies.
 | 1.5 | Product-Variation | JSON | `useVariation` | DONE | PDP selection rides Product-Show partial visits (per-value `url`); quickview needs the JSON endpoint to swap variants without navigating, so 1.6 ported it and added per-value `variationUrl` |
 | 1.6 | Product-ShowQuickView | JSON | `useQuickView` | DONE | `server.replace` → typed product + productUrl; QuickView sheet on every PLP tile. Cart CTA disabled until 2.4; quantity/options/mainAttributes deferred with it |
 | 1.7 | Product-SizeChart | JSON | `useSizeChart` | DONE | `server.replace` → `SizeChartData` (miss = `success:false`); `sizeChartId` added to `ProductDetailData`; PDP disclosure under the swatches. Base's outside-click dismissal dropped — the panel is inline, not an overlay |
-| 1.8 | Product-ShowInCategory | PAGE | `Product/Show` | TODO | same page, category-scoped breadcrumbs |
+| 1.8 | Product-ShowInCategory | PAGE | `Product/Show` | DONE | `server.append` → same page/props as 1.3 via a shared `renderProductDetail`; breadcrumbs now walk the `cgid` (base ignored it and repeated the primary-category trail), falling back when it does not resolve. Nothing links here — SEO URL rules do, as in base |
 | 1.9 | Product-ShowBonusProducts | JSON | `useBonusProducts` | TODO | pairs with Cart-AddBonusProducts (2.11) |
 | 1.10 | Search-Content | JSON | `useContentSearch` | TODO | content results tab |
 | 1.11 | Search-ShowAjax | N/A | — | TODO | superseded by the scroll paginator on Search-Show |

@@ -7,7 +7,10 @@ export type Crumb = {
   url: string;
 };
 
-/** Props of default/Product/Show. */
+/**
+ * Props of default/Product/Show — answered by both PDP routes: Product-Show
+ * and Product-ShowInCategory, which differ only in the breadcrumb trail.
+ */
 export interface ProductShowProps extends SharedProps {
   product: IProductDetailData;
   breadcrumbs: Crumb[];

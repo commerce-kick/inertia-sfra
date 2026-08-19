@@ -12,6 +12,34 @@ var shareData = require("*/cartridge/scripts/middleware/shareData");
 var cache = require("*/cartridge/scripts/middleware/cache");
 
 /**
+ * Render the PDP. Both product routes answer the same page with the same
+ * props; only the breadcrumb trail differs, so it is passed in.
+ * @param {Object} res - the SFRA response
+ * @param {Array} breadcrumbs - SFRA breadcrumb objects, outermost first
+ * @returns {void}
+ */
+function renderProductDetail(res, breadcrumbs) {
+  var ProductDetailData = require("*/cartridge/scripts/data/ProductDetailData");
+
+  var viewData = res.getViewData();
+
+  // Base answers an offline product with a 404 and error/notFound, leaving no
+  // product on viewData. Leave that render standing rather than overriding it
+  // with an empty PDP.
+  if (!viewData.product) return;
+
+  res.inertia.render("Product/Show", {
+    product: ProductDetailData.fromModel(viewData.product),
+    breadcrumbs: (breadcrumbs || []).map(function (crumb) {
+      return {
+        htmlValue: crumb.htmlValue,
+        url: crumb.url ? crumb.url.toString() : "",
+      };
+    }),
+  });
+}
+
+/**
  * Product-Show: the PDP. Base SFRA Product-Show computes the full product
  * model in viewData; this appended step replaces the ISML render with a
  * trimmed, typed slice of it.
@@ -27,19 +55,45 @@ var cache = require("*/cartridge/scripts/middleware/cache");
  * @queryParam quantity optional number selected quantity, carried on variation URLs
  */
 server.append("Show", initInertia.init, shareData, function (req, res, next) {
-  var ProductDetailData = require("*/cartridge/scripts/data/ProductDetailData");
+  renderProductDetail(res, res.getViewData().breadcrumbs);
+
+  next();
+});
+
+/**
+ * Product-ShowInCategory: the same PDP, entered through a category.
+ *
+ * SFCC's SEO URL rules map category-scoped product paths here; nothing in the
+ * storefront links to it, exactly as in base. Base renders the identical
+ * template with the identical view data — minus the Page Designer lookup,
+ * the canonical URL, and the schema data Product-Show adds — so the port is
+ * the same page with the same props.
+ *
+ * The one thing base leaves on the table is the category itself: its
+ * showProductPage helper always walks the product's *primary* category, so
+ * the trail ignores the `cgid` the shopper arrived through and this route
+ * renders breadcrumbs identical to Product-Show's. The helper it calls
+ * already accepts a cgid, so this passes it and the trail finally names the
+ * category in the URL, falling back to base's primary-category trail when the
+ * cgid is absent or does not resolve.
+ *
+ * Variation values still carry Product-Show URLs (ProductDetailData rewrites
+ * them), so selecting a variant leaves the category-scoped route — base's
+ * jQuery PDP likewise replaced the address bar with Product-Show URLs.
+ *
+ * @queryParam pid required string the product ID to display
+ * @queryParam cgid optional string the category the product is being viewed in
+ * @queryParam quantity optional number selected quantity, carried on variation URLs
+ */
+server.append("ShowInCategory", initInertia.init, shareData, function (req, res, next) {
+  var productHelpers = require("*/cartridge/scripts/helpers/productHelpers");
 
   var viewData = res.getViewData();
+  var scoped = req.querystring.cgid
+    ? productHelpers.getAllBreadcrumbs(req.querystring.cgid, null, []).reverse()
+    : [];
 
-  res.inertia.render("Product/Show", {
-    product: ProductDetailData.fromModel(viewData.product),
-    breadcrumbs: (viewData.breadcrumbs || []).map(function (crumb) {
-      return {
-        htmlValue: crumb.htmlValue,
-        url: crumb.url ? crumb.url.toString() : "",
-      };
-    }),
-  });
+  renderProductDetail(res, scoped.length ? scoped : viewData.breadcrumbs);
 
   next();
 });
