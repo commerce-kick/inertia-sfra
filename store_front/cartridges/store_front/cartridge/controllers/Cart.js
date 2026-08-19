@@ -259,6 +259,25 @@ server.append("AddCoupon", function (req, res, next) {
 });
 
 /**
+ * Cart-RemoveCouponLineItem: give a promo code back.
+ *
+ * Base finds the coupon line item by UUID, removes it, recalculates and
+ * answers the basket. This appends and retypes.
+ *
+ * Base's `code` parameter is only there for its jQuery, which read it back
+ * out of the request to name the coupon in a confirmation; the UUID is what
+ * identifies the line. It is documented because base still accepts it.
+ *
+ * @queryParam uuid required string UUID of the coupon line item to remove
+ * @queryParam code optional string the coupon code, unused by the route itself
+ */
+server.append("RemoveCouponLineItem", function (req, res, next) {
+  answerCart(res);
+
+  next();
+});
+
+/**
  * Cart-MiniCart: the bag count in the header.
  *
  * Base rendered components/header/miniCart.isml — the bag glyph, the count,

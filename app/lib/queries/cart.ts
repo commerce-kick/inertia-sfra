@@ -9,6 +9,7 @@ import { cartAddCoupon } from "@/generated/routes/cart-addcoupon";
 import { cartEditProductLineItem } from "@/generated/routes/cart-editproductlineitem";
 import { cartMiniCart } from "@/generated/routes/cart-minicart";
 import { cartMiniCartShow } from "@/generated/routes/cart-minicartshow";
+import { cartRemoveCouponLineItem } from "@/generated/routes/cart-removecouponlineitem";
 import { cartRemoveProductLineItem } from "@/generated/routes/cart-removeproductlineitem";
 import { cartUpdateQuantity } from "@/generated/routes/cart-updatequantity";
 import { router, usePage } from "@inertiajs/react";
@@ -186,6 +187,18 @@ export function useAddCoupon() {
   return useMutation({
     mutationFn: (vars: { couponCode: string }) =>
       request<ICartData>(cartAddCoupon({ ...vars, ...csrf })),
+    onSuccess: refresh,
+  });
+}
+
+/** Give a promo code back. The UUID identifies the line; the code names it. */
+export function useRemoveCoupon() {
+  const request = useSfraRequest();
+  const refresh = useCartRefresh();
+
+  return useMutation({
+    mutationFn: (vars: { uuid: string; code: string }) =>
+      request<ICartData>(cartRemoveCouponLineItem(vars)),
     onSuccess: refresh,
   });
 }
