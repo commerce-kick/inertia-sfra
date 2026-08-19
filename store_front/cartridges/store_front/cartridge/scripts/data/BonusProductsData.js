@@ -20,8 +20,16 @@ var BonusProductsData = BaseData.extend({
     duuid: { type: "string", default: "" },
     /** @type {IBonusProductData[]} this page of eligible bonus products */
     products: {
-      type: "collection",
       of: BonusProductData,
+      // A transform, not `type: "collection"`: a collection re-runs the child
+      // schema over whatever it is handed, so mapping the models to plain
+      // objects first and *then* declaring a collection ran every transform
+      // twice. The second pass sees an already-normalized image bag and an
+      // already-normalized swatch, finds neither, and drops both — which is
+      // what this field did until row 2.11 built the chooser that shows them.
+      transform: function (models) {
+        return (models || []).map(BonusProductData.fromModel);
+      },
       default: function () {
         return [];
       },

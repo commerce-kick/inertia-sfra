@@ -278,6 +278,37 @@ server.append("RemoveCouponLineItem", function (req, res, next) {
 });
 
 /**
+ * Cart-AddBonusProducts: commit a choice-of-bonus selection.
+ *
+ * Base validates the total against what the promotion allows, clears whatever
+ * was chosen before, creates a bonus product line item per pick at its chosen
+ * quantity, and stamps the qualifying line so the cart can find them again.
+ * This appends and retypes its answer as the same CartActionData a plain
+ * add-to-bag returns.
+ *
+ * Base reads all three fields off `req.querystring` even though it declares
+ * the route a POST, so they are query parameters despite the method — unlike
+ * Cart-AddProduct, whose fields are read off `req.form`.
+ *
+ * Left standing: base looks the discount up by UUID and calls
+ * `getBonusProductLineItems()` on the result without checking it was found,
+ * so an unknown uuid throws rather than answering. Every uuid the storefront
+ * sends came from the basket it was rendered from, or from the offer this
+ * route's own add-to-bag answer handed back.
+ *
+ * @queryParam pids required string JSON {totalQty, bonusProducts: [{pid, qty, options}]}
+ * @queryParam uuid required string UUID of the bonus discount line item being chosen against
+ * @queryParam pliuuid required string UUID of the line item that earned the offer
+ */
+server.append("AddBonusProducts", function (req, res, next) {
+  var CartActionData = require("*/cartridge/scripts/data/CartActionData");
+
+  answer(res, CartActionData.fromResult(res.getViewData()));
+
+  next();
+});
+
+/**
  * Cart-MiniCart: the bag count in the header.
  *
  * Base rendered components/header/miniCart.isml — the bag glyph, the count,

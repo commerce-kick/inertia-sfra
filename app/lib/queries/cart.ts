@@ -5,6 +5,7 @@ import type {
   IMiniCartData,
 } from "@/generated/data";
 import { cartAddProduct } from "@/generated/routes/cart-addproduct";
+import { cartAddBonusProducts } from "@/generated/routes/cart-addbonusproducts";
 import { cartAddCoupon } from "@/generated/routes/cart-addcoupon";
 import { cartEditProductLineItem } from "@/generated/routes/cart-editproductlineitem";
 import { cartMiniCart } from "@/generated/routes/cart-minicart";
@@ -199,6 +200,45 @@ export function useRemoveCoupon() {
   return useMutation({
     mutationFn: (vars: { uuid: string; code: string }) =>
       request<ICartData>(cartRemoveCouponLineItem(vars)),
+    onSuccess: refresh,
+  });
+}
+
+/** One pick in a choice-of-bonus selection. */
+export type BonusPick = { pid: string; qty: number };
+
+/**
+ * Commit a choice-of-bonus selection.
+ *
+ * Base declares the route a POST but reads its three fields off the query
+ * string, so that is where they go. `totalQty` is what the promotion allows,
+ * not what was picked — base validates the picks against it.
+ */
+export function useAddBonusProducts() {
+  const request = useSfraRequest();
+  const refresh = useCartRefresh();
+
+  return useMutation({
+    mutationFn: (vars: {
+      uuid: string;
+      pliUuid: string;
+      maxPids: number;
+      picks: BonusPick[];
+    }) =>
+      request<ICartActionData>(
+        cartAddBonusProducts({
+          uuid: vars.uuid,
+          pliuuid: vars.pliUuid,
+          pids: JSON.stringify({
+            totalQty: vars.maxPids,
+            bonusProducts: vars.picks.map((pick) => ({
+              pid: pick.pid,
+              qty: pick.qty,
+              options: [],
+            })),
+          }),
+        })
+      ),
     onSuccess: refresh,
   });
 }

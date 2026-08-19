@@ -206,7 +206,6 @@ server.replace("ShowBonusProducts", function (req, res, next) {
   var BasketMgr = require("dw/order/BasketMgr");
   var collections = require("*/cartridge/scripts/util/collections");
   var ProductFactory = require("*/cartridge/scripts/factories/product");
-  var BonusProductData = require("*/cartridge/scripts/data/BonusProductData");
   var BonusProductLineItemData = require("*/cartridge/scripts/data/BonusProductLineItemData");
   var BonusProductsData = require("*/cartridge/scripts/data/BonusProductsData");
 
@@ -275,7 +274,7 @@ server.replace("ShowBonusProducts", function (req, res, next) {
   res.json(
     BonusProductsData.from({
       duuid: duuid,
-      products: products.map(BonusProductData.fromModel),
+      products: products,
       selected: collections.map(
         discount.bonusProductLineItems,
         BonusProductLineItemData.fromLineItem

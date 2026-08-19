@@ -1,3 +1,4 @@
+import { BonusChooser } from "./bonus-chooser";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -6,10 +7,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { IProductDetailData } from "@/generated/data";
+import type { IBonusOfferData, IProductDetailData } from "@/generated/data";
 import { cartShow } from "@/generated/routes/cart-show";
 import { useAddToCart } from "@/lib/queries/cart";
 import { router } from "@inertiajs/react";
+import { useState } from "react";
 import { toast } from "sonner";
 
 /** Partial visit: only `product` changes when quantity or an option moves. */
@@ -136,6 +138,9 @@ export function AddToBag({
   onSelect?: (variationUrl: string) => void;
 }) {
   const addToCart = useAddToCart();
+  // A choice-of-bonus promotion the addition just earned. It exists only in
+  // the answer — nothing can ask for it afterwards but Cart-EditBonusProduct.
+  const [offer, setOffer] = useState<IBonusOfferData | null>(null);
   const unavailable = !product.availability.available;
   const blocked = !product.readyToOrder || unavailable;
 
@@ -163,13 +168,15 @@ export function AddToBag({
                 : undefined,
             },
             {
-              onSuccess: (result) =>
+              onSuccess: (result) => {
                 toast.success(result.message || "Added to bag", {
                   action: {
                     label: "View bag",
                     onClick: () => router.visit(cartShow()),
                   },
-                }),
+                });
+                if (result.bonusOffer) setOffer(result.bonusOffer);
+              },
               onError: (error) => toast.error(error.message),
             }
           )
@@ -183,6 +190,13 @@ export function AddToBag({
           {unavailable ? "Out of stock" : "Choose every option to continue"}
         </span>
       )}
+
+      <BonusChooser
+        offer={offer}
+        onOpenChange={(open) => {
+          if (!open) setOffer(null);
+        }}
+      />
     </div>
   );
 }

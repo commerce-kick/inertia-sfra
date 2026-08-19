@@ -41,7 +41,13 @@ var CartActionData = BaseData.extend({
 });
 
 /**
- * Map base's add-to-cart answer to a plain CartActionData object.
+ * Map base's answer to a plain CartActionData object.
+ *
+ * The three routes that answer this shape each named the same two fields
+ * differently — Cart-AddProduct says `message` and `quantityTotal`,
+ * Cart-AddProductListItem says `msg`, Cart-AddBonusProducts says `msgSuccess`
+ * and `totalQty` — so the aliases are read here rather than in three callers.
+ *
  * @param {Object} result - the view data base's route answered with
  * @returns {Object} plain CartActionData object
  */
@@ -51,8 +57,9 @@ CartActionData.fromResult = function (result) {
   return CartActionData.from({
     error: failed,
     errorMessage: failed ? result.errorMessage || result.message : "",
-    message: failed ? "" : result.message || result.msg,
-    quantityTotal: result.quantityTotal,
+    message: failed ? "" : result.message || result.msg || result.msgSuccess,
+    quantityTotal:
+      result.quantityTotal === undefined ? result.totalQty : result.quantityTotal,
     pliUuid: result.pliUUID,
     bonusOffer: result.newBonusDiscountLineItem,
   });
