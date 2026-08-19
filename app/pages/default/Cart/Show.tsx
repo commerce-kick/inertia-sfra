@@ -3,6 +3,7 @@ import { CartDiscounts } from "@/components/commerce/cart/cart-discounts";
 import { CartLines } from "@/components/commerce/cart/cart-lines";
 import { CartSummary } from "@/components/commerce/cart/cart-summary";
 import { EmptyBag } from "@/components/commerce/cart/empty-bag";
+import { PromoCode } from "@/components/commerce/cart/promo-code";
 import { ShippingMethods } from "@/components/commerce/cart/shipping-methods";
 import { Section } from "@/components/commerce/section";
 import type { CartShowProps } from "@/types/cart";
@@ -30,6 +31,7 @@ export default function Show() {
             </div>
 
             <CartSummary cart={cart}>
+              <PromoCode />
               <CartDiscounts discounts={cart.totals.discounts} />
               <ShippingMethods cart={cart} />
             </CartSummary>

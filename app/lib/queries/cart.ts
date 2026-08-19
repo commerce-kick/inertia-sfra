@@ -1,10 +1,11 @@
-import { useSfraRequest } from "./sfra";
+import { useCsrfParams, useSfraRequest } from "./sfra";
 import type {
   ICartActionData,
   ICartData,
   IMiniCartData,
 } from "@/generated/data";
 import { cartAddProduct } from "@/generated/routes/cart-addproduct";
+import { cartAddCoupon } from "@/generated/routes/cart-addcoupon";
 import { cartEditProductLineItem } from "@/generated/routes/cart-editproductlineitem";
 import { cartMiniCart } from "@/generated/routes/cart-minicart";
 import { cartMiniCartShow } from "@/generated/routes/cart-minicartshow";
@@ -167,6 +168,24 @@ export function useEditLineItem() {
 
       return request<ICartData>(cartEditProductLineItem(), body);
     },
+    onSuccess: refresh,
+  });
+}
+
+/**
+ * Redeem a promo code.
+ *
+ * Base guarded the route with `csrfProtection.validateAjaxRequest` and left
+ * it a GET, so the token rides in the query string beside the code.
+ */
+export function useAddCoupon() {
+  const request = useSfraRequest();
+  const csrf = useCsrfParams();
+  const refresh = useCartRefresh();
+
+  return useMutation({
+    mutationFn: (vars: { couponCode: string }) =>
+      request<ICartData>(cartAddCoupon({ ...vars, ...csrf })),
     onSuccess: refresh,
   });
 }

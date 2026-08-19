@@ -237,6 +237,28 @@ server.append("EditProductLineItem", function (req, res, next) {
 });
 
 /**
+ * Cart-AddCoupon: redeem a promo code.
+ *
+ * Base creates the coupon line item, maps every platform error code to a
+ * message ("already in the cart", "already redeemed", "cannot be combined"),
+ * recalculates and answers the basket. This appends and retypes.
+ *
+ * The route is a GET that base guarded with `csrfProtection.validateAjaxRequest`,
+ * so its token travels in the query string rather than a body — see
+ * `useCsrfParams` in app/lib/queries/sfra.ts. The token is not documented as a
+ * `@queryParam` for the same reason the POST routes do not document theirs:
+ * it is transport, not a parameter of the route, and typing it into the
+ * generated helper would make every caller name it.
+ *
+ * @queryParam couponCode required string the code the shopper entered
+ */
+server.append("AddCoupon", function (req, res, next) {
+  answerCart(res);
+
+  next();
+});
+
+/**
  * Cart-MiniCart: the bag count in the header.
  *
  * Base rendered components/header/miniCart.isml — the bag glyph, the count,

@@ -71,6 +71,19 @@ async function request<T>(
 }
 
 /**
+ * The CSRF pair as query parameters.
+ *
+ * SFRA's `req.form` is built by getFormData, which skips any key that also
+ * appears in the query string — so a GET route base guarded with
+ * `csrfProtection.validateAjaxRequest` can only be given its token in the
+ * URL. POSTs carry it in the body instead; `useSfraRequest` does that.
+ */
+export function useCsrfParams(): Record<string, string> {
+  const { csrf } = usePage<SharedProps>().props;
+  return csrf ? { [csrf.tokenName]: csrf.token } : {};
+}
+
+/**
  * Bind `request` to the current page's CSRF token. Use this inside a
  * `useMutation`/`useQuery` rather than calling `request` directly, so POSTs
  * always carry `{ [tokenName]: token }`.
