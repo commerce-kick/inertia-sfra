@@ -121,8 +121,15 @@ export function BagFlyout() {
               {cart.valid.error ? (
                 <span>Checkout</span>
               ) : (
-                // An Inertia visit; never prefetched — see cart-summary for why.
-                <Link href={checkoutBegin({})} prefetch={false}>
+                // An Inertia visit; never prefetched — see cart-summary for
+                // why. The drawer closes on the way out: the visit replaces
+                // the page under it, and a sheet left open over checkout is
+                // a sheet the shopper has to dismiss before they can pay.
+                <Link
+                  href={checkoutBegin({})}
+                  prefetch={false}
+                  onClick={() => setOpen(false)}
+                >
                   Checkout
                 </Link>
               )}

@@ -1,7 +1,17 @@
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import type { IProductDetailData } from "@/generated/data";
+import { disSrcSet, disUrl } from "@/lib/dis";
 import { ImageOff } from "lucide-react";
 import { useState } from "react";
+
+/**
+ * The two sizes this gallery draws: the main 1:1 plate, at the widest the
+ * two-column PDP gives it, and the 64px thumbs. Both go through DIS rather
+ * than shrinking a full-size catalog asset in the browser — the thumbs
+ * especially, which were each pulling the same original as the plate.
+ */
+const PLATE_SIZE = { width: 720, height: 720 };
+const THUMB_SIZE = { width: 64, height: 64 };
 
 /** 1:1 gallery with thumbs — the fixed PDP crop from DESIGN.md's No-Chrome rule. */
 function ProductGallery({ product }: { product: IProductDetailData }) {
@@ -15,7 +25,8 @@ function ProductGallery({ product }: { product: IProductDetailData }) {
           {image ? (
             <img
               key={image.url}
-              src={image.url}
+              src={disUrl(image.url, PLATE_SIZE)}
+              srcSet={disSrcSet(image.url, PLATE_SIZE)}
               alt={image.alt || product.productName}
               className="size-full object-cover motion-safe:animate-in motion-safe:fade-in motion-safe:duration-(--motion-base)"
             />
@@ -42,7 +53,13 @@ function ProductGallery({ product }: { product: IProductDetailData }) {
                   : "border-transparent hover:border-border"
               }`}
             >
-              <img src={img.url} alt="" className="size-full object-cover" />
+              <img
+                src={disUrl(img.url, THUMB_SIZE)}
+                srcSet={disSrcSet(img.url, THUMB_SIZE)}
+                alt=""
+                loading="lazy"
+                className="size-full object-cover"
+              />
             </button>
           ))}
         </div>
