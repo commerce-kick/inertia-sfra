@@ -266,4 +266,32 @@ server.replace("SaveNewPassword", server.middleware.https, function (req, res, n
   return next();
 });
 
+/**
+ * Account-DoSetNewPassword: the form that sets the new password.
+ *
+ * Base gets here from Account-SetNewPassword's self-submitting form, which
+ * exists to move the reset token out of the address bar and into a POST body.
+ * That is worth keeping — a token in a URL rides in history and in referrers
+ * — so the port keeps the same two-step shape, and this renders the form with
+ * the token as a prop rather than as a visible parameter.
+ *
+ * Base redirects to Account-PasswordReset when the token does not resolve,
+ * and a pending redirect breaks the middleware chain before this step, so the
+ * bad-token path is base's untouched.
+ *
+ * @formParam token required string the reset token from the emailed link
+ */
+server.append("DoSetNewPassword", initInertia.init, shareData, function (req, res, next) {
+  var NewPasswordFormData = require("*/cartridge/scripts/data/NewPasswordFormData");
+
+  var viewData = res.getViewData();
+
+  res.inertia.render("Account/SetNewPassword", {
+    token: viewData.token || "",
+    form: NewPasswordFormData.fromForm(viewData.passwordForm),
+  });
+
+  return next();
+});
+
 module.exports = server.exports();
