@@ -337,6 +337,28 @@ server.append("EditBonusProduct", function (req, res, next) {
 });
 
 /**
+ * Cart-SelectShippingMethod: choose how the bag should be delivered.
+ *
+ * Base assigns the method to the shipment, recalculates, and answers the
+ * basket — with the shipping cost and tax that were "-" until a method
+ * existed now resolved. This appends and retypes.
+ *
+ * Base accepts both fields from the query string or the form and prefers the
+ * query string; they go in the body, which is what a POST is for. The
+ * shipment is left unnamed on purpose: base falls back to the default
+ * shipment, and the cart is single-shipment (it is checkout that splits a
+ * basket across shipments).
+ *
+ * @formParam methodID required string ID of the shipping method to assign
+ * @formParam shipmentUUID optional string UUID of the shipment, defaulting to the basket's default
+ */
+server.append("SelectShippingMethod", function (req, res, next) {
+  answerCart(res);
+
+  next();
+});
+
+/**
  * Cart-MiniCart: the bag count in the header.
  *
  * Base rendered components/header/miniCart.isml — the bag glyph, the count,

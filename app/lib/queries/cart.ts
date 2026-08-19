@@ -14,6 +14,7 @@ import { cartMiniCart } from "@/generated/routes/cart-minicart";
 import { cartMiniCartShow } from "@/generated/routes/cart-minicartshow";
 import { cartRemoveCouponLineItem } from "@/generated/routes/cart-removecouponlineitem";
 import { cartRemoveProductLineItem } from "@/generated/routes/cart-removeproductlineitem";
+import { cartSelectShippingMethod } from "@/generated/routes/cart-selectshippingmethod";
 import { cartUpdateQuantity } from "@/generated/routes/cart-updatequantity";
 import { router, usePage } from "@inertiajs/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -260,5 +261,23 @@ export function useEditBonusProduct(duuid: string | null) {
     enabled: Boolean(duuid),
     queryFn: () =>
       request<IBonusOfferData>(cartEditBonusProduct({ duuid: duuid as string })),
+  });
+}
+
+/**
+ * Choose how the bag should be delivered.
+ *
+ * The shipment is left unnamed: base falls back to the basket's default, and
+ * the cart is single-shipment — splitting a basket across shipments is
+ * checkout's job.
+ */
+export function useSelectShippingMethod() {
+  const request = useSfraRequest();
+  const refresh = useCartRefresh();
+
+  return useMutation({
+    mutationFn: (vars: { methodID: string }) =>
+      request<ICartData>(cartSelectShippingMethod(), vars),
+    onSuccess: refresh,
   });
 }
