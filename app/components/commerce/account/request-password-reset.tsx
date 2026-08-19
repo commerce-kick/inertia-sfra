@@ -22,7 +22,7 @@ export function RequestPasswordReset() {
 
   if (result?.success) {
     return (
-      <div className="flex flex-col gap-6">
+      <div role="status" className="flex flex-col gap-6">
         <h2 className="display-caps text-2xl">Check your inbox</h2>
         <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">
           If {loginEmail} has an account with us, a link to set a new password

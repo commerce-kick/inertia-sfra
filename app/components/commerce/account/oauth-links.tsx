@@ -17,7 +17,7 @@ export function OAuthLinks({ providers }: { providers: OAuthProvider[] }) {
 
   return (
     <div className="flex flex-col gap-4 border-t pt-8">
-      <span className="meta-caps text-muted-foreground">Or continue with</span>
+      <span className="label-caps text-muted-foreground">Or continue with</span>
       <div className="flex flex-col gap-3">
         {providers.map((provider) => (
           <Button

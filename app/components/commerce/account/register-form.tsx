@@ -60,7 +60,15 @@ export function RegisterForm({
           payload[form.addToEmailList.name] = "true";
         }
 
-        register.mutate(payload);
+        // Seven fields deep, a verdict that lands silently at the top of the
+        // form is a verdict nobody reads: send focus to the first field the
+        // server refused.
+        register.mutate(payload, {
+          onSuccess: (result) => {
+            const first = Object.keys(result.fields ?? {})[0];
+            if (first) document.getElementById(first)?.focus();
+          },
+        });
       }}
     >
       {TEXT_FIELDS.map(({ key, type, autoComplete }) => (

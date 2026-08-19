@@ -28,7 +28,7 @@ export function TokenHandoff({ token }: { token: string }) {
 
   return (
     <div className="flex flex-col gap-6">
-      <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">
+      <p role="status" className="max-w-sm text-sm leading-relaxed text-muted-foreground">
         One moment — taking you to the form where you set your new password.
       </p>
       <Button onClick={handoff} className="label-caps h-12 w-fit px-8">
