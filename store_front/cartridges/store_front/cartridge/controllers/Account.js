@@ -44,7 +44,7 @@ var answerError = answerJson.answerError;
  * @formParam loginRememberMe optional boolean keep the username for next time
  */
 server.append("Login", function (req, res, next) {
-  var AuthResultData = require("*/cartridge/scripts/data/AuthResultData");
+  var FormResultData = require("*/cartridge/scripts/data/FormResultData");
 
   var viewData = res.getViewData();
   var errors = viewData.error;
@@ -54,7 +54,7 @@ server.append("Login", function (req, res, next) {
     return next();
   }
 
-  answer(res, AuthResultData.fromViewData(viewData));
+  answer(res, FormResultData.fromViewData(viewData));
   return next();
 });
 
@@ -93,7 +93,7 @@ server.append("Login", function (req, res, next) {
  */
 server.append("SubmitRegistration", function (req, res, next) {
   this.on("route:BeforeComplete", function (beforeReq, beforeRes) {
-    var AuthResultData = require("*/cartridge/scripts/data/AuthResultData");
+    var FormResultData = require("*/cartridge/scripts/data/FormResultData");
 
     var viewData = beforeRes.getViewData();
 
@@ -102,7 +102,7 @@ server.append("SubmitRegistration", function (req, res, next) {
       return;
     }
 
-    answer(beforeRes, AuthResultData.fromViewData(viewData));
+    answer(beforeRes, FormResultData.fromViewData(viewData));
   });
 
   return next();
@@ -116,7 +116,7 @@ server.append("SubmitRegistration", function (req, res, next) {
  * silence is the feature: an answer that differed would turn the form into a
  * test for whether an address has an account here. It is kept exactly.
  *
- * `AuthResultData` again: the shape is the one it already describes — a
+ * `FormResultData` again: the shape is the one it already describes — a
  * verdict, somewhere to go next (base's `returnUrl`, back to sign-in), and a
  * per-field message when the address itself will not do. Base's four copy
  * fields (`receivedMsgHeading`, `receivedMsgBody`, `buttonText`) and its
@@ -127,13 +127,13 @@ server.append("SubmitRegistration", function (req, res, next) {
  * @formParam loginEmail required string the address to send the reset link to
  */
 server.append("PasswordResetDialogForm", function (req, res, next) {
-  var AuthResultData = require("*/cartridge/scripts/data/AuthResultData");
+  var FormResultData = require("*/cartridge/scripts/data/FormResultData");
 
   var viewData = res.getViewData();
 
   answer(
     res,
-    AuthResultData.from({
+    FormResultData.from({
       success: viewData.success,
       redirectUrl: viewData.returnUrl,
       fields: viewData.fields,
@@ -194,7 +194,7 @@ server.replace("SaveNewPassword", server.middleware.https, function (req, res, n
   var URLUtils = require("dw/web/URLUtils");
   var emailHelpers = require("*/cartridge/scripts/helpers/emailHelpers");
   var formErrors = require("*/cartridge/scripts/formErrors");
-  var AuthResultData = require("*/cartridge/scripts/data/AuthResultData");
+  var FormResultData = require("*/cartridge/scripts/data/FormResultData");
 
   var passwordForm = server.forms.getForm("newPasswords");
   // Base moved the token from the query string into the body and kept
@@ -213,7 +213,7 @@ server.replace("SaveNewPassword", server.middleware.https, function (req, res, n
   }
 
   if (!passwordForm.valid) {
-    answer(res, AuthResultData.from({ fields: formErrors.getFormErrors(passwordForm) }));
+    answer(res, FormResultData.from({ fields: formErrors.getFormErrors(passwordForm) }));
     return next();
   }
 
@@ -257,7 +257,7 @@ server.replace("SaveNewPassword", server.middleware.https, function (req, res, n
 
   answer(
     res,
-    AuthResultData.from({
+    FormResultData.from({
       success: true,
       redirectUrl: URLUtils.url("Login-Show").toString(),
     })
@@ -370,7 +370,7 @@ server.append("Show", initInertia.init, shareData, function (req, res, next) {
  *
  * Like registration, the work happens in base's own `route:BeforeComplete`,
  * so this registers one of its own to retype what base decided. The three
- * answers reduce to `AuthResultData` again: saved (with where to go next),
+ * answers reduce to `FormResultData` again: saved (with where to go next),
  * refused per field (a mismatched email confirmation, a password that does
  * not match, an email the platform will not accept as a login).
  *
@@ -383,9 +383,9 @@ server.append("Show", initInertia.init, shareData, function (req, res, next) {
  */
 server.append("SaveProfile", function (req, res, next) {
   this.on("route:BeforeComplete", function (beforeReq, beforeRes) {
-    var AuthResultData = require("*/cartridge/scripts/data/AuthResultData");
+    var FormResultData = require("*/cartridge/scripts/data/FormResultData");
 
-    answer(beforeRes, AuthResultData.fromViewData(beforeRes.getViewData()));
+    answer(beforeRes, FormResultData.fromViewData(beforeRes.getViewData()));
   });
 
   return next();
@@ -429,7 +429,7 @@ server.append("EditProfile", initInertia.init, shareData, function (req, res, ne
  * distinction is the whole usefulness of the error, and it is base's.
  *
  * The work is in base's own `route:BeforeComplete`, so this registers one
- * after it, as 3.4 and 4.3 do. `AuthResultData` again.
+ * after it, as 3.4 and 4.3 do. `FormResultData` again.
  *
  * @formParam dwfrm_profile_login_currentpassword required string the password in force now
  * @formParam dwfrm_profile_login_newpasswords_newpassword required string the new password
@@ -437,9 +437,9 @@ server.append("EditProfile", initInertia.init, shareData, function (req, res, ne
  */
 server.append("SavePassword", function (req, res, next) {
   this.on("route:BeforeComplete", function (beforeReq, beforeRes) {
-    var AuthResultData = require("*/cartridge/scripts/data/AuthResultData");
+    var FormResultData = require("*/cartridge/scripts/data/FormResultData");
 
-    answer(beforeRes, AuthResultData.fromViewData(beforeRes.getViewData()));
+    answer(beforeRes, FormResultData.fromViewData(beforeRes.getViewData()));
   });
 
   return next();

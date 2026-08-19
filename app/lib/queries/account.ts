@@ -1,5 +1,5 @@
 import { useSfraRequest } from "./sfra";
-import type { IAuthResultData } from "@/generated/data";
+import type { IFormResultData } from "@/generated/data";
 import { accountLogin } from "@/generated/routes/account-login";
 import { accountPasswordResetDialogForm } from "@/generated/routes/account-passwordresetdialogform";
 import { accountSaveNewPassword } from "@/generated/routes/account-savenewpassword";
@@ -36,7 +36,7 @@ export function useLogin(rurl?: number) {
 
   return useMutation({
     mutationFn: (vars: LoginVars) =>
-      request<IAuthResultData>(accountLogin({ rurl }), {
+      request<IFormResultData>(accountLogin({ rurl }), {
         ...vars,
         loginRememberMe: vars.loginRememberMe ? "true" : "",
       }),
@@ -67,7 +67,7 @@ export function useRegister(rurl?: number) {
 
   return useMutation({
     mutationFn: (fields: Record<string, string>) =>
-      request<IAuthResultData>(accountSubmitRegistration({ rurl }), fields),
+      request<IFormResultData>(accountSubmitRegistration({ rurl }), fields),
     onSuccess: (result) => {
       if (result.redirectUrl) router.visit(result.redirectUrl);
     },
@@ -88,7 +88,7 @@ export function useRequestPasswordReset() {
 
   return useMutation({
     mutationFn: (vars: { loginEmail: string }) =>
-      request<IAuthResultData>(accountPasswordResetDialogForm({}), vars),
+      request<IFormResultData>(accountPasswordResetDialogForm({}), vars),
   });
 }
 
@@ -107,7 +107,7 @@ export function useSaveNewPassword() {
 
   return useMutation({
     mutationFn: (fields: Record<string, string>) =>
-      request<IAuthResultData>(accountSaveNewPassword({}), fields),
+      request<IFormResultData>(accountSaveNewPassword({}), fields),
     onSuccess: (result) => {
       if (result.redirectUrl) router.visit(result.redirectUrl);
     },
@@ -127,7 +127,7 @@ export function useSaveProfile() {
 
   return useMutation({
     mutationFn: (fields: Record<string, string>) =>
-      request<IAuthResultData>(accountSaveProfile({}), fields),
+      request<IFormResultData>(accountSaveProfile({}), fields),
     onSuccess: (result) => {
       if (result.redirectUrl) router.visit(result.redirectUrl);
     },
@@ -148,7 +148,7 @@ export function useSavePassword() {
 
   return useMutation({
     mutationFn: (fields: Record<string, string>) =>
-      request<IAuthResultData>(accountSavePassword({}), fields),
+      request<IFormResultData>(accountSavePassword({}), fields),
     onSuccess: (result) => {
       if (result.redirectUrl) router.visit(result.redirectUrl);
     },

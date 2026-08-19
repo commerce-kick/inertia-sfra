@@ -3,14 +3,17 @@
 var BaseData = require("../BaseData");
 
 /**
- * What the two credential routes answer: Account-Login and
- * Account-SubmitRegistration.
+ * What every posted form answers with.
  *
- * Both end the same way — the shopper is logged in and told where to go next
- * (Account-Show, or Checkout-Begin when the sign-in was entered from the
- * checkout gate; base maps the `rurl` index to the endpoint) — and both can
- * refuse in the same two ways: something is wrong with a particular field, or
- * something is wrong with the attempt as a whole.
+ * SFRA's account routes all end the same way — the change is made and the
+ * shopper is told where to go next, or it is refused — and they say so in one
+ * shape: `{success, redirectUrl}` or `{success: false, fields}`. Nine routes
+ * across three waves answer exactly this (sign in, register, reset a
+ * password, set a new one, save a profile, change a password, save an
+ * address, save a card), which is why it is one DTO and not nine.
+ *
+ * The two refusals are different in kind: something is wrong with a
+ * particular field, or something is wrong with the attempt as a whole.
  *
  * The whole-attempt refusal never reaches this DTO: it travels as the error
  * envelope `app/lib/queries/sfra.ts` unwraps (see answerJson.answerError), so
@@ -22,8 +25,11 @@ var BaseData = require("../BaseData");
  * Base wrapped its login failure in an array (`{ error: [message] }`) and its
  * registration server failure in a 500 with `errorMessage`; neither shape
  * survives — both become the one envelope.
+ *
+ * (Named `AuthResultData` through waves 3 and 4, until the address book and
+ * the wallet answered with it too.)
  */
-var AuthResultData = BaseData.extend({
+var FormResultData = BaseData.extend({
   schema: {
     /** @type {boolean} whether the shopper is now logged in */
     success: { type: "boolean", default: false },
@@ -46,18 +52,18 @@ var AuthResultData = BaseData.extend({
 });
 
 /**
- * Map what a base credential route left in view data to a plain
- * AuthResultData object.
+ * Map what a base form route left in view data to a plain FormResultData
+ * object.
  *
  * @param {Object} viewData - the response view data base's res.json merged in
- * @returns {Object} plain AuthResultData object
+ * @returns {Object} plain FormResultData object
  */
-AuthResultData.fromViewData = function (viewData) {
-  return AuthResultData.from({
+FormResultData.fromViewData = function (viewData) {
+  return FormResultData.from({
     success: viewData && viewData.success,
     redirectUrl: viewData && viewData.redirectUrl,
     fields: viewData && viewData.fields,
   });
 };
 
-module.exports = AuthResultData;
+module.exports = FormResultData;
