@@ -3,6 +3,7 @@ import type {
   IBonusOfferData,
   ICartActionData,
   ICartData,
+  ICartEditProductData,
   IMiniCartData,
 } from "@/generated/data";
 import { cartAddProduct } from "@/generated/routes/cart-addproduct";
@@ -10,6 +11,7 @@ import { cartAddBonusProducts } from "@/generated/routes/cart-addbonusproducts";
 import { cartAddCoupon } from "@/generated/routes/cart-addcoupon";
 import { cartEditBonusProduct } from "@/generated/routes/cart-editbonusproduct";
 import { cartEditProductLineItem } from "@/generated/routes/cart-editproductlineitem";
+import { cartGetProduct } from "@/generated/routes/cart-getproduct";
 import { cartMiniCart } from "@/generated/routes/cart-minicart";
 import { cartMiniCartShow } from "@/generated/routes/cart-minicartshow";
 import { cartRemoveCouponLineItem } from "@/generated/routes/cart-removecouponlineitem";
@@ -279,5 +281,22 @@ export function useSelectShippingMethod() {
     mutationFn: (vars: { methodID: string }) =>
       request<ICartData>(cartSelectShippingMethod(), vars),
     onSuccess: refresh,
+  });
+}
+
+/**
+ * The product behind a cart line, for the edit dialog.
+ *
+ * Disabled until the dialog opens, and re-read whenever the basket changes —
+ * it hangs off CART_KEY, so an edit that succeeds invalidates its own source.
+ */
+export function useCartProduct(uuid: string | null) {
+  const request = useSfraRequest();
+
+  return useQuery({
+    queryKey: [...CART_KEY, "line-product", uuid],
+    enabled: Boolean(uuid),
+    queryFn: () =>
+      request<ICartEditProductData>(cartGetProduct({ uuid: uuid as string })),
   });
 }

@@ -359,6 +359,78 @@ server.append("SelectShippingMethod", function (req, res, next) {
 });
 
 /**
+ * Cart-GetProduct: the product behind a cart line, for the edit dialog.
+ *
+ * This one is replaced rather than appended. Base defers its answer to a
+ * `route:BeforeComplete` handler that renders product/quickView.isml out of
+ * view data — so it runs *after* an appended step and would render from the
+ * view data that step reset. Replacing removes the handler with the route.
+ *
+ * The product is resolved exactly as base resolved it: by the line's product
+ * ID, at the line's quantity, with the line's chosen option applied, so the
+ * dialog opens on what the shopper actually has.
+ *
+ * Two repairs: base reads `allProductLineItems` off the basket and
+ * `quantityValue` off the found line without checking either, so an expired
+ * basket or a stale uuid throws instead of answering — both now come back as
+ * the error envelope. And base sent the option down twice (once as
+ * `selectedOptionValueId`, once inside a `selectedOptions` array it then
+ * dropped into the template); one field carries it.
+ *
+ * @queryParam uuid required string UUID of the product line item to edit
+ */
+server.replace("GetProduct", function (req, res, next) {
+  var BasketMgr = require("dw/order/BasketMgr");
+  var collections = require("*/cartridge/scripts/util/collections");
+  var ProductFactory = require("*/cartridge/scripts/factories/product");
+  var CartEditProductData = require("*/cartridge/scripts/data/CartEditProductData");
+
+  var basket = BasketMgr.getCurrentBasket();
+  var lineItem = basket
+    ? collections.find(basket.allProductLineItems, function (item) {
+        return item.UUID === req.querystring.uuid;
+      })
+    : null;
+
+  if (!lineItem) {
+    res.json(
+      CartEditProductData.from({
+        error: true,
+        errorMessage: "That item is no longer in your bag.",
+      })
+    );
+    return next();
+  }
+
+  var optionItems = lineItem.optionProductLineItems;
+  var option =
+    optionItems && optionItems.length ? optionItems.iterator().next() : null;
+
+  res.json(
+    CartEditProductData.from({
+      uuid: lineItem.UUID,
+      product: ProductFactory.get({
+        pid: lineItem.productID,
+        quantity: lineItem.quantityValue,
+        options: option
+          ? [
+              {
+                optionId: option.optionID,
+                selectedValueId: option.optionValueID,
+                productId: lineItem.productID,
+              },
+            ]
+          : null,
+      }),
+      selectedQuantity: lineItem.quantityValue,
+      selectedOptionValueId: option ? option.optionValueID : "",
+    })
+  );
+
+  return next();
+});
+
+/**
  * Cart-MiniCart: the bag count in the header.
  *
  * Base rendered components/header/miniCart.isml — the bag glyph, the count,

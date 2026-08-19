@@ -1,4 +1,5 @@
 import { BonusOffers } from "./bonus-offers";
+import { EditLineItem } from "./edit-line-item";
 import { LineItem } from "./line-item";
 import { QuantityStepper } from "./quantity-stepper";
 import { RemoveLineItem } from "./remove-line-item";
@@ -34,6 +35,7 @@ export function CartLines({ items }: { items: ICartLineItemData[] }) {
                   />
                   <LineItem.Promotions />
                   <LineItem.Bundle />
+                  {!item.isBonus && <EditLineItem item={item} />}
                 </>
               )}
               <LineItem.Bonus>
