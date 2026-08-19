@@ -152,7 +152,7 @@ Sets the composition bar the rest of the loop copies.
 |---|---|---|---|---|---|
 | 0.1 | *(refactor)* Home-Show | PAGE | `Home/Show` | DONE | 690 → 35 lines; 7 components in `commerce/home/*`; markup unchanged |
 | 0.2 | *(refactor)* Search-Show | PAGE | `Search/Show` | DONE | 182 → 47 lines; 3 components in `commerce/search/*`; fixed a Spanish `aria-label` |
-| 0.3 | *(refactor)* Product-Show | PAGE | `Product/Show` | TODO | 262 lines; extract gallery + price + swatches |
+| 0.3 | *(refactor)* Product-Show | PAGE | `Product/Show` | DONE | 262 → 26 lines; 6 components in `commerce/product/*` |
 
 ## Wave 1 — catalog completion
 
