@@ -13,5 +13,5 @@ export const FACTS = {
   /** Generated route-helper modules in app/generated/routes (minus index). */
   routeHelpers: 155,
   /** Generated DTO type modules in app/generated/data (minus index). */
-  dtoTypes: 19,
+  dtoTypes: 21,
 } as const;

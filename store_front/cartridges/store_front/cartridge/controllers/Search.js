@@ -9,6 +9,7 @@ server.extend(module.superModule);
 
 var initInertia = require("*/cartridge/scripts/middleware/initInertia");
 var shareData = require("*/cartridge/scripts/middleware/shareData");
+var cache = require("*/cartridge/scripts/middleware/cache");
 
 /**
  * Search-Show: the PLP. Base SFRA Search-Show runs first and computes
@@ -83,6 +84,39 @@ server.append("Show", initInertia.init, shareData, function (req, res, next) {
       };
     },
   });
+
+  next();
+});
+
+/**
+ * Search-Content: the Articles tab beside the products on a results page.
+ *
+ * Base rendered search/contentGrid.isml to an HTML string for a jQuery tab to
+ * inject and paged it with a "More Results" button; this replaces the route
+ * with the same ContentSearch model typed, so the tab is React and the paging
+ * follows the server-authored `moreUrl` out of the payload.
+ *
+ * Replacing rather than appending because `res.json` *merges* into whatever
+ * view data is already there: base's own render would ship the raw
+ * ContentSearch model alongside the typed one. For the same reason base's
+ * `consentTracking.consent` is not carried over — it writes `tracking_consent`
+ * (and a CSRF pair) into view data, which on a JSON route means onto the wire.
+ * Consent is already established by Search-Show, which hosts this tab.
+ * The default cache base applied is kept.
+ *
+ * @queryParam q required string the phrase to search content for
+ * @queryParam startingPage optional number index of the first result on this page
+ */
+server.replace("Content", cache.applyDefaultCache, function (req, res, next) {
+  var searchHelpers = require("*/cartridge/scripts/helpers/searchHelpers");
+  var ContentSearchData = require("*/cartridge/scripts/data/ContentSearchData");
+
+  res.json(
+    ContentSearchData.fromModel(
+      searchHelpers.setupContentSearch(req.querystring),
+      req.querystring.startingPage
+    )
+  );
 
   next();
 });
