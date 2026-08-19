@@ -1,72 +1,11 @@
 import { FormField } from "@/components/commerce/account/form-field";
+import { SelectField } from "@/components/commerce/account/select-field";
 import { Link } from "@/components/link";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import type { IAddressFormData, IFormFieldData } from "@/generated/data";
 import { addressList } from "@/generated/routes/address-list";
 import { useSaveAddress } from "@/lib/queries/address";
 import { useState } from "react";
-
-/** The two fields whose choices the merchant owns rather than the shopper. */
-function SelectField({
-  field,
-  value,
-  onChange,
-  error,
-}: {
-  field: IFormFieldData;
-  value: string;
-  onChange: (value: string) => void;
-  error?: string;
-}) {
-  const message = error || field.error;
-  const errorId = `${field.name}-error`;
-
-  return (
-    <div className="flex flex-col gap-2">
-      <label htmlFor={field.name} className="label-caps">
-        {field.label}
-        {field.mandatory && (
-          <span className="text-muted-foreground" aria-hidden>
-            {" *"}
-          </span>
-        )}
-      </label>
-      <Select value={value} onValueChange={onChange} name={field.name}>
-        <SelectTrigger
-          id={field.name}
-          aria-invalid={message ? true : undefined}
-          aria-describedby={message ? errorId : undefined}
-          className="label-caps h-11 w-full"
-        >
-          <SelectValue placeholder="Select" />
-        </SelectTrigger>
-        <SelectContent>
-          {field.options.map((option) => (
-            <SelectItem
-              key={option.id || option.value}
-              value={option.value}
-              className="label-caps"
-            >
-              {option.label}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      {message && (
-        <span id={errorId} role="alert" className="text-sm text-destructive">
-          {message}
-        </span>
-      )}
-    </div>
-  );
-}
 
 /** The eight free-text fields, in the order base's addressForm.isml printed them. */
 const TEXT_FIELDS = [

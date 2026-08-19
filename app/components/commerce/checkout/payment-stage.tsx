@@ -1,14 +1,8 @@
 import { FormField } from "@/components/commerce/account/form-field";
 import { AddressFields } from "@/components/commerce/checkout/address-fields";
+import { SelectField } from "@/components/commerce/account/select-field";
 import { detectCardType } from "@/components/commerce/payment/card-type";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import type {
   ICheckoutFormsData,
   ICheckoutOrderData,
@@ -19,54 +13,6 @@ import { checkoutBegin } from "@/generated/routes/checkout-begin";
 import { useSubmitPayment } from "@/lib/queries/checkout";
 import { router } from "@inertiajs/react";
 import { useState } from "react";
-
-function ExpirySelect({
-  field,
-  value,
-  onChange,
-  error,
-}: {
-  field: IFormFieldData;
-  value: string;
-  onChange: (value: string) => void;
-  error?: string;
-}) {
-  const message = error || field.error;
-  const options = field.options.filter((option) => option.value !== "");
-
-  return (
-    <div className="flex flex-col gap-2">
-      <label htmlFor={field.name} className="label-caps">
-        {field.label}
-      </label>
-      <Select value={value} onValueChange={onChange} name={field.name}>
-        <SelectTrigger
-          id={field.name}
-          aria-invalid={message ? true : undefined}
-          className="meta-caps h-11 w-full"
-        >
-          <SelectValue placeholder="—" />
-        </SelectTrigger>
-        <SelectContent>
-          {options.map((option) => (
-            <SelectItem
-              key={option.id || option.value}
-              value={option.value}
-              className="meta-caps"
-            >
-              {option.label}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      {message && (
-        <span role="alert" className="text-sm text-destructive">
-          {message}
-        </span>
-      )}
-    </div>
-  );
-}
 
 /**
  * How it is paid for: the billing address and the card.
@@ -226,14 +172,16 @@ export function PaymentStage({
               )}
             </div>
             <div className="grid gap-6 sm:grid-cols-2">
-              <ExpirySelect
+              <SelectField
                 field={forms.card.expirationMonth}
+                voice="data"
                 value={valueOf(forms.card.expirationMonth)}
                 error={errors[forms.card.expirationMonth.name]}
                 onChange={(value) => set(forms.card.expirationMonth.name, value)}
               />
-              <ExpirySelect
+              <SelectField
                 field={forms.card.expirationYear}
+                voice="data"
                 value={valueOf(forms.card.expirationYear)}
                 error={errors[forms.card.expirationYear.name]}
                 onChange={(value) => set(forms.card.expirationYear.name, value)}

@@ -1,76 +1,12 @@
 import { FormField } from "@/components/commerce/account/form-field";
 import { detectCardType } from "@/components/commerce/payment/card-type";
+import { SelectField } from "@/components/commerce/account/select-field";
 import { Link } from "@/components/link";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import type { ICreditCardFormData, IFormFieldData } from "@/generated/data";
 import { paymentInstrumentsList } from "@/generated/routes/paymentinstruments-list";
 import { useSavePayment } from "@/lib/queries/payment";
 import { useState } from "react";
-
-function ExpirySelect({
-  field,
-  value,
-  onChange,
-  error,
-}: {
-  field: IFormFieldData;
-  value: string;
-  onChange: (value: string) => void;
-  error?: string;
-}) {
-  const message = error || field.error;
-  const errorId = `${field.name}-error`;
-  // Base's month list opens on an empty placeholder option; a select with a
-  // blank row is a shadcn anti-pattern, so the placeholder lives on the
-  // trigger and the empty option is filtered out.
-  const options = field.options.filter((option) => option.value !== "");
-
-  return (
-    <div className="flex flex-col gap-2">
-      <label htmlFor={field.name} className="label-caps">
-        {field.label}
-        {field.mandatory && (
-          <span className="text-muted-foreground" aria-hidden>
-            {" *"}
-          </span>
-        )}
-      </label>
-      <Select value={value} onValueChange={onChange} name={field.name}>
-        <SelectTrigger
-          id={field.name}
-          aria-invalid={message ? true : undefined}
-          aria-describedby={message ? errorId : undefined}
-          className="meta-caps h-11 w-full"
-        >
-          <SelectValue placeholder="—" />
-        </SelectTrigger>
-        <SelectContent>
-          {options.map((option) => (
-            <SelectItem
-              key={option.id || option.value}
-              value={option.value}
-              className="meta-caps"
-            >
-              {option.label}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      {message && (
-        <span id={errorId} role="alert" className="text-sm text-destructive">
-          {message}
-        </span>
-      )}
-    </div>
-  );
-}
 
 /**
  * Save a card.
@@ -144,14 +80,16 @@ export function CardForm({ form }: { form: ICreditCardFormData }) {
       </div>
 
       <div className="grid gap-6 sm:grid-cols-2">
-        <ExpirySelect
+        <SelectField
           field={form.expirationMonth}
+          voice="data"
           value={valueOf(form.expirationMonth)}
           error={fieldErrors[form.expirationMonth.name]}
           onChange={(value) => set(form.expirationMonth, value)}
         />
-        <ExpirySelect
+        <SelectField
           field={form.expirationYear}
+          voice="data"
           value={valueOf(form.expirationYear)}
           error={fieldErrors[form.expirationYear.name]}
           onChange={(value) => set(form.expirationYear, value)}

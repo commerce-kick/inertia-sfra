@@ -28,7 +28,12 @@ const SORT_LABELS: Record<string, string> = {
  * URL, so choosing one is a plain Inertia visit.
  */
 export function SortSelect({ sort }: { sort: SortState }) {
-  if (!sort.options.length) return null;
+  // A sorting rule with no ID is not a rule anything can be sorted by, and
+  // Radix refuses an item with an empty value outright — the empty string is
+  // what clears a select. Drop them rather than coercing to "".
+  const options = sort.options.filter((option) => Boolean(option.id));
+
+  if (!options.length) return null;
 
   return (
     <Select
@@ -48,9 +53,9 @@ export function SortSelect({ sort }: { sort: SortState }) {
         <SelectValue placeholder="Sort" />
       </SelectTrigger>
       <SelectContent>
-        {sort.options.map((option) => (
-          <SelectItem key={option.id} value={option.id ?? ""}>
-            {SORT_LABELS[option.id ?? ""] ?? option.displayName}
+        {options.map((option) => (
+          <SelectItem key={option.id} value={option.id}>
+            {SORT_LABELS[option.id] ?? option.displayName}
           </SelectItem>
         ))}
       </SelectContent>

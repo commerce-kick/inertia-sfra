@@ -1,67 +1,6 @@
 import { FormField } from "@/components/commerce/account/form-field";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { SelectField } from "@/components/commerce/account/select-field";
 import type { IAddressFormData, IFormFieldData } from "@/generated/data";
-
-/** The address form's own select fields — country and state. */
-function SelectField({
-  field,
-  value,
-  onChange,
-  error,
-}: {
-  field: IFormFieldData;
-  value: string;
-  onChange: (value: string) => void;
-  error?: string;
-}) {
-  const message = error || field.error;
-  const errorId = `${field.name}-error`;
-
-  return (
-    <div className="flex flex-col gap-2">
-      <label htmlFor={field.name} className="label-caps">
-        {field.label}
-        {field.mandatory && (
-          <span className="text-muted-foreground" aria-hidden>
-            {" *"}
-          </span>
-        )}
-      </label>
-      <Select value={value} onValueChange={onChange} name={field.name}>
-        <SelectTrigger
-          id={field.name}
-          aria-invalid={message ? true : undefined}
-          aria-describedby={message ? errorId : undefined}
-          className="label-caps h-11 w-full"
-        >
-          <SelectValue placeholder="Select" />
-        </SelectTrigger>
-        <SelectContent>
-          {field.options.map((option) => (
-            <SelectItem
-              key={option.id || option.value}
-              value={option.value}
-              className="label-caps"
-            >
-              {option.label}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      {message && (
-        <span id={errorId} role="alert" className="text-sm text-destructive">
-          {message}
-        </span>
-      )}
-    </div>
-  );
-}
 
 /** The seven address fields checkout asks for — base's form minus its ID. */
 const FIELDS = [
