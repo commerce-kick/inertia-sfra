@@ -7,27 +7,25 @@
 var server = require("server");
 server.extend(module.superModule);
 
-var utils = require("*/cartridge/helpers/utils");
-
 /**
- * SearchServices-GetSuggestions : The SearchServices-GetSuggestions endpoint is responsible for searching as you type and displaying the suggestions from that search
- * @name Base/SearchServices-GetSuggestions
- * @function
- * @memberof SearchServices
- * @param {middleware} - cache.applyDefaultCache
- * @param {querystringparameter} - q - the query string a shopper is searching for
- * @param {category} - non-sensitive
- * @param {returns} - json
- * @param {serverfunction} - get
+ * SearchServices-GetSuggestions: the header typeahead.
+ *
+ * Base computes six suggestion models and renders them through
+ * search/suggestions.isml. This appended step reuses that computation and
+ * answers JSON instead — SFRA's appendRendering replaces the queued ISML
+ * render with the json one, so the template never runs.
+ *
+ * Not an Inertia route: the header calls this with axios, so it keeps base's
+ * cache middleware and never touches initInertia.
+ *
+ * @queryParam q required string the phrase the shopper is typing
  */
 server.append("GetSuggestions", function (req, res, next) {
-  const viewData = res.getViewData();
-  /* ("[JavaClass dw.web.URL]"); */
-  const r = utils.processUrls(viewData.suggestions);
+  var SearchSuggestionsData = require("*/cartridge/scripts/data/SearchSuggestionsData");
 
-  res.json({
-    suggestions: r,
-  });
+  // Base emits {} when the phrase is shorter than preferences.minTermLength or
+  // no group had a hit; fromModels turns that into empty groups + total 0.
+  res.json(SearchSuggestionsData.fromModels(res.getViewData().suggestions));
 
   next();
 });

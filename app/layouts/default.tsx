@@ -1,3 +1,4 @@
+import { HeaderSearch } from "@/components/commerce/search/header-search";
 /**
  * Storefront shell — stark atelier system (user-pinned: high-fashion design
  * agency; direction contract lives as the first child of <body> in
@@ -7,7 +8,6 @@
 import { Link } from "@/components/link";
 import { useTheme } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Sheet,
   SheetContent,
@@ -16,15 +16,13 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { homeShow } from "@/generated/routes/home-show";
-import { searchShow } from "@/generated/routes/search-show";
 import { useMaskedReveal } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 import type { PageWithFlash, SharedProps } from "@/types/shared";
-import { router, usePage } from "@inertiajs/react";
+import { usePage } from "@inertiajs/react";
 import {
   Menu,
   Moon,
-  Search,
   ShoppingBag,
   Sun,
   UserRound,
@@ -66,33 +64,6 @@ function isActiveCategory(pageUrl: string, categoryUrl: string) {
   }
 }
 
-function SearchForm({ onSubmitted }: { onSubmitted?: () => void }) {
-  const [phrase, setPhrase] = useState("");
-
-  return (
-    <form
-      role="search"
-      className="relative"
-      onSubmit={(event) => {
-        event.preventDefault();
-        const q = phrase.trim();
-        if (!q) return;
-        router.get(searchShow({ q }));
-        onSubmitted?.();
-      }}
-    >
-      <Search className="pointer-events-none absolute left-0 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-      <Input
-        type="search"
-        value={phrase}
-        onChange={(event) => setPhrase(event.target.value)}
-        placeholder="Search"
-        aria-label="Search products"
-        className="label-caps h-9 w-36 rounded-none border-0 border-b bg-transparent pl-6 shadow-none transition-[width,border-color] duration-(--motion-base) ease-(--motion-ease) placeholder:label-caps placeholder:text-muted-foreground focus-visible:border-foreground focus-visible:ring-0 md:w-40 md:focus:w-56"
-      />
-    </form>
-  );
-}
 
 function ThemeToggle() {
   const { theme, setTheme } = useTheme();
@@ -155,7 +126,7 @@ function Header() {
               })}
             </nav>
             <div className="mt-auto px-4 pb-6">
-              <SearchForm onSubmitted={() => setMobileOpen(false)} />
+              <HeaderSearch onSubmitted={() => setMobileOpen(false)} />
             </div>
           </SheetContent>
         </Sheet>
@@ -194,7 +165,7 @@ function Header() {
 
         <div className="ml-auto flex items-center gap-2">
           <div className="hidden md:block">
-            <SearchForm />
+            <HeaderSearch />
           </div>
           <ThemeToggle />
           <Button
