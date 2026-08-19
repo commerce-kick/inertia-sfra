@@ -11,6 +11,25 @@ var initInertia = require("*/cartridge/scripts/middleware/initInertia");
 var shareData = require("*/cartridge/scripts/middleware/shareData");
 
 /**
+ * Answer a cart route with a typed payload, discarding whatever view data
+ * the base route left behind.
+ *
+ * `res.json` *merges* into view data (modules/server/response.js), so an
+ * appended JSON step would otherwise ship base's untyped model alongside the
+ * typed one. Resetting first is the same move the adapter makes before it
+ * emits a page, and it is what lets these routes append — keeping base's
+ * transactions, validation and error handling — instead of replacing them.
+ *
+ * @param {Object} res - the SFRA response
+ * @param {Object} payload - the DTO object to answer with
+ * @returns {void}
+ */
+function answer(res, payload) {
+  res.viewData = {};
+  res.json(payload);
+}
+
+/**
  * Cart-Show: the bag.
  *
  * Base computes the whole cart model — it revalidates the currency, makes
@@ -39,14 +58,21 @@ server.append("Show", initInertia.init, shareData, function (req, res, next) {
   next();
 });
 
+/**
+ * Cart-MiniCartShow: the contents of the bag flyout.
+ *
+ * Base rendered checkout/cart/miniCart.isml for jQuery to drop into the
+ * popover the header fragment left empty. It does the same basket work
+ * Cart-Show does first — revalidate the currency, ensure every shipment has
+ * a method, recalculate — so this appends and answers the same CartData the
+ * cart page renders, and the flyout is a narrower arrangement of the same
+ * components rather than a second payload.
+ */
 server.append("MiniCartShow", function (req, res, next) {
-  const viewData = res.getViewData();
+  var BasketMgr = require("dw/order/BasketMgr");
+  var CartData = require("*/cartridge/scripts/data/CartData");
 
-  res.setViewData({
-    checkoutUrl: dw.web.URLUtils.url("Checkout-Begin").toString(),
-  });
-
-  res.json(viewData);
+  answer(res, CartData.fromModel(res.getViewData(), BasketMgr.getCurrentBasket()));
 
   next();
 });

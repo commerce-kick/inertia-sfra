@@ -1,4 +1,4 @@
-import { BagLink } from "@/components/commerce/cart/bag-link";
+import { BagFlyout } from "@/components/commerce/cart/bag-flyout";
 import { HeaderSearch } from "@/components/commerce/search/header-search";
 /**
  * Storefront shell — stark atelier system (user-pinned: high-fashion design
@@ -177,7 +177,7 @@ function Header() {
           >
             <UserRound className="size-4" />
           </Button>
-          <BagLink />
+          <BagFlyout />
         </div>
       </div>
     </header>

@@ -1,6 +1,7 @@
 import { useSfraRequest } from "./sfra";
-import type { IMiniCartData } from "@/generated/data";
+import type { ICartData, IMiniCartData } from "@/generated/data";
 import { cartMiniCart } from "@/generated/routes/cart-minicart";
+import { cartMiniCartShow } from "@/generated/routes/cart-minicartshow";
 import { useQuery } from "@tanstack/react-query";
 
 /**
@@ -24,5 +25,23 @@ export function useMiniCart() {
     queryKey: [...CART_KEY, "count"],
     staleTime: 60_000,
     queryFn: () => request<IMiniCartData>(cartMiniCart()),
+  });
+}
+
+/**
+ * The contents of the bag flyout — the same basket the cart page renders.
+ *
+ * Base fetched the fragment every time the popover opened; this is the same
+ * shape as a query disabled until the flyout is open, so a shopper who never
+ * opens it never pays for it.
+ */
+export function useMiniCartContents(enabled: boolean) {
+  const request = useSfraRequest();
+
+  return useQuery({
+    queryKey: [...CART_KEY, "contents"],
+    enabled,
+    staleTime: 60_000,
+    queryFn: () => request<ICartData>(cartMiniCartShow()),
   });
 }
