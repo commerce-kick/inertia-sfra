@@ -24,6 +24,12 @@ Four artifacts per converted endpoint. Nothing is hand-built that a generator ca
 come from `@/generated/data/*` (emitted from `BaseData` schemas). `app/generated/**`
 is gitignored and regenerated — never hand-edit it.
 
+**UI copy is English-only.** No translation, no locale switcher, no i18n scaffolding
+— write strings inline in English. This is a scope decision, not a permanent one: the
+adapter still passes `locale` as a shared prop and `Response.resolveComponent` still
+honours locale-specific page overrides, so the door stays open. Catalog data stays as
+Business Manager holds it.
+
 **`DESIGN.md` is binding** for every pixel: the One Red Rule, the Three Voices, the
 Mono-Is-Data rule, the Hairline Chapter rule, no radius, no elevation, and the
 closed 8-device motion inventory.
@@ -294,8 +300,8 @@ Sets the composition bar the rest of the loop copies.
 | # | Endpoint | Kind | Page / Hook | Status | Notes |
 |---|---|---|---|---|---|
 | 9.1 | Page-Show | PAGE | `Page/Show` | TODO | content asset; body ships as an HTML-string prop |
-| 9.2 | Page-SetLocale | JSON | `useSetLocale` | TODO | locale switcher |
-| 9.3 | Page-Locale | N/A | — | TODO | ISML locale-selector fragment |
+| 9.2 | Page-SetLocale | N/A | — | N/A | English-only storefront (user directive) — no locale switcher |
+| 9.3 | Page-Locale | N/A | — | N/A | English-only storefront (user directive) — no locale selector |
 | 9.4 | ContactUs-Landing | PAGE | `ContactUs/Landing` | TODO | |
 | 9.5 | ContactUs-Subscribe | JSON | `useContactUs` | TODO | POST |
 | 9.6 | EmailSubscribe-Subscribe | JSON | `useEmailSubscribe` | TODO | POST; footer signup |
