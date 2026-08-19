@@ -7,8 +7,29 @@
 const server = require("server");
 server.extend(module.superModule);
 
-// The reset-then-json seam, shared with Cart.js, Account.js and Address.js.
-var answer = require("*/cartridge/scripts/helpers/answerJson").answerJson;
+// The reset-then-json seam and the failure envelope, shared with Cart.js,
+// Account.js and Address.js.
+var answerJson = require("*/cartridge/scripts/helpers/answerJson");
+var answer = answerJson.answerJson;
+var answerError = answerJson.answerError;
+
+/**
+ * Base guards this route with `userLoggedIn.validateLoggedInAjax`, which
+ * answers a 500 with `{loggedin: false, redirectUrl}` — a status the browser
+ * rejects on before anything reads the body, so a shopper whose session ended
+ * would be told the request failed rather than sent to sign in. Normalized to
+ * the envelope, the same way Address.js does.
+ *
+ * @param {Object} res - the SFRA response
+ * @returns {boolean} true when the request was answered because nobody is signed in
+ */
+function refusedSignedOut(res) {
+  var viewData = res.getViewData();
+  if (viewData.loggedin !== false) return false;
+
+  answerError(res, "Your session ended. Please sign in again.", viewData.redirectUrl);
+  return true;
+}
 
 /**
  * PaymentInstruments-SavePayment: save a card to the wallet.
@@ -39,6 +60,44 @@ server.append("SavePayment", function (req, res, next) {
     var FormResultData = require("*/cartridge/scripts/data/FormResultData");
 
     answer(beforeRes, FormResultData.fromViewData(beforeRes.getViewData()));
+  });
+
+  return next();
+});
+
+/**
+ * PaymentInstruments-DeletePayment: remove a card from the wallet.
+ *
+ * Base finds the instrument by UUID, removes it in a transaction and emails
+ * the account-edited notice; all of that stays. Its answer was DOM
+ * bookkeeping — the UUID of the row to delete, plus a "no saved payments"
+ * line for an emptied wallet — so it becomes `PaymentDeletedData`, carrying
+ * the same emptiness as the count base computed to choose that message.
+ *
+ * Left standing: base reads `paymentToDelete.raw` without checking the UUID
+ * matched anything, so a hand-made URL naming a card that is not in the
+ * wallet throws. No surface in the storefront can produce that UUID.
+ *
+ * @queryParam UUID required string the wallet entry to remove
+ */
+server.append("DeletePayment", function (req, res, next) {
+  if (refusedSignedOut(res)) return next();
+
+  this.on("route:BeforeComplete", function (beforeReq, beforeRes) {
+    var CustomerMgr = require("dw/customer/CustomerMgr");
+    var PaymentDeletedData = require("*/cartridge/scripts/data/PaymentDeletedData");
+
+    var customer = CustomerMgr.getCustomerByCustomerNumber(
+      beforeReq.currentCustomer.profile.customerNo
+    );
+
+    answer(
+      beforeRes,
+      PaymentDeletedData.from({
+        uuid: beforeReq.querystring.UUID,
+        remaining: customer.getProfile().getWallet().getPaymentInstruments().length,
+      })
+    );
   });
 
   return next();
