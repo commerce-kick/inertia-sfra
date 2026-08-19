@@ -14,6 +14,10 @@ var AddressData = BaseData.extend({
   schema: {
     /** @type {string} the shopper's name for this address, empty for an unsaved one */
     id: { type: "string", default: "" },
+    /** @type {string} the platform's UUID for the stored address */
+    uuid: { type: "string", default: "" },
+    /** @type {boolean} whether this is the address book's default */
+    isDefault: { type: "boolean", default: false },
     /** @type {string} given name */
     firstName: { type: "string", default: "" },
     /** @type {string} family name */
@@ -43,14 +47,17 @@ var AddressData = BaseData.extend({
  * "no default address" is a state the dashboard renders.
  *
  * @param {Object} model - SFRA AddressModel, or its inner address object
+ * @param {boolean} [isDefault] - whether this is the book's preferred address
  * @returns {Object|null} plain AddressData object, or null
  */
-AddressData.fromModel = function (model) {
+AddressData.fromModel = function (model, isDefault) {
   var address = (model && model.address) || model;
   if (!address) return null;
 
   return AddressData.from({
     id: address.ID,
+    uuid: address.UUID,
+    isDefault: isDefault,
     firstName: address.firstName,
     lastName: address.lastName,
     address1: address.address1,

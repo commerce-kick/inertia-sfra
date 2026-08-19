@@ -3,10 +3,13 @@ import {
   PanelEmpty,
   PanelFact,
 } from "@/components/commerce/account/account-panel";
+import { Link } from "@/components/link";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import type { IAccountData } from "@/generated/data";
 import { accountEditPassword } from "@/generated/routes/account-editpassword";
 import { accountEditProfile } from "@/generated/routes/account-editprofile";
+import { addressAddAddress } from "@/generated/routes/address-addaddress";
+import { addressList } from "@/generated/routes/address-list";
 
 /** Who the shopper is. Base hid the phone on an externally-authenticated account. */
 export function ProfilePanel({ account }: { account: IAccountData }) {
@@ -51,17 +54,19 @@ export function PasswordPanel() {
 }
 
 /**
- * The address book's default entry.
- *
- * Base's "View" and "Add new" links point at Address-List and
- * Address-AddAddress, whose controller is still one of the fatal ones — they
- * arrive with wave 5 rather than pointing at a 500 today.
+ * The address book's default entry, with base's two links: "View" into the
+ * book itself, and "Add new" beneath it — which 5.1/5.2 made reachable.
  */
 export function AddressPanel({ account }: { account: IAccountData }) {
   const address = account.preferredAddress;
 
   return (
-    <AccountPanel title="Address book">
+    <AccountPanel
+      title="Address book"
+      action={
+        address ? { label: "View", href: addressList({}) } : undefined
+      }
+    >
       {address ? (
         <div className="flex flex-col gap-1 text-sm leading-relaxed">
           {address.id && <span className="label-caps">{address.id}</span>}
@@ -80,6 +85,12 @@ export function AddressPanel({ account }: { account: IAccountData }) {
           No default address yet. One is saved the first time you check out.
         </PanelEmpty>
       )}
+      <Link
+        href={addressAddAddress({})}
+        className="link-draw label-caps w-fit text-muted-foreground transition-colors hover:text-foreground"
+      >
+        Add new
+      </Link>
     </AccountPanel>
   );
 }

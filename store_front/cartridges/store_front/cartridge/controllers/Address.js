@@ -7,6 +7,9 @@
 const server = require("server");
 server.extend(module.superModule);
 
+var initInertia = require("*/cartridge/scripts/middleware/initInertia");
+var shareData = require("*/cartridge/scripts/middleware/shareData");
+
 // The reset-then-json seam and the failure envelope, shared with Cart.js
 // and Account.js.
 var answerJson = require("*/cartridge/scripts/helpers/answerJson");
@@ -103,6 +106,84 @@ server.append("DeleteAddress", function (req, res, next) {
         remaining: customer.getProfile().getAddressBook().getAddresses().length,
       })
     );
+  });
+
+  return next();
+});
+
+/**
+ * Address-List: the address book.
+ *
+ * Base builds the list already — it re-reads the customer so the UUIDs are
+ * the stored ones — and this appends the typed slice of it. Base decided
+ * which entry was the default *positionally*, by comparing every row against
+ * `addressBook[0]`; the platform does return the preferred address first, so
+ * the answer was right, but the fact is named here instead of inferred: each
+ * address carries `isDefault`, compared against the book's actual preferred
+ * address.
+ *
+ * Dropped: the `actionUrls` bag (generated route helpers) and the breadcrumb
+ * trail, whose two links — Home and Account — the header wordmark and the
+ * page's own "Back to account" already are.
+ */
+server.append("List", initInertia.init, shareData, function (req, res, next) {
+  var CustomerMgr = require("dw/customer/CustomerMgr");
+  var AddressData = require("*/cartridge/scripts/data/AddressData");
+
+  var viewData = res.getViewData();
+  var customer = CustomerMgr.getCustomerByCustomerNumber(req.currentCustomer.profile.customerNo);
+  var preferred = customer.getProfile().getAddressBook().getPreferredAddress();
+  var preferredId = preferred ? preferred.getID() : null;
+
+  res.inertia.render("Address/List", {
+    addresses: (viewData.addressBook || []).map(function (model) {
+      return AddressData.fromModel(model, Boolean(preferredId) && model.address.ID === preferredId);
+    }),
+  });
+
+  return next();
+});
+
+/**
+ * Address-AddAddress: the empty address form.
+ *
+ * Base clears the `address` form and renders the same template
+ * Address-EditAddress renders; the port keeps that — one page, `Address/Edit`,
+ * told apart by whether an `addressId` came with it.
+ */
+server.append("AddAddress", initInertia.init, shareData, function (req, res, next) {
+  var AddressFormData = require("*/cartridge/scripts/data/AddressFormData");
+
+  res.inertia.render("Address/Edit", {
+    form: AddressFormData.fromForm(res.getViewData().addressForm),
+    addressId: "",
+  });
+
+  return next();
+});
+
+/**
+ * Address-EditAddress: the same form, filled from a stored address.
+ *
+ * Base clears the form and then `copyFrom`s the address model, which is what
+ * puts the stored values on the fields — so the prefill rides on the fields
+ * themselves and nothing has to be copied across again here.
+ *
+ * The `addressId` travels as its own prop as well as being a field: the field
+ * is what the shopper may rename the address to, the prop is which address is
+ * being edited, and Address-SaveAddress genuinely needs both to tell a rename
+ * from a collision.
+ *
+ * @queryParam addressId required string the address being edited
+ */
+server.append("EditAddress", initInertia.init, shareData, function (req, res, next) {
+  var AddressFormData = require("*/cartridge/scripts/data/AddressFormData");
+
+  var viewData = res.getViewData();
+
+  res.inertia.render("Address/Edit", {
+    form: AddressFormData.fromForm(viewData.addressForm),
+    addressId: viewData.addressId || "",
   });
 
   return next();
