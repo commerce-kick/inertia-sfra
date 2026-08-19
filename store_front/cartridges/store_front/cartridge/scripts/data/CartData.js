@@ -86,8 +86,6 @@ var CartData = BaseData.extend({
         return { error: false, message: "" };
       },
     },
-    /** @type {string} the https Checkout-Begin URL — server-authored because checkout is always https */
-    checkoutUrl: { type: "string", default: "" },
   },
 });
 
@@ -104,8 +102,6 @@ var CartData = BaseData.extend({
  * @returns {Object} plain CartData object
  */
 CartData.fromModel = function (model, basket) {
-  var URLUtils = require("dw/web/URLUtils");
-
   var shipment = (model && model.shipments && model.shipments[0]) || {};
 
   return CartData.from({
@@ -117,7 +113,6 @@ CartData.fromModel = function (model, basket) {
     approachingDiscounts: CartData.approachingDiscounts(basket),
     hasBonusProduct: model && model.hasBonusProduct,
     valid: model && model.valid,
-    checkoutUrl: URLUtils.https("Checkout-Begin").toString(),
   });
 };
 

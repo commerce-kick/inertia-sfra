@@ -5,16 +5,12 @@
  */
 
 const server = require("server");
-server.extend(module.superModule);
 
 const PageMgr = require("dw/experience/PageMgr");
 
-server.get("Page", function (req, res, next) {
-
-  const page = PageMgr.getPage('home');
-
-  PageMgr.serializePage('homepage-example', req.pageMetaData);
-
+server.get("Show", function (req, res, next) {
+const j = PageMgr.getPage("homepage-example");
+  const page = PageMgr.serializePage("homepage-example");
 
   return next();
 
@@ -22,3 +18,4 @@ server.get("Page", function (req, res, next) {
 
 
 module.exports = server.exports();
+

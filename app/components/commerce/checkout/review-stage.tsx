@@ -40,6 +40,7 @@ function ReviewPanel({
         <h2 className="label-caps">{title}</h2>
         <Link
           href={checkoutBegin({ stage })}
+          prefetch={false}
           className="link-draw label-caps text-muted-foreground transition-colors hover:text-foreground"
         >
           Change

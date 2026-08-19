@@ -1,5 +1,6 @@
 import { LineItem } from "./line-item";
 import { Link } from "@/components/link";
+import { checkoutBegin } from "@/generated/routes/checkout-begin";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -120,7 +121,10 @@ export function BagFlyout() {
               {cart.valid.error ? (
                 <span>Checkout</span>
               ) : (
-                <a href={cart.checkoutUrl}>Checkout</a>
+                // An Inertia visit; never prefetched — see cart-summary for why.
+                <Link href={checkoutBegin({})} prefetch={false}>
+                  Checkout
+                </Link>
               )}
             </Button>
             <Link

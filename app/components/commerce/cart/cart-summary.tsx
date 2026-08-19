@@ -1,3 +1,5 @@
+import { Link } from "@/components/link";
+import { checkoutBegin } from "@/generated/routes/checkout-begin";
 import { Button } from "@/components/ui/button";
 import type { ICartData } from "@/generated/data";
 import { cn } from "@/lib/utils";
@@ -83,7 +85,14 @@ export function CartSummary({
         {valid.error ? (
           <span>Checkout</span>
         ) : (
-          <a href={cart.checkoutUrl}>Checkout</a>
+          // An Inertia visit, not a page load — Checkout-Begin is a ported
+          // page. Never prefetched, though: base's Begin handler *writes* to
+          // the basket (it fills empty shipments, revalidates the currency,
+          // recalculates, and copies the default address onto the shipment),
+          // and none of that should happen because a pointer crossed a button.
+          <Link href={checkoutBegin({})} prefetch={false}>
+            Checkout
+          </Link>
         )}
       </Button>
     </aside>
