@@ -56,6 +56,11 @@ async function request<T>(
   }
 
   if (data?.error) {
+    // Base answers `{error, redirectUrl}` when the basket it was asked to
+    // change is gone. Its jQuery assigned window.location; an Inertia visit
+    // is the same move without the full page load.
+    if (data.redirectUrl) router.visit(data.redirectUrl);
+
     throw new SfraError(
       data.errorMessage || (typeof data.error === "string" ? data.error : "Something went wrong."),
       false

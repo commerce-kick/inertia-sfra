@@ -1,4 +1,5 @@
 import { LineItem } from "./line-item";
+import { QuantityStepper } from "./quantity-stepper";
 import type { ICartLineItemData } from "@/generated/data";
 
 /**
@@ -22,7 +23,11 @@ export function CartLines({ items }: { items: ICartLineItemData[] }) {
                 <>
                   <LineItem.Attributes />
                   <LineItem.Availability />
-                  <LineItem.Money />
+                  <LineItem.Money
+                    quantity={
+                      item.isBonus ? undefined : <QuantityStepper item={item} />
+                    }
+                  />
                   <LineItem.Promotions />
                   <LineItem.Bundle />
                 </>

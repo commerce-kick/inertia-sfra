@@ -30,6 +30,40 @@ function answer(res, payload) {
 }
 
 /**
+ * Answer a cart mutation with the basket it produced — or, when base refused
+ * the change, with the failure envelope the client already knows how to read.
+ *
+ * Base signals a refusal two ways at once: it sets a 500 and puts the reason
+ * in `errorMessage`. A 500 rejects in the browser before anything reads the
+ * body, so the shopper would be told "Request failed with status code 500"
+ * instead of why. The status is normalized back to 200 and the reason travels
+ * in the envelope `app/lib/queries/sfra.ts` unwraps for every SFRA endpoint —
+ * so a hook still only ever sees a DTO or a rejection carrying real text.
+ * `redirectUrl` is base's "your basket is gone, start over" signal.
+ *
+ * @param {Object} res - the SFRA response
+ * @returns {void}
+ */
+function answerCart(res) {
+  var BasketMgr = require("dw/order/BasketMgr");
+  var CartData = require("*/cartridge/scripts/data/CartData");
+
+  var viewData = res.getViewData();
+
+  if (viewData.error || viewData.errorMessage) {
+    res.setStatusCode(200);
+    answer(res, {
+      error: true,
+      errorMessage: viewData.errorMessage || "",
+      redirectUrl: viewData.redirectUrl || "",
+    });
+    return;
+  }
+
+  answer(res, CartData.fromModel(viewData, BasketMgr.getCurrentBasket()));
+}
+
+/**
  * Cart-Show: the bag.
  *
  * Base computes the whole cart model — it revalidates the currency, makes
@@ -103,10 +137,7 @@ server.append("AddProduct", function (req, res, next) {
  * components rather than a second payload.
  */
 server.append("MiniCartShow", function (req, res, next) {
-  var BasketMgr = require("dw/order/BasketMgr");
-  var CartData = require("*/cartridge/scripts/data/CartData");
-
-  answer(res, CartData.fromModel(res.getViewData(), BasketMgr.getCurrentBasket()));
+  answerCart(res);
 
   next();
 });
@@ -125,10 +156,33 @@ server.append("MiniCartShow", function (req, res, next) {
  * of the storefront's public surface either way.
  */
 server.append("Get", function (req, res, next) {
-  var BasketMgr = require("dw/order/BasketMgr");
-  var CartData = require("*/cartridge/scripts/data/CartData");
+  answerCart(res);
 
-  answer(res, CartData.fromModel(res.getViewData(), BasketMgr.getCurrentBasket()));
+  next();
+});
+
+/**
+ * Cart-UpdateQuantity: change how many of a line the shopper wants.
+ *
+ * Base owns the arithmetic — it checks the new quantity against inventory and
+ * the rest of the basket (`checkPliCanBeUpdated`), recalculates, and adopts
+ * any bonus discount the new quantity just earned — so this appends and
+ * retypes.
+ *
+ * One base fault is left standing rather than repaired: base reads
+ * `matchingLineItem.product` before checking that the line was found, so a
+ * request naming a pid/uuid pair that is not in the basket throws instead of
+ * answering its own "cannot update" message. Repairing it means replacing the
+ * route and reimplementing the bonus-discount bookkeeping around it; nothing
+ * in the storefront can produce that pair, since every uuid comes from the
+ * basket the page was rendered from.
+ *
+ * @queryParam pid required string product ID of the line to change
+ * @queryParam uuid required string UUID of the line to change
+ * @queryParam quantity required number the new quantity
+ */
+server.append("UpdateQuantity", function (req, res, next) {
+  answerCart(res);
 
   next();
 });

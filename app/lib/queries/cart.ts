@@ -7,6 +7,7 @@ import type {
 import { cartAddProduct } from "@/generated/routes/cart-addproduct";
 import { cartMiniCart } from "@/generated/routes/cart-minicart";
 import { cartMiniCartShow } from "@/generated/routes/cart-minicartshow";
+import { cartUpdateQuantity } from "@/generated/routes/cart-updatequantity";
 import { router, usePage } from "@inertiajs/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback } from "react";
@@ -102,6 +103,24 @@ export function useAddToCart() {
 
       return request<ICartActionData>(cartAddProduct(), body);
     },
+    onSuccess: refresh,
+  });
+}
+
+/**
+ * Change how many of a line the shopper wants.
+ *
+ * The answer is the whole basket, but nothing reads it: the cart page reloads
+ * its own prop, which is the copy on screen. What the mutation is really for
+ * is the change itself.
+ */
+export function useUpdateQuantity() {
+  const request = useSfraRequest();
+  const refresh = useCartRefresh();
+
+  return useMutation({
+    mutationFn: (vars: { pid: string; uuid: string; quantity: number }) =>
+      request<ICartData>(cartUpdateQuantity(vars)),
     onSuccess: refresh,
   });
 }
