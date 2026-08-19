@@ -431,6 +431,32 @@ server.replace("GetProduct", function (req, res, next) {
 });
 
 /**
+ * Cart-AddProductListItem: put an item from a product list — a wishlist or a
+ * gift registry — into the bag. Contributed by plugin_giftregistry.
+ *
+ * Base resolves the list item, checks the quantity against what is already in
+ * the basket, adds it and detects any choice-of-bonus promotion it earned, so
+ * this appends and retypes its answer as the same CartActionData a plain
+ * add-to-bag returns — down to the bonus offer, which opens the same chooser.
+ *
+ * No hook yet: nothing renders a product list until the wishlist and gift
+ * registry waves, and the caller belongs with the surface that has a list
+ * item to add. The route is typed now because it is part of the storefront's
+ * public surface either way.
+ *
+ * @formParam plid required string ID of the product list
+ * @formParam pid required string ID of the item within the list
+ * @formParam qty optional number how many, defaulting to 1
+ */
+server.append("AddProductListItem", function (req, res, next) {
+  var CartActionData = require("*/cartridge/scripts/data/CartActionData");
+
+  answer(res, CartActionData.fromResult(res.getViewData()));
+
+  next();
+});
+
+/**
  * Cart-MiniCart: the bag count in the header.
  *
  * Base rendered components/header/miniCart.isml — the bag glyph, the count,

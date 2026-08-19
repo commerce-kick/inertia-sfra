@@ -43,16 +43,18 @@ var CartActionData = BaseData.extend({
 /**
  * Map base's answer to a plain CartActionData object.
  *
- * The three routes that answer this shape each named the same two fields
- * differently — Cart-AddProduct says `message` and `quantityTotal`,
- * Cart-AddProductListItem says `msg`, Cart-AddBonusProducts says `msgSuccess`
- * and `totalQty` — so the aliases are read here rather than in three callers.
+ * The three routes that answer this shape each named the same fields
+ * differently — Cart-AddProduct says `message` and `quantityTotal` and flags
+ * failure with `error`; Cart-AddProductListItem says `msg` and flags success
+ * with `success`, never setting `error` at all; Cart-AddBonusProducts says
+ * `msgSuccess` and `totalQty` and sets both flags. The aliases are read here
+ * rather than in three callers, and a failure is either flag saying so.
  *
  * @param {Object} result - the view data base's route answered with
  * @returns {Object} plain CartActionData object
  */
 CartActionData.fromResult = function (result) {
-  var failed = Boolean(result.error);
+  var failed = Boolean(result.error) || result.success === false;
 
   return CartActionData.from({
     error: failed,
