@@ -59,6 +59,40 @@ server.append("Show", initInertia.init, shareData, function (req, res, next) {
 });
 
 /**
+ * Cart-AddProduct: put a product in the bag.
+ *
+ * Base does the whole job already — it resolves the product (single, set or
+ * bundle), merges it with a matching line if the options agree, ensures every
+ * shipment has a method, recalculates, and detects any choice-of-bonus
+ * promotion the addition just earned. This appends and retypes the answer.
+ *
+ * The basket itself does not ride back: the cart page refreshes with a
+ * partial reload of its own `cart` prop, and the header count is
+ * Cart-MiniCart. What the caller cannot get any other way is the bonus offer,
+ * which exists only in the difference between the basket before and after.
+ *
+ * Its fields are form fields, not query parameters, and are documented as
+ * `@formParam` rather than `@queryParam`: SFRA's `req.form` is built by
+ * getFormData, which skips any key that also appears in the query string
+ * (modules/server/request.js), so a POST field put in the URL never arrives.
+ * `@queryParam` would also make the generated route helper demand it in the
+ * URL — the body is where it belongs.
+ *
+ * @formParam pid required string the product ID to add
+ * @formParam quantity optional number how many, defaults to the product minimum
+ * @formParam options optional string JSON array of {optionId, selectedValueId}
+ * @formParam childProducts optional string JSON array of bundle children
+ * @formParam pidsObj optional string JSON array of {pid, qty, options} for a product set
+ */
+server.append("AddProduct", function (req, res, next) {
+  var CartActionData = require("*/cartridge/scripts/data/CartActionData");
+
+  answer(res, CartActionData.fromResult(res.getViewData()));
+
+  next();
+});
+
+/**
  * Cart-MiniCartShow: the contents of the bag flyout.
  *
  * Base rendered checkout/cart/miniCart.isml for jQuery to drop into the

@@ -4,7 +4,7 @@ import { ProductPromotions } from "./product-promotions";
 import { ProductPrice } from "./product-price";
 import { SizeChart } from "./size-chart";
 import { VariationSwatches } from "./variation-swatches";
-import { Button } from "@/components/ui/button";
+import { AddToBag } from "@/components/commerce/cart/add-to-bag";
 import type { IProductDetailData } from "@/generated/data";
 import type { Crumb } from "@/types/product";
 import { Star } from "lucide-react";
@@ -52,21 +52,9 @@ function ProductSummary({
       <ProductAvailability availability={product.availability} />
 
       <ProductPromotions promotions={product.promotions} />
-      
-      <div className="flex w-full flex-col items-start gap-2.5 pt-2">
-        <Button
-          size="lg"
-          disabled
-          className="label-caps h-13 w-full max-w-sm"
-          title="The cart flow arrives in the next phase"
-        >
-          Add to bag
-        </Button>
-        <span className="meta-caps text-muted-foreground">
-          Cart coming soon · demo in progress
-        </span>
-      </div>
-      
+
+      <AddToBag product={product} />
+
       {product.description && (
         <div className="flex w-full flex-col gap-3 border-t pt-6">
           <h2 className="label-caps">Description</h2>

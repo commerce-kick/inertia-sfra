@@ -1,8 +1,15 @@
 import { useSfraRequest } from "./sfra";
-import type { ICartData, IMiniCartData } from "@/generated/data";
+import type {
+  ICartActionData,
+  ICartData,
+  IMiniCartData,
+} from "@/generated/data";
+import { cartAddProduct } from "@/generated/routes/cart-addproduct";
 import { cartMiniCart } from "@/generated/routes/cart-minicart";
 import { cartMiniCartShow } from "@/generated/routes/cart-minicartshow";
-import { useQuery } from "@tanstack/react-query";
+import { router, usePage } from "@inertiajs/react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useCallback } from "react";
 
 /**
  * Every cart query hangs off this key, so one mutation can invalidate the
@@ -43,5 +50,58 @@ export function useMiniCartContents(enabled: boolean) {
     enabled,
     staleTime: 60_000,
     queryFn: () => request<ICartData>(cartMiniCartShow()),
+  });
+}
+
+/**
+ * What every cart mutation does once it lands: drop the cached bag queries,
+ * and — only on a page that actually renders the basket — partially reload
+ * the `cart` prop it just invalidated. A PDP has no `cart` prop, so asking
+ * for one there would be a round trip for nothing.
+ */
+export function useCartRefresh() {
+  const queryClient = useQueryClient();
+  const rendersCart = Boolean(usePage().props.cart);
+
+  return useCallback(() => {
+    queryClient.invalidateQueries({ queryKey: CART_KEY });
+    if (rendersCart) router.reload({ only: ["cart"] });
+  }, [queryClient, rendersCart]);
+}
+
+/** The fields Cart-AddProduct accepts. Absent ones are never sent. */
+export type AddToCartVars = {
+  pid: string;
+  quantity?: number;
+  /** JSON array of `{optionId, selectedValueId}` — base parses it server-side. */
+  options?: string;
+  /** JSON array of bundle children. */
+  childProducts?: string;
+  /** JSON array of `{pid, qty, options}`, for a product set. */
+  pidsObj?: string;
+};
+
+/**
+ * Add a product to the bag.
+ *
+ * Quantity and options are server-owned on the product surfaces — both are
+ * resolved by the URL the shopper is on — so callers pass back what the
+ * product model already reports rather than holding a second copy in state.
+ */
+export function useAddToCart() {
+  const request = useSfraRequest();
+  const refresh = useCartRefresh();
+
+  return useMutation({
+    mutationFn: (vars: AddToCartVars) => {
+      const body: Record<string, string | number> = { pid: vars.pid };
+      if (vars.quantity !== undefined) body.quantity = vars.quantity;
+      if (vars.options) body.options = vars.options;
+      if (vars.childProducts) body.childProducts = vars.childProducts;
+      if (vars.pidsObj) body.pidsObj = vars.pidsObj;
+
+      return request<ICartActionData>(cartAddProduct(), body);
+    },
+    onSuccess: refresh,
   });
 }

@@ -91,6 +91,50 @@ var ProductDetailData = BaseData.extend({
       },
       default: "",
     },
+    /** @type {boolean} every variation attribute is chosen, so the product can be added to the bag */
+    readyToOrder: { type: "boolean", default: false },
+    /** @type {number} the quantity currently resolved, which is what Add to bag submits */
+    selectedQuantity: { type: "number", default: 1 },
+    /** @type {Array<{value: number, selected: boolean, url: string, variationUrl: string}>} orderable quantities, each carrying the URL that re-resolves the product at it */
+    quantities: {
+      transform: function (quantities) {
+        return (quantities || []).map(function (quantity) {
+          return {
+            value: parseInt(quantity.value, 10) || 0,
+            selected: Boolean(quantity.selected),
+            url: productUrls.normalizeVariationUrl(quantity.url),
+            variationUrl: quantity.url ? quantity.url.toString() : "",
+          };
+        });
+      },
+      default: function () {
+        return [];
+      },
+    },
+    /** @type {Array<{id: string, name: string, selectedValueId: string, values: Array<{id: string, displayValue: string, price: string, url: string, variationUrl: string}>}>} product options and their values, sorted by price as base sorted them */
+    options: {
+      transform: function (options) {
+        return (options || []).map(function (option) {
+          return {
+            id: option.id || "",
+            name: option.name || "",
+            selectedValueId: option.selectedValueId || "",
+            values: (option.values || []).map(function (value) {
+              return {
+                id: value.id || "",
+                displayValue: value.displayValue || "",
+                price: value.price || "",
+                url: productUrls.normalizeVariationUrl(value.url),
+                variationUrl: value.url ? value.url.toString() : "",
+              };
+            }),
+          };
+        });
+      },
+      default: function () {
+        return [];
+      },
+    },
     /** @type {Array<{id: string, displayName: string, displayValue: string, swatchable: boolean, resetUrl: string, values: Array<{id: string, displayValue: string, selected: boolean, selectable: boolean, url: string, variationUrl: string, image: {url: string, alt: string}|null}>}>} variation attributes, each value carrying the Product-Show URL that selects it */
     variationAttributes: {
       transform: function (attrs) {
@@ -159,6 +203,10 @@ ProductDetailData.fromModel = function (product) {
     promotions: product.promotions,
     variationAttributes: product.variationAttributes,
     sizeChartId: product.sizeChartId,
+    readyToOrder: product.readyToOrder,
+    selectedQuantity: product.selectedQuantity,
+    quantities: product.quantities,
+    options: product.options,
   });
 };
 

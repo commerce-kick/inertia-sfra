@@ -3,6 +3,7 @@ import { ProductGallery } from "./product-gallery";
 import { ProductPrice } from "./product-price";
 import { ProductPromotions } from "./product-promotions";
 import { VariationSwatches } from "./variation-swatches";
+import { AddToBag } from "@/components/commerce/cart/add-to-bag";
 import { Link } from "@/components/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -103,19 +104,7 @@ export function QuickView({ pid, name }: { pid: string; name: string }) {
 
               <ProductPromotions promotions={product.promotions} />
 
-              <div className="flex flex-col items-start gap-2.5 pt-2">
-                <Button
-                  size="lg"
-                  disabled
-                  className="label-caps h-13 w-full"
-                  title="The cart flow arrives in the next phase"
-                >
-                  Add to bag
-                </Button>
-                <span className="meta-caps text-muted-foreground">
-                  Cart coming soon · demo in progress
-                </span>
-              </div>
+              <AddToBag product={product} onSelect={setVariationUrl} />
             </>
           )}
 
