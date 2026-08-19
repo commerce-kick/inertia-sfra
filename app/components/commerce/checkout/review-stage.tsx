@@ -2,8 +2,8 @@ import { Link } from "@/components/link";
 import { Button } from "@/components/ui/button";
 import type { IAddressData, ICheckoutOrderData } from "@/generated/data";
 import { checkoutBegin } from "@/generated/routes/checkout-begin";
+import { formPost } from "@/lib/form-post";
 import { usePlaceOrder } from "@/lib/queries/checkout";
-import { router } from "@inertiajs/react";
 
 function AddressBlock({ address }: { address: IAddressData | null }) {
   if (!address) {
@@ -110,11 +110,12 @@ export function ReviewStage({ order }: { order: ICheckoutOrderData }) {
           placeOrder.mutate(undefined, {
             onSuccess: (result) => {
               // Base hands the order number and its token to Order-Confirm as
-              // a form POST, and that is what this is: the two facts travel in
-              // the body, so a placed order is not left sitting in browser
-              // history or leaking through a referrer. The field names are
-              // base's own — the route reads them off `req.form`.
-              router.post(result.continueUrl, {
+              // a form POST, and so does this: the two facts travel in the
+              // body, out of history and out of referrers. It has to be a real
+              // form — Order-Confirm reads them off `req.form`, which SFCC
+              // fills only from an encoded body, never from the JSON
+              // `router.post` sends.
+              formPost(result.continueUrl, {
                 orderID: result.orderId,
                 orderToken: result.orderToken,
               });

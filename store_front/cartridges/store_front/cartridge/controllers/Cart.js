@@ -458,7 +458,11 @@ server.replace("MiniCart", function (req, res, next) {
 
   var currentBasket = BasketMgr.getCurrentBasket();
 
-  res.json(
+  // Through the reset seam like every other typed answer: `res.json` merges,
+  // so answering directly shipped SFRA's own page metadata (`action`,
+  // `queryString`, `locale`) alongside the count.
+  answer(
+    res,
     MiniCartData.from({
       quantity: currentBasket ? currentBasket.productQuantityTotal : 0,
     })

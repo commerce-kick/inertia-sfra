@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { accountDoSetNewPassword } from "@/generated/routes/account-dosetnewpassword";
-import { router } from "@inertiajs/react";
+import { formPost } from "@/lib/form-post";
 import { useEffect, useRef } from "react";
 
 /**
@@ -21,7 +21,10 @@ export function TokenHandoff({ token }: { token: string }) {
   const handoff = () => {
     if (sent.current) return;
     sent.current = true;
-    router.post(accountDoSetNewPassword({}), { token });
+    // A real form POST, as base's own newPasswordRedirect template was —
+    // Account-DoSetNewPassword reads the token off `req.form`, which SFCC
+    // fills only from an encoded body.
+    formPost(accountDoSetNewPassword({}), { token });
   };
 
   useEffect(handoff, []);
