@@ -166,7 +166,7 @@ Sets the composition bar the rest of the loop copies.
 | 1.6 | Product-ShowQuickView | JSON | `useQuickView` | DONE | `server.replace` → typed product + productUrl; QuickView sheet on every PLP tile. Cart CTA disabled until 2.4; quantity/options/mainAttributes deferred with it |
 | 1.7 | Product-SizeChart | JSON | `useSizeChart` | DONE | `server.replace` → `SizeChartData` (miss = `success:false`); `sizeChartId` added to `ProductDetailData`; PDP disclosure under the swatches. Base's outside-click dismissal dropped — the panel is inline, not an overlay |
 | 1.8 | Product-ShowInCategory | PAGE | `Product/Show` | DONE | `server.append` → same page/props as 1.3 via a shared `renderProductDetail`; breadcrumbs now walk the `cgid` (base ignored it and repeated the primary-category trail), falling back when it does not resolve. Nothing links here — SEO URL rules do, as in base |
-| 1.9 | Product-ShowBonusProducts | JSON | `useBonusProducts` | TODO | pairs with Cart-AddBonusProducts (2.11) |
+| 1.9 | Product-ShowBonusProducts | JSON | `useBonusProducts` | DONE | `server.replace` → `BonusProductsData` (3 DTOs; `BonusProductLineItemData` fleshed out, base's option-id typo fixed); `useBonusProducts` is an infinite query walking server-authored `moreUrl`. No chooser UI yet — the DUUID only exists once 2.4/2.12 land, so the dialog ships with 2.11. Options/`renderedTemplate` copy dropped |
 | 1.10 | Search-Content | JSON | `useContentSearch` | TODO | content results tab |
 | 1.11 | Search-ShowAjax | N/A | — | TODO | superseded by the scroll paginator on Search-Show |
 | 1.12 | Search-UpdateGrid | N/A | — | TODO | superseded by the scroll paginator on Search-Show |

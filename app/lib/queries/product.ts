@@ -1,8 +1,12 @@
 import { useSfraRequest } from "./sfra";
-import type { IProductDetailData, ISizeChartData } from "@/generated/data";
+import type {
+  IBonusProductsData,
+  IProductDetailData,
+  ISizeChartData,
+} from "@/generated/data";
 import { productShowQuickView } from "@/generated/routes/product-showquickview";
 import { productSizeChart } from "@/generated/routes/product-sizechart";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 
 /** Product-ShowQuickView's payload: the same product the PDP renders, plus its link. */
 export type QuickViewResponse = {
@@ -63,5 +67,31 @@ export function useSizeChart(cid: string, enabled: boolean) {
     enabled: enabled && Boolean(cid),
     staleTime: Infinity,
     queryFn: () => request<ISizeChartData>(productSizeChart({ cid })),
+  });
+}
+
+/**
+ * The choice-of-bonus chooser: the products a promotion lets a shopper pick,
+ * and what they have already picked.
+ *
+ * `url` is server-authored. Cart-AddProduct and Cart-EditBonusProduct hand
+ * back a finished Product-ShowBonusProducts URL — rule-based with paging, or
+ * list-based with named pids — so nothing here builds one, and passing `null`
+ * (no bonus discount in play) costs no request.
+ *
+ * Base's "More" button followed `moreUrl` out of the payload and appended the
+ * next page to the dialog; the same walk is an infinite query, so pages
+ * accumulate in `data.pages` in the order the shopper asked for them.
+ */
+export function useBonusProducts(url: string | null) {
+  const request = useSfraRequest();
+
+  return useInfiniteQuery({
+    queryKey: ["bonus-products", url],
+    enabled: Boolean(url),
+    initialPageParam: url ?? "",
+    queryFn: ({ pageParam }) => request<IBonusProductsData>(pageParam),
+    getNextPageParam: (page) =>
+      page.showMore && page.moreUrl ? page.moreUrl : undefined,
   });
 }

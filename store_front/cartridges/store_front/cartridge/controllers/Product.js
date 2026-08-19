@@ -11,6 +11,11 @@ var initInertia = require("*/cartridge/scripts/middleware/initInertia");
 var shareData = require("*/cartridge/scripts/middleware/shareData");
 var cache = require("*/cartridge/scripts/middleware/cache");
 
+// Base's cart helper pages the rule-based bonus chooser six at a time
+// (cartHelpers.BONUS_PRODUCTS_PAGE_SIZE); the same number is the fallback
+// when a caller reaches this route without a pagesize.
+var BONUS_PRODUCTS_PAGE_SIZE = 6;
+
 /**
  * Render the PDP. Both product routes answer the same page with the same
  * props; only the breadcrumb trail differs, so it is passed in.
@@ -168,6 +173,118 @@ server.replace("SizeChart", function (req, res, next) {
   var SizeChartData = require("*/cartridge/scripts/data/SizeChartData");
 
   res.json(SizeChartData.fromContent(ContentMgr.getContent(req.querystring.cid)));
+
+  next();
+});
+
+/**
+ * Product-ShowBonusProducts: the choice-of-bonus chooser.
+ *
+ * Reached when a promotion grants a choice of bonus products: Cart-AddProduct
+ * (and Cart-EditBonusProduct) hand the client a finished URL for this route —
+ * rule-based with `pagesize`/`pagestart`, or list-based with `pids` — so the
+ * caller follows a server-authored URL rather than building one.
+ *
+ * Base rendered the chooser's markup to an HTML string for a jQuery modal
+ * (`{ renderedTemplate }`); this replaces the route with the same information
+ * typed, so the dialog can be built from the PDP's own components. Base's
+ * `closeButtonText`/`enterDialogMessage` resource strings are dropped: UI copy
+ * is English-only and written inline.
+ *
+ * The paging arithmetic, the `pids` branch, and the already-chosen list are
+ * base's, with two repairs: a missing basket or an unknown DUUID answers an
+ * empty selection instead of throwing, and `pagestart`/`pagesize` fall back to
+ * base's own defaults rather than becoming NaN.
+ *
+ * @queryParam DUUID required string UUID of the bonus discount line item being chosen against
+ * @queryParam pids optional string comma-separated product IDs, for a list-based promotion
+ * @queryParam pagestart optional number index of the first product on this page
+ * @queryParam pagesize optional number products per page
+ * @queryParam maxpids optional number how many bonus products the promotion allows
+ */
+server.replace("ShowBonusProducts", function (req, res, next) {
+  var BasketMgr = require("dw/order/BasketMgr");
+  var collections = require("*/cartridge/scripts/util/collections");
+  var ProductFactory = require("*/cartridge/scripts/factories/product");
+  var BonusProductData = require("*/cartridge/scripts/data/BonusProductData");
+  var BonusProductLineItemData = require("*/cartridge/scripts/data/BonusProductLineItemData");
+  var BonusProductsData = require("*/cartridge/scripts/data/BonusProductsData");
+
+  var duuid = req.querystring.DUUID;
+  var basket = BasketMgr.getCurrentBasket();
+  var discount =
+    duuid && basket
+      ? collections.find(basket.getBonusDiscountLineItems(), function (item) {
+          return item.UUID === duuid;
+        })
+      : null;
+
+  if (!discount) {
+    res.json(BonusProductsData.from({ duuid: duuid || "" }));
+    return next();
+  }
+
+  var products = [];
+  var moreUrl = "";
+  var showMore = false;
+
+  if (req.querystring.pids) {
+    products = req.querystring.pids.split(",").map(function (pid) {
+      return ProductFactory.get({ pid: pid, pview: "bonus", duuid: duuid });
+    });
+  } else {
+    var URLUtils = require("dw/web/URLUtils");
+    var PagingModel = require("dw/web/PagingModel");
+    var ProductSearchModel = require("dw/catalog/ProductSearchModel");
+
+    var pageStart = parseInt(req.querystring.pagestart, 10) || 0;
+    var pageSize = parseInt(req.querystring.pagesize, 10) || BONUS_PRODUCTS_PAGE_SIZE;
+
+    var search = new ProductSearchModel();
+    search.setPromotionID(discount.promotionID);
+    search.setPromotionProductType("bonus");
+    search.search();
+
+    var paging = new PagingModel(search.getProductSearchHits(), search.count);
+    paging.setStart(pageStart);
+    paging.setPageSize(pageSize);
+
+    showMore = pageStart + pageSize <= paging.count;
+    moreUrl = URLUtils.url(
+      "Product-ShowBonusProducts",
+      "DUUID",
+      duuid,
+      "pagesize",
+      pageSize,
+      "pagestart",
+      pageStart + pageSize
+    ).toString();
+
+    var hits = paging.pageElements;
+    while (hits !== null && hits.hasNext()) {
+      products.push(
+        ProductFactory.get({
+          pid: hits.next().getProduct().ID,
+          pview: "bonus",
+          duuid: duuid,
+        })
+      );
+    }
+  }
+
+  res.json(
+    BonusProductsData.from({
+      duuid: duuid,
+      products: products.map(BonusProductData.fromModel),
+      selected: collections.map(
+        discount.bonusProductLineItems,
+        BonusProductLineItemData.fromLineItem
+      ),
+      maxPids: parseInt(req.querystring.maxpids, 10) || discount.maxBonusItems,
+      moreUrl: moreUrl,
+      showMore: showMore,
+    })
+  );
 
   next();
 });
