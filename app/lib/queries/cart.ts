@@ -7,6 +7,7 @@ import type {
 import { cartAddProduct } from "@/generated/routes/cart-addproduct";
 import { cartMiniCart } from "@/generated/routes/cart-minicart";
 import { cartMiniCartShow } from "@/generated/routes/cart-minicartshow";
+import { cartRemoveProductLineItem } from "@/generated/routes/cart-removeproductlineitem";
 import { cartUpdateQuantity } from "@/generated/routes/cart-updatequantity";
 import { router, usePage } from "@inertiajs/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -121,6 +122,18 @@ export function useUpdateQuantity() {
   return useMutation({
     mutationFn: (vars: { pid: string; uuid: string; quantity: number }) =>
       request<ICartData>(cartUpdateQuantity(vars)),
+    onSuccess: refresh,
+  });
+}
+
+/** Take a line out of the bag. */
+export function useRemoveLineItem() {
+  const request = useSfraRequest();
+  const refresh = useCartRefresh();
+
+  return useMutation({
+    mutationFn: (vars: { pid: string; uuid: string }) =>
+      request<ICartData>(cartRemoveProductLineItem(vars)),
     onSuccess: refresh,
   });
 }

@@ -42,9 +42,11 @@ function answer(res, payload) {
  * `redirectUrl` is base's "your basket is gone, start over" signal.
  *
  * @param {Object} res - the SFRA response
+ * @param {Object} [model] - the cart model, when base did not leave it at the
+ *   top of view data (Cart-RemoveProductLineItem wraps it in `basket`)
  * @returns {void}
  */
-function answerCart(res) {
+function answerCart(res, model) {
   var BasketMgr = require("dw/order/BasketMgr");
   var CartData = require("*/cartridge/scripts/data/CartData");
 
@@ -60,7 +62,7 @@ function answerCart(res) {
     return;
   }
 
-  answer(res, CartData.fromModel(viewData, BasketMgr.getCurrentBasket()));
+  answer(res, CartData.fromModel(model || viewData, BasketMgr.getCurrentBasket()));
 }
 
 /**
@@ -183,6 +185,27 @@ server.append("Get", function (req, res, next) {
  */
 server.append("UpdateQuantity", function (req, res, next) {
   answerCart(res);
+
+  next();
+});
+
+/**
+ * Cart-RemoveProductLineItem: take a line out of the bag.
+ *
+ * Base finds the line, collects the bonus lines that hung off it, removes it,
+ * drops the shipment if that emptied a non-default one, and recalculates.
+ * This appends and retypes.
+ *
+ * Base answered `{basket, toBeDeletedUUIDs}` — the second list told its
+ * jQuery which bonus rows to delete from the DOM alongside the one the
+ * shopper clicked. A re-render has no rows to reconcile, so only the basket
+ * survives, and it arrives where every other cart route puts it.
+ *
+ * @queryParam pid required string product ID of the line to remove
+ * @queryParam uuid required string UUID of the line to remove
+ */
+server.append("RemoveProductLineItem", function (req, res, next) {
+  answerCart(res, res.getViewData().basket);
 
   next();
 });

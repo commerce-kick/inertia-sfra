@@ -1,5 +1,6 @@
 import { LineItem } from "./line-item";
 import { QuantityStepper } from "./quantity-stepper";
+import { RemoveLineItem } from "./remove-line-item";
 import type { ICartLineItemData } from "@/generated/data";
 
 /**
@@ -16,7 +17,9 @@ export function CartLines({ items }: { items: ICartLineItemData[] }) {
           <LineItem item={item}>
             <LineItem.Media />
             <LineItem.Body>
-              <LineItem.Title />
+              <LineItem.Title>
+                {!item.isBonus && <RemoveLineItem item={item} />}
+              </LineItem.Title>
               {item.noProduct ? (
                 <LineItem.Unavailable />
               ) : (
