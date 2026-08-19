@@ -27,7 +27,7 @@ var OAUTH_REENTRY_ENDPOINT = 1;
  * decides which of the two panes opens from the `action` parameter. So this
  * appends and swaps only the render.
  *
- * The registration fields arrive as data, not markup: `RegistrationFormData`
+ * The registration fields arrive as data, not markup: `ProfileFormData`
  * carries the label, the required flag and the length/pattern constraints the
  * site's form definition declares, so the browser enforces the same rules the
  * server will. Base printed the same facts as an attributes string.
@@ -50,7 +50,7 @@ var OAUTH_REENTRY_ENDPOINT = 1;
  */
 server.append("Show", initInertia.init, shareData, function (req, res, next) {
   var URLUtils = require("dw/web/URLUtils");
-  var RegistrationFormData = require("*/cartridge/scripts/data/RegistrationFormData");
+  var ProfileFormData = require("*/cartridge/scripts/data/ProfileFormData");
 
   if (customer.isAuthenticated()) {
     res.redirect(URLUtils.url("Account-Show"));
@@ -66,7 +66,7 @@ server.append("Show", initInertia.init, shareData, function (req, res, next) {
       email: viewData.userName || "",
       rememberMe: Boolean(viewData.rememberMe),
     },
-    register: RegistrationFormData.fromForm(viewData.profileForm),
+    register: ProfileFormData.fromForm(viewData.profileForm),
     oauth: OAUTH_PROVIDERS.map(function (provider) {
       return {
         id: provider.id,

@@ -4,20 +4,23 @@ var BaseData = require("../BaseData");
 var FormFieldData = require("./FormFieldData");
 
 /**
- * The `profile` form as the registration surface renders it.
+ * The `profile` form — one shape for the two surfaces that render it.
  *
- * Base's registerForm.isml printed these eight fields of `server.forms
- * .getForm('profile')` in this order, and posted them to
- * Account-SubmitRegistration under the names carried here. Naming them makes
- * the shape typed on both sides: the form component composes named fields
- * instead of looping over an untyped bag, and the values it hands the
- * mutation are keyed by `name`, which is what base's validation answers under.
+ * Registration prints all eight of these fields (base's registerForm.isml, in
+ * this order) and posts them to Account-SubmitRegistration; editing a profile
+ * prints six of them (no password confirmation, no mailing-list opt-in, and
+ * the password field means "confirm it is you") and posts them to
+ * Account-SaveProfile. It is the same `server.forms.getForm('profile')` on
+ * the server, so it is one DTO here, composed differently by each form —
+ * naming the fields is what lets a component pick the ones it renders instead
+ * of looping over an untyped bag.
  *
- * The form's other fields — `currentpassword` and the included `newpasswords`
- * group — belong to the profile and password-change surfaces, not to
- * registration, and arrive with those rows.
+ * The values go back keyed by `name`, which is what base's validation answers
+ * under. The form's remaining fields — `currentpassword` and the included
+ * `newpasswords` group — belong to the password-change surface and arrive
+ * with it.
  */
-var RegistrationFormData = BaseData.extend({
+var ProfileFormData = BaseData.extend({
   schema: {
     /** @type {IFormFieldData} given name */
     firstName: { of: FormFieldData, transform: FormFieldData.fromField, default: null },
@@ -39,15 +42,15 @@ var RegistrationFormData = BaseData.extend({
 });
 
 /**
- * Map the `profile` form to a plain RegistrationFormData object.
+ * Map the `profile` form to a plain ProfileFormData object.
  * @param {Object} form - server.forms.getForm("profile")
- * @returns {Object} plain RegistrationFormData object
+ * @returns {Object} plain ProfileFormData object
  */
-RegistrationFormData.fromForm = function (form) {
+ProfileFormData.fromForm = function (form) {
   var customer = (form && form.customer) || {};
   var login = (form && form.login) || {};
 
-  return RegistrationFormData.from({
+  return ProfileFormData.from({
     firstName: customer.firstname,
     lastName: customer.lastname,
     phone: customer.phone,
@@ -59,4 +62,4 @@ RegistrationFormData.fromForm = function (form) {
   });
 };
 
-module.exports = RegistrationFormData;
+module.exports = ProfileFormData;

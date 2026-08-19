@@ -391,4 +391,31 @@ server.append("SaveProfile", function (req, res, next) {
   return next();
 });
 
+/**
+ * Account-EditProfile: the profile form.
+ *
+ * Base prefills it from the account model — first name, last name, phone and
+ * email — clears everything else, and renders the same `profile` form the
+ * registration surface renders. This appends and types that form, with the
+ * prefilled values riding along on each field, so the page composes six of
+ * the eight fields `ProfileFormData` describes and the seventh and eighth
+ * (password confirmation, mailing-list opt-in) simply are not rendered here,
+ * exactly as base did not render them.
+ *
+ * Base's `consentApi` / `caOnline` view data belongs to the tracking-consent
+ * banner it also hung on this page; that is row 9.17, and nothing on the
+ * profile form reads them.
+ */
+server.append("EditProfile", initInertia.init, shareData, function (req, res, next) {
+  var ProfileFormData = require("*/cartridge/scripts/data/ProfileFormData");
+
+  var viewData = res.getViewData();
+
+  res.inertia.render("Account/EditProfile", {
+    form: ProfileFormData.fromForm(viewData.profileForm),
+  });
+
+  return next();
+});
+
 module.exports = server.exports();

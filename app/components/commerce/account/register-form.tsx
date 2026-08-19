@@ -3,7 +3,7 @@ import {
   FormField,
 } from "@/components/commerce/account/form-field";
 import { Button } from "@/components/ui/button";
-import type { IFormFieldData, IRegistrationFormData } from "@/generated/data";
+import type { IFormFieldData, IProfileFormData } from "@/generated/data";
 import { useRegister } from "@/lib/queries/account";
 import { useState } from "react";
 
@@ -35,7 +35,7 @@ export function RegisterForm({
   form,
   rurl,
 }: {
-  form: IRegistrationFormData;
+  form: IProfileFormData;
   rurl: number;
 }) {
   const register = useRegister(rurl);

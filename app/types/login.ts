@@ -1,4 +1,4 @@
-import type { IRegistrationFormData } from "@/generated/data";
+import type { IProfileFormData } from "@/generated/data";
 import type { SharedProps } from "./shared";
 
 /**
@@ -21,6 +21,6 @@ export interface LoginShowProps extends SharedProps {
   /** The remembered username, when the customer's credentials hold one. */
   login: { email: string; rememberMe: boolean };
   /** The `profile` form as the site's form definition declares it. */
-  register: IRegistrationFormData;
+  register: IProfileFormData;
   oauth: OAuthProvider[];
 }
