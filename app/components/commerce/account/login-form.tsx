@@ -1,6 +1,8 @@
+import { Link } from "@/components/link";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
+import { accountPasswordReset } from "@/generated/routes/account-passwordreset";
 import { useLogin } from "@/lib/queries/account";
 import { useState } from "react";
 
@@ -71,16 +73,24 @@ export function LoginForm({
         />
       </div>
 
-      <div className="flex items-center gap-3">
-        <Checkbox
-          id="loginRememberMe"
-          name="loginRememberMe"
-          checked={loginRememberMe}
-          onCheckedChange={(state) => setRememberMe(state === true)}
-        />
-        <label htmlFor="loginRememberMe" className="label-caps">
-          Remember me
-        </label>
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <Checkbox
+            id="loginRememberMe"
+            name="loginRememberMe"
+            checked={loginRememberMe}
+            onCheckedChange={(state) => setRememberMe(state === true)}
+          />
+          <label htmlFor="loginRememberMe" className="label-caps">
+            Remember me
+          </label>
+        </div>
+        <Link
+          href={accountPasswordReset({})}
+          className="link-draw label-caps text-muted-foreground transition-colors hover:text-foreground"
+        >
+          Forgot password?
+        </Link>
       </div>
 
       {login.isError && (

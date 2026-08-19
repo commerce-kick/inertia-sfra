@@ -7,6 +7,9 @@
 const server = require("server");
 server.extend(module.superModule);
 
+var initInertia = require("*/cartridge/scripts/middleware/initInertia");
+var shareData = require("*/cartridge/scripts/middleware/shareData");
+
 // The reset-then-json seam and the failure envelope, shared with Cart.js.
 var answerJson = require("*/cartridge/scripts/helpers/answerJson");
 var answer = answerJson.answerJson;
@@ -136,6 +139,25 @@ server.append("PasswordResetDialogForm", function (req, res, next) {
       fields: viewData.fields,
     })
   );
+
+  return next();
+});
+
+/**
+ * Account-PasswordReset: the forgotten-password surface.
+ *
+ * Base rendered the same form twice — once as this page (its `mobile` flag)
+ * and once as a Bootstrap modal on the login page, both posting to
+ * Account-PasswordResetDialogForm. The port keeps one surface: an Inertia
+ * visit costs a fraction of what base's page load did, so the second copy
+ * bought nothing but a second place for the form to drift.
+ *
+ * Nothing needs to travel with the page — the form is two fields base wrote
+ * inline rather than a form definition, and where to go afterwards comes back
+ * with the answer.
+ */
+server.append("PasswordReset", initInertia.init, shareData, function (req, res, next) {
+  res.inertia.render("Account/PasswordReset", {});
 
   return next();
 });
