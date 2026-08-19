@@ -63,7 +63,7 @@ Reviewer ran in a fresh context (no shipped reviewer agent in this harness — d
 1. Sort select shows English "Best Matches" on the Spanish storefront → localize (BM rule names or client label map).
 2. Category-card imagery at `opacity-10` is invisible (compliance token) → make photography visible or commit to the icon-plate card.
 3. Home's first showcase row leads with a photo-less product ("Sin foto") → curate image-bearing products first or fix the catalog asset.
-4. PDP variation swatches are inert → wire SFRA variation URLs (variant selection is not covered by the cart deferral).
+4. ~~PDP variation swatches are inert → wire SFRA variation URLs.~~ **Resolved 2026-08-19** (port row 1.5): values carry normalized Product-Show URLs; selection is a partial visit.
 5. PLP price slider shows a full orange track at default, reading as an applied filter → mute until narrowed.
 6. Home deferred fallback renders 1 skeleton section but 2 real sections arrive → mirror `categoryShowcase.length`.
 7. 16px photo-in-circle tile swatches read as specks → flat color chips or true crops, cap at 4.

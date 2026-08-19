@@ -2,6 +2,7 @@
 
 var BaseData = require("../BaseData");
 var PriceData = require("./PriceData");
+var productUrls = require("./productUrls");
 
 /**
  * The PDP product: a trimmed, typed slice of the SFRA full product model.
@@ -66,7 +67,7 @@ var ProductDetailData = BaseData.extend({
       },
       default: 0,
     },
-    /** @type {Array<{id: string, displayName: string, swatchable: boolean, values: Array<{id: string, displayValue: string, selected: boolean, image: {url: string, alt: string}|null}>}>} variation attributes for display */
+    /** @type {Array<{id: string, displayName: string, displayValue: string, swatchable: boolean, resetUrl: string, values: Array<{id: string, displayValue: string, selected: boolean, selectable: boolean, url: string, image: {url: string, alt: string}|null}>}>} variation attributes, each value carrying the Product-Show URL that selects it */
     variationAttributes: {
       transform: function (attrs) {
         if (!attrs) return [];
@@ -75,7 +76,13 @@ var ProductDetailData = BaseData.extend({
           return {
             id: attr.attributeId || attr.id || "",
             displayName: attr.displayName || "",
+            // The selected value's label, so the UI can say "Color: Black"
+            // without hunting through values for selected.
+            displayValue: attr.displayValue || "",
             swatchable: Boolean(attr.swatchable),
+            // Clears this attribute's selection. Base only emits it for
+            // non-swatch attributes; empty means "no reset offered".
+            resetUrl: productUrls.normalizeVariationUrl(attr.resetUrl),
             values: (attr.values || []).map(function (value) {
               var swatch =
                 value.images && value.images.swatch && value.images.swatch.length
@@ -85,6 +92,10 @@ var ProductDetailData = BaseData.extend({
                 id: value.id || "",
                 displayValue: value.displayValue || "",
                 selected: Boolean(value.selected),
+                // False when no orderable variant exists for this combination.
+                // Base omits `url` entirely in that case.
+                selectable: Boolean(value.selectable),
+                url: productUrls.normalizeVariationUrl(value.url),
                 image: swatch
                   ? { url: swatch.url.toString(), alt: swatch.alt || "" }
                   : null,
