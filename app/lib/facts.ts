@@ -7,11 +7,11 @@
  */
 export const FACTS = {
   /** Adapter unit tests under test/unit/inertia_plugin (bun test). */
-  unitTests: 214,
+  unitTests: 219,
   /** Inertia protocol parity target — see PRODUCT.md, "Positioning". */
   protocolParity: "v3.3.0",
   /** Generated route-helper modules in app/generated/routes (minus index). */
-  routeHelpers: 154,
+  routeHelpers: 155,
   /** Generated DTO type modules in app/generated/data (minus index). */
   dtoTypes: 13,
 } as const;

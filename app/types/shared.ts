@@ -1,5 +1,15 @@
 import type { Page, PageProps } from "@inertiajs/core";
 
+/**
+ * SFRA's CSRF token pair, shared by the shareData middleware as an always()
+ * prop so it survives partial reloads. JSON mutations must send it as
+ * `{ [tokenName]: token }` in their payload.
+ */
+export type TCSRF = {
+  tokenName: string;
+  token: string;
+};
+
 /** One nav category from the shareData middleware. */
 export type NavCategory = {
   id: string;
@@ -15,6 +25,7 @@ export interface SharedProps extends PageProps {
   };
   locale: string;
   navBar: { categories?: NavCategory[] };
+  csrf: TCSRF | null;
   errors: Record<string, string>;
 }
 
