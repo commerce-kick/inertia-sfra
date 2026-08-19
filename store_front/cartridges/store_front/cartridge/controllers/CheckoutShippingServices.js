@@ -47,11 +47,33 @@ server.append("SubmitShipping", function (req, res, next) {
  * recalculates the basket on every change, which is the point — the totals
  * move — so the re-rendered order rides back.
  *
+ * This *must* answer from a `route:BeforeComplete` of its own, not from the
+ * middleware chain. Base stashes the address on view data during the chain
+ * and does the whole transaction in its own BeforeComplete, reading it back
+ * from there — so a chain-time answer, which resets view data, takes the
+ * address out from under base and its transaction throws "Unable to select
+ * shipping Method" on a request that was perfectly good.
+ *
+ * The routes that answer inline (Get, PlaceOrder, UpdateShippingMethodsList,
+ * CreateNewAddress) are the ones whose port steps may answer from the chain;
+ * every route that defers, defers here too.
+ *
  * @formParam methodID required string the shipping method to apply
  * @formParam shipmentUUID optional string which shipment, when the basket has more than one
+ * @formParam firstName optional string the shipment's address — plain names, not the form definition's
+ * @formParam lastName optional string see firstName
+ * @formParam address1 optional string see firstName
+ * @formParam address2 optional string see firstName
+ * @formParam city optional string see firstName
+ * @formParam stateCode optional string see firstName
+ * @formParam postalCode optional string see firstName
+ * @formParam countryCode optional string see firstName
+ * @formParam phone optional string see firstName
  */
 server.append("SelectShippingMethod", function (req, res, next) {
-  answerCheckout(res);
+  this.on("route:BeforeComplete", function (beforeReq, beforeRes) {
+    answerCheckout(beforeRes);
+  });
 
   return next();
 });
