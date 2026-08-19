@@ -7,68 +7,67 @@
 const server = require("server");
 server.extend(module.superModule);
 
-const inertia = require("*/cartridge/scripts/middleware/inertiaMiddleware");
-const sharedData = require("*/cartridge/scripts/middleware/shareData");
+var initInertia = require("*/cartridge/scripts/middleware/initInertia");
+var shareData = require("*/cartridge/scripts/middleware/shareData");
 
-server.append(
-  "Confirm",
-  function (req, res, next) {
-    var OrderMgr = require("dw/order/OrderMgr");
-    var OrderModel = require("*/cartridge/models/order");
-    var Locale = require("dw/util/Locale");
+/**
+ * Order-Confirm: the order exists, and this says so.
+ *
+ * A POST, as base wrote it: the order number and its token travel in the body
+ * rather than the URL, so a placed order is not sitting in browser history or
+ * leaking through a referrer. `router.post` from the review stage carries
+ * base's own two field names.
+ *
+ * Base's checks are all kept — both fields present, the order resolvable by
+ * number *and* token, and the order belonging to whoever is asking — and each
+ * failure renders base's standalone error template, untouched, which a
+ * pending render leaves alone.
+ *
+ * One repair. Base guards against re-rendering the same confirmation twice by
+ * comparing its remembered order against `req.querystring.ID` — but this
+ * route is a POST and reads everything else off `req.form`, so the comparison
+ * was against `undefined` and the guard never fired; it then *stored*
+ * `undefined`, so it never could. Both sides now read `req.form.orderID`,
+ * which is what base meant: seeing the same confirmation a second time sends
+ * the shopper home.
+ *
+ * Deferred: base offers a guest the chance to turn this order into an account
+ * (a password form posting to Order-CreateAccount). That is row 7.6 and
+ * arrives with it; `returningCustomer` already says which shopper is looking.
+ *
+ * @formParam orderID required string the order number
+ * @formParam orderToken required string the token that authorizes seeing it
+ */
+server.append("Confirm", initInertia.init, shareData, function (req, res, next) {
+  var OrderConfirmationData = require("*/cartridge/scripts/data/OrderConfirmationData");
 
-    var order;
+  var viewData = res.getViewData();
 
-    var currentLocale = Locale.getLocale(req.locale.id);
+  // Base answered a bad token or a missing order by rendering its own error
+  // template; leave that standing rather than overriding it with an empty
+  // confirmation.
+  if (!viewData.order) return next();
 
-    var config = {
-      numberOfLineItems: "*",
-    };
+  var lastOrderId = Object.prototype.hasOwnProperty.call(req.session.raw.custom, "orderID")
+    ? req.session.raw.custom.orderID
+    : null;
 
-    order = OrderMgr.getOrder(req.form.orderID, req.form.orderToken);
+  if (lastOrderId && lastOrderId === req.form.orderID) {
+    var URLUtils = require("dw/web/URLUtils");
+    res.redirect(URLUtils.url("Home-Show"));
+    return next();
+  }
 
-    var orderModel = new OrderModel(order, {
-      config: config,
-      countryCode: currentLocale.country,
-      containerView: "order",
-    });
+  res.inertia.render("Order/Confirm", {
+    confirmation: OrderConfirmationData.fromModel(
+      viewData.order,
+      Boolean(viewData.returningCustomer)
+    ),
+  });
 
-    res.setViewData({
-      template: "Checkout/Thanks",
-      props: {
-        order: orderModel,
-        orderUUID: order.getUUID(),
-      },
-    });
+  req.session.raw.custom.orderID = req.form.orderID; // eslint-disable-line no-param-reassign
 
-    next();
-  },
-  sharedData,
-  inertia.render
-);
-
-server.append(
-  "Details",
-  function (req, res, next) {
-    const viewData = res.getViewData();
-
-    res.setViewData({
-      template: "Order/Details",
-      props: viewData,
-    });
-
-    next();
-  },
-  sharedData,
-  inertia.render
-);
-
-server.append("History", function (req, res, next) {
-  const viewData = res.getViewData();
-
-  res.json(viewData);
-
-  next();
+  return next();
 });
 
 module.exports = server.exports();

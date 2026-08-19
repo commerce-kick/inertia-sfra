@@ -2,6 +2,7 @@ import type {
   IAddressData,
   ICheckoutFormsData,
   ICheckoutOrderData,
+  IOrderConfirmationData,
   IPaymentCardData,
 } from "@/generated/data";
 import type { SharedProps } from "./shared";
@@ -18,4 +19,9 @@ export interface CheckoutBeginProps extends SharedProps {
   registered: boolean;
   savedAddresses: IAddressData[];
   savedCards: IPaymentCardData[];
+}
+
+/** Props of default/Order/Confirm — the order that now exists. */
+export interface OrderConfirmProps extends SharedProps {
+  confirmation: IOrderConfirmationData;
 }

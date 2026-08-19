@@ -109,12 +109,15 @@ export function ReviewStage({ order }: { order: ICheckoutOrderData }) {
         onClick={() =>
           placeOrder.mutate(undefined, {
             onSuccess: (result) => {
-              // Base built a form POST to Order-Confirm out of these three;
-              // the confirmation page is row 7.1, so until it lands the order
-              // number is what the shopper is left holding.
-              router.visit(
-                `${result.continueUrl}?ID=${encodeURIComponent(result.orderId)}&token=${encodeURIComponent(result.orderToken)}`
-              );
+              // Base hands the order number and its token to Order-Confirm as
+              // a form POST, and that is what this is: the two facts travel in
+              // the body, so a placed order is not left sitting in browser
+              // history or leaking through a referrer. The field names are
+              // base's own — the route reads them off `req.form`.
+              router.post(result.continueUrl, {
+                orderID: result.orderId,
+                orderToken: result.orderToken,
+              });
             },
           })
         }
