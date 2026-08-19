@@ -309,6 +309,34 @@ server.append("AddBonusProducts", function (req, res, next) {
 });
 
 /**
+ * Cart-EditBonusProduct: reopen a choice-of-bonus offer already in the bag.
+ *
+ * It answers the same offer Cart-AddProduct hands back when the addition
+ * earns one — base even names the fields identically — so it retypes to the
+ * same BonusOfferData and opens the same chooser.
+ *
+ * Base also returned `selectedBonusProducts`, a page size, an add-to-cart
+ * URL, a label bag and an always-empty `selectprods`. The chooser reads what
+ * was already picked from Product-ShowBonusProducts' own `selected` (row
+ * 1.9), the page size is baked into the chooser URL the server builds, and
+ * the add-to-cart URL comes from the generated route helper.
+ *
+ * Left standing: base reads `getBonusDiscountLineItems()` off the basket and
+ * `bonusProductLineItems` off the result without checking either, so no
+ * basket or an unknown duuid throws. Every duuid comes from a line of the
+ * basket the page was rendered from.
+ *
+ * @queryParam duuid required string UUID of the bonus discount line item
+ */
+server.append("EditBonusProduct", function (req, res, next) {
+  var BonusOfferData = require("*/cartridge/scripts/data/BonusOfferData");
+
+  answer(res, BonusOfferData.fromResult(res.getViewData()));
+
+  next();
+});
+
+/**
  * Cart-MiniCart: the bag count in the header.
  *
  * Base rendered components/header/miniCart.isml — the bag glyph, the count,

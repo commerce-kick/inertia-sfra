@@ -1,5 +1,6 @@
 import { useCsrfParams, useSfraRequest } from "./sfra";
 import type {
+  IBonusOfferData,
   ICartActionData,
   ICartData,
   IMiniCartData,
@@ -7,6 +8,7 @@ import type {
 import { cartAddProduct } from "@/generated/routes/cart-addproduct";
 import { cartAddBonusProducts } from "@/generated/routes/cart-addbonusproducts";
 import { cartAddCoupon } from "@/generated/routes/cart-addcoupon";
+import { cartEditBonusProduct } from "@/generated/routes/cart-editbonusproduct";
 import { cartEditProductLineItem } from "@/generated/routes/cart-editproductlineitem";
 import { cartMiniCart } from "@/generated/routes/cart-minicart";
 import { cartMiniCartShow } from "@/generated/routes/cart-minicartshow";
@@ -240,5 +242,23 @@ export function useAddBonusProducts() {
         })
       ),
     onSuccess: refresh,
+  });
+}
+
+/**
+ * Reopen a choice-of-bonus offer already in the bag.
+ *
+ * It answers the same offer Cart-AddProduct hands back, so the same chooser
+ * opens on it. A query rather than a mutation: it changes nothing, and a
+ * shopper who reopens the same offer twice should not pay for it twice.
+ */
+export function useEditBonusProduct(duuid: string | null) {
+  const request = useSfraRequest();
+
+  return useQuery({
+    queryKey: [...CART_KEY, "bonus-offer", duuid],
+    enabled: Boolean(duuid),
+    queryFn: () =>
+      request<IBonusOfferData>(cartEditBonusProduct({ duuid: duuid as string })),
   });
 }
