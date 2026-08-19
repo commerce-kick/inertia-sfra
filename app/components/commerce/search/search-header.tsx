@@ -28,9 +28,9 @@ function SearchHeader({ title, count }: { title: string; count: number }) {
           </BreadcrumbList>
         </Breadcrumb>
         <div className="flex flex-wrap items-end justify-between gap-4">
-          <h1 className="display-caps text-[clamp(2.75rem,7vw,6rem)]">
+          {/* <h1 className="display-caps text-[clamp(2.75rem,7vw,6rem)]">
             {title}
-          </h1>
+          </h1> */}
           <span className="meta-caps pb-2 text-muted-foreground">
             {count} {count === 1 ? "item" : "items"}
           </span>
