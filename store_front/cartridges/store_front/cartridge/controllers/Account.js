@@ -324,4 +324,40 @@ server.append("SetNewPassword", initInertia.init, shareData, function (req, res,
   return next();
 });
 
+/**
+ * Account-Show: the dashboard.
+ *
+ * Base assembles the whole account model already — profile, address book,
+ * wallet, and the most recent order — and both plugin cartridges decorate the
+ * same object on their way past (plugin_wishlists adds the wish list,
+ * plugin_giftregistry the registries). This appends last and types a slice of
+ * it: the four glances base's cards showed.
+ *
+ * Base's `userLoggedIn.validateLoggedIn` stands in front, so a signed-out
+ * visitor is redirected to Login-Show before this step runs — a pending
+ * redirect breaks the middleware chain.
+ *
+ * Dropped: `reportingURLs` (the account-open analytics beacon, row 10.4),
+ * `viewSavedPaymentsUrl`/`addPaymentUrl` (generated route helpers), and
+ * base's `********` password placeholder — a fake secret is not worth putting
+ * on the wire, and the card can draw its own dots. The wish list and gift
+ * registry the plugins decorate on are left untyped until their wave.
+ *
+ * Base's `registration=submitted` parameter is not read here: its only
+ * consumer was the account-open analytics beacon, which is row 10.4. It
+ * changes nothing a shopper sees, and inventing a welcome for it would be
+ * inventing UI base did not have.
+ */
+server.append("Show", initInertia.init, shareData, function (req, res, next) {
+  var AccountData = require("*/cartridge/scripts/data/AccountData");
+
+  var viewData = res.getViewData();
+
+  res.inertia.render("Account/Show", {
+    account: AccountData.fromModel(viewData.account),
+  });
+
+  return next();
+});
+
 module.exports = server.exports();

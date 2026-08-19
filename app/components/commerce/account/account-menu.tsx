@@ -8,6 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { accountShow } from "@/generated/routes/account-show";
 import { loginLogout } from "@/generated/routes/login-logout";
 import { loginShow } from "@/generated/routes/login-show";
 import type { SharedProps } from "@/types/shared";
@@ -57,6 +58,11 @@ export function AccountMenu() {
           {name || auth.user.email}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+          <Link href={accountShow({})} className="label-caps">
+            Account
+          </Link>
+        </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link href={loginLogout({})} prefetch={false} className="label-caps">
             Sign out

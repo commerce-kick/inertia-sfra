@@ -1,5 +1,10 @@
-import type { INewPasswordFormData } from "@/generated/data";
+import type { IAccountData, INewPasswordFormData } from "@/generated/data";
 import type { SharedProps } from "./shared";
+
+/** Props of default/Account/Show — the dashboard. */
+export interface AccountShowProps extends SharedProps {
+  account: IAccountData;
+}
 
 /**
  * Props of default/Account/SetNewPassword — rendered by both steps of the
