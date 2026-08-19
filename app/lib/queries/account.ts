@@ -1,6 +1,7 @@
 import { useSfraRequest } from "./sfra";
 import type { IAuthResultData } from "@/generated/data";
 import { accountLogin } from "@/generated/routes/account-login";
+import { accountSubmitRegistration } from "@/generated/routes/account-submitregistration";
 import { router } from "@inertiajs/react";
 import { useMutation } from "@tanstack/react-query";
 
@@ -35,6 +36,34 @@ export function useLogin(rurl?: number) {
         ...vars,
         loginRememberMe: vars.loginRememberMe ? "true" : "",
       }),
+    onSuccess: (result) => {
+      if (result.redirectUrl) router.visit(result.redirectUrl);
+    },
+  });
+}
+
+/**
+ * Create an account.
+ *
+ * The values are keyed by the form field names the server authored — the
+ * register form renders each input under the `name` its `IFormFieldData`
+ * carries, and hands the same map straight back, so nothing here has to know
+ * that a first name is `dwfrm_profile_customer_firstname`.
+ *
+ * Two failure shapes, and they mean different things: a rejection is the
+ * attempt as a whole failing (the account could not be created), while a
+ * resolved result carrying `fields` is base's per-field verdict — the email
+ * that did not match its confirmation, the password the site's policy
+ * refused. The form renders those beside the inputs they name.
+ *
+ * @param rurl base's redirect index — 1 Account-Show, 2 Checkout-Begin
+ */
+export function useRegister(rurl?: number) {
+  const request = useSfraRequest();
+
+  return useMutation({
+    mutationFn: (fields: Record<string, string>) =>
+      request<IAuthResultData>(accountSubmitRegistration({ rurl }), fields),
     onSuccess: (result) => {
       if (result.redirectUrl) router.visit(result.redirectUrl);
     },

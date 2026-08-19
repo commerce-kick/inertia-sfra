@@ -55,4 +55,54 @@ server.append("Login", function (req, res, next) {
   return next();
 });
 
+/**
+ * Account-SubmitRegistration: create an account and sign into it.
+ *
+ * Base creates the customer, authenticates, logs in, copies the profile
+ * fields, emails a welcome note and resolves the same `rurl` index the login
+ * route does — all inside a `route:BeforeComplete` handler, because the
+ * account must exist before the answer is written. An appended step therefore
+ * runs *before* base has decided anything, so this registers a
+ * `route:BeforeComplete` of its own; handlers fire in registration order, and
+ * ours registers last (after base's and after plugin_wishlists', which merges
+ * the guest wish list into the new account off `authenticatedCustomer`).
+ *
+ * Base answers three different ways and this normalizes all three: a valid
+ * registration (`{success, redirectUrl}`, typed), a form base refused
+ * (`{fields}` — a map of message per form field name, kept, because that is
+ * the key the register form already renders each input under), and a creation
+ * that threw (a 500 with `errorMessage`, which rejects in the browser before
+ * anything reads the body — normalized to the error envelope).
+ *
+ * Base's own validation stands: the email/confirm and password/confirm
+ * matches, and `CustomerMgr.isAcceptablePassword` against the site's password
+ * policy, which no client-side rule can know.
+ *
+ * @queryParam rurl optional number where to go once registered — 1 Account-Show, 2 Checkout-Begin
+ * @formParam dwfrm_profile_customer_firstname required string given name
+ * @formParam dwfrm_profile_customer_lastname required string family name
+ * @formParam dwfrm_profile_customer_phone required string phone number
+ * @formParam dwfrm_profile_customer_email required string email address, the account's login
+ * @formParam dwfrm_profile_customer_emailconfirm required string the email address again
+ * @formParam dwfrm_profile_login_password required string the new password
+ * @formParam dwfrm_profile_login_passwordconfirm required string the new password again
+ * @formParam dwfrm_profile_customer_addtoemaillist optional boolean opt in to the mailing list
+ */
+server.append("SubmitRegistration", function (req, res, next) {
+  this.on("route:BeforeComplete", function (beforeReq, beforeRes) {
+    var AuthResultData = require("*/cartridge/scripts/data/AuthResultData");
+
+    var viewData = beforeRes.getViewData();
+
+    if (viewData.errorMessage) {
+      answerError(beforeRes, viewData.errorMessage);
+      return;
+    }
+
+    answer(beforeRes, AuthResultData.fromViewData(viewData));
+  });
+
+  return next();
+});
+
 module.exports = server.exports();
