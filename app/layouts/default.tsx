@@ -1,3 +1,4 @@
+import { AccountMenu } from "@/components/commerce/account/account-menu";
 import { BagFlyout } from "@/components/commerce/cart/bag-flyout";
 import { HeaderSearch } from "@/components/commerce/search/header-search";
 /**
@@ -21,7 +22,7 @@ import { useMaskedReveal } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 import type { PageWithFlash, SharedProps } from "@/types/shared";
 import { usePage } from "@inertiajs/react";
-import { Menu, Moon, Sun, UserRound } from "lucide-react";
+import { Menu, Moon, Sun } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -82,7 +83,7 @@ function ThemeToggle() {
 
 function Header() {
   const page = usePage<SharedProps>();
-  const { auth, navBar } = page.props;
+  const { navBar } = page.props;
   const categories = navBar?.categories ?? [];
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -163,20 +164,7 @@ function Header() {
             <HeaderSearch />
           </div>
           <ThemeToggle />
-          <Button
-            variant="ghost"
-            size="icon"
-            aria-label={
-              auth.user ? `${auth.user.firstName}’s account` : "Sign in"
-            }
-            title={
-              auth.user
-                ? `${auth.user.firstName} ${auth.user.lastName}`
-                : undefined
-            }
-          >
-            <UserRound className="size-4" />
-          </Button>
+          <AccountMenu />
           <BagFlyout />
         </div>
       </div>
