@@ -10,24 +10,12 @@ server.extend(module.superModule);
 var initInertia = require("*/cartridge/scripts/middleware/initInertia");
 var shareData = require("*/cartridge/scripts/middleware/shareData");
 
-/**
- * Answer a cart route with a typed payload, discarding whatever view data
- * the base route left behind.
- *
- * `res.json` *merges* into view data (modules/server/response.js), so an
- * appended JSON step would otherwise ship base's untyped model alongside the
- * typed one. Resetting first is the same move the adapter makes before it
- * emits a page, and it is what lets these routes append — keeping base's
- * transactions, validation and error handling — instead of replacing them.
- *
- * @param {Object} res - the SFRA response
- * @param {Object} payload - the DTO object to answer with
- * @returns {void}
- */
-function answer(res, payload) {
-  res.viewData = {};
-  res.json(payload);
-}
+// The reset-then-json seam every appended JSON route shares, and the failure
+// envelope beside it; the account routes are their second caller, so both
+// live in scripts/helpers now.
+var answerJson = require("*/cartridge/scripts/helpers/answerJson");
+var answer = answerJson.answerJson;
+var answerError = answerJson.answerError;
 
 /**
  * Answer a cart mutation with the basket it produced — or, when base refused
@@ -36,10 +24,8 @@ function answer(res, payload) {
  * Base signals a refusal two ways at once: it sets a 500 and puts the reason
  * in `errorMessage`. A 500 rejects in the browser before anything reads the
  * body, so the shopper would be told "Request failed with status code 500"
- * instead of why. The status is normalized back to 200 and the reason travels
- * in the envelope `app/lib/queries/sfra.ts` unwraps for every SFRA endpoint —
- * so a hook still only ever sees a DTO or a rejection carrying real text.
- * `redirectUrl` is base's "your basket is gone, start over" signal.
+ * instead of why — which is what answerError normalizes. `redirectUrl` is
+ * base's "your basket is gone, start over" signal.
  *
  * @param {Object} res - the SFRA response
  * @param {Object} [model] - the cart model, when base did not leave it at the
@@ -53,12 +39,7 @@ function answerCart(res, model) {
   var viewData = res.getViewData();
 
   if (viewData.error || viewData.errorMessage) {
-    res.setStatusCode(200);
-    answer(res, {
-      error: true,
-      errorMessage: viewData.errorMessage || "",
-      redirectUrl: viewData.redirectUrl || "",
-    });
+    answerError(res, viewData.errorMessage, viewData.redirectUrl);
     return;
   }
 

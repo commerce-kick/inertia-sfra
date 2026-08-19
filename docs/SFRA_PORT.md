@@ -203,7 +203,7 @@ Sets the composition bar the rest of the loop copies.
 |---|---|---|---|---|---|
 | 3.1 | Login-Show | PAGE | `Login/Show` | TODO | login + register in one page; redirects authed users to Account-Show |
 | 3.2 | Login-Logout | N/A | — | TODO | pure redirect; link from the layout header |
-| 3.3 | Account-Login | JSON | `useLogin` | TODO | POST; plugin_wishlists prepends/appends |
+| 3.3 | Account-Login | JSON | `useLogin` | DONE | Ported ahead of 3.1: the login surface composes this hook, so the endpoint lands first. `Account.js` repaired — the fatal `inertiaMiddleware` require and the two `setViewData({template, props})` appends it carried (Show, EditProfile, both naming pages that do not exist) are gone; 4.1/4.2 add them back as real rows. `server.append` → `AuthResultData`, keeping base's authentication, remember-me, account-locked email and `rurl` resolution (1 → Account-Show, 2 → Checkout-Begin). Deliberately the *last* append: plugin_wishlists appends here to merge the guest wish list and reads `authenticatedCustomer` off view data, which the answer seam resets. Base wrapped its refusal in `{error: [message]}` — an array the client envelope never reads, so a wrong password would have surfaced as "Something went wrong"; it now travels in the envelope and lands under the form. `answer`/`answerError` promoted out of Cart.js into `scripts/helpers/answerJson.js` on this second use |
 | 3.4 | Account-SubmitRegistration | JSON | `useRegister` | TODO | POST; plugin_wishlists prepends/appends |
 | 3.5 | Account-PasswordReset | PAGE | `Account/PasswordReset` | TODO | request-reset form |
 | 3.6 | Account-PasswordResetDialogForm | JSON | `useRequestPasswordReset` | TODO | POST |
