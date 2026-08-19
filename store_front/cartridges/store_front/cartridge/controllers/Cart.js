@@ -51,21 +51,32 @@ server.append("MiniCartShow", function (req, res, next) {
   next();
 });
 
+/**
+ * Cart-MiniCart: the bag count in the header.
+ *
+ * Base rendered components/header/miniCart.isml — the bag glyph, the count,
+ * and an empty popover the flyout would later be injected into — and the
+ * page header pulled it in as a remote include, which is why base guarded
+ * the route with `server.middleware.include`. A typed client has no use for
+ * that markup, so this replaces the route with the number the fragment
+ * existed to print; replacing also drops the include guard, which is what
+ * makes the route directly callable.
+ *
+ * The count is deliberately not a shared Inertia prop: it would then be
+ * recomputed on every page of the storefront, and it changes only when the
+ * shopper touches the bag.
+ */
 server.replace("MiniCart", function (req, res, next) {
   var BasketMgr = require("dw/order/BasketMgr");
+  var MiniCartData = require("*/cartridge/scripts/data/MiniCartData");
 
   var currentBasket = BasketMgr.getCurrentBasket();
-  var quantityTotal;
 
-  if (currentBasket) {
-    quantityTotal = currentBasket.productQuantityTotal;
-  } else {
-    quantityTotal = 0;
-  }
-
-  res.json({
-    quantity: quantityTotal,
-  });
+  res.json(
+    MiniCartData.from({
+      quantity: currentBasket ? currentBasket.productQuantityTotal : 0,
+    })
+  );
 
   next();
 });

@@ -1,3 +1,4 @@
+import { BagLink } from "@/components/commerce/cart/bag-link";
 import { HeaderSearch } from "@/components/commerce/search/header-search";
 /**
  * Storefront shell — stark atelier system (user-pinned: high-fashion design
@@ -20,13 +21,7 @@ import { useMaskedReveal } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 import type { PageWithFlash, SharedProps } from "@/types/shared";
 import { usePage } from "@inertiajs/react";
-import {
-  Menu,
-  Moon,
-  ShoppingBag,
-  Sun,
-  UserRound,
-} from "lucide-react";
+import { Menu, Moon, Sun, UserRound } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -182,9 +177,7 @@ function Header() {
           >
             <UserRound className="size-4" />
           </Button>
-          <Button variant="ghost" size="icon" aria-label="Shopping bag">
-            <ShoppingBag className="size-4" />
-          </Button>
+          <BagLink />
         </div>
       </div>
     </header>
