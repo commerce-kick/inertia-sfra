@@ -84,6 +84,13 @@ var ProductDetailData = BaseData.extend({
         return [];
       },
     },
+    /** @type {string} content-asset ID of the size chart, empty when the product's category defines none */
+    sizeChartId: {
+      transform: function (id) {
+        return id ? String(id) : "";
+      },
+      default: "",
+    },
     /** @type {Array<{id: string, displayName: string, displayValue: string, swatchable: boolean, resetUrl: string, values: Array<{id: string, displayValue: string, selected: boolean, selectable: boolean, url: string, variationUrl: string, image: {url: string, alt: string}|null}>}>} variation attributes, each value carrying the Product-Show URL that selects it */
     variationAttributes: {
       transform: function (attrs) {
@@ -151,6 +158,7 @@ ProductDetailData.fromModel = function (product) {
     rating: product.rating,
     promotions: product.promotions,
     variationAttributes: product.variationAttributes,
+    sizeChartId: product.sizeChartId,
   });
 };
 

@@ -2,6 +2,7 @@ import { ProductAvailability } from "./product-availability";
 import { ProductDetails } from "./product-details";
 import { ProductPromotions } from "./product-promotions";
 import { ProductPrice } from "./product-price";
+import { SizeChart } from "./size-chart";
 import { VariationSwatches } from "./variation-swatches";
 import { Button } from "@/components/ui/button";
 import type { IProductDetailData } from "@/generated/data";
@@ -45,6 +46,8 @@ function ProductSummary({
       <ProductPrice price={product.price} />
 
       <VariationSwatches attributes={product.variationAttributes} />
+
+      <SizeChart product={product} />
 
       <ProductAvailability availability={product.availability} />
 

@@ -95,4 +95,27 @@ server.replace("Variation", function (req, res, next) {
   next();
 });
 
+/**
+ * Product-SizeChart: the sizing table behind the PDP's "Size guide" link.
+ *
+ * The chart is a content asset whose body is authored markup, so the payload
+ * is HTML either way. Base answered an untyped `{success, content}` — or a
+ * bare `{}` on a miss; this replaces the route so SizeChartData owns the wire
+ * shape and the miss arrives as `success: false` instead of an absent key.
+ *
+ * `cid` comes from the product model (ProductDetailData.sizeChartId, set by
+ * the base sizeChart decorator from the category's sizeChartID) — the
+ * frontend never invents it.
+ *
+ * @queryParam cid required string the size-chart content asset ID
+ */
+server.replace("SizeChart", function (req, res, next) {
+  var ContentMgr = require("dw/content/ContentMgr");
+  var SizeChartData = require("*/cartridge/scripts/data/SizeChartData");
+
+  res.json(SizeChartData.fromContent(ContentMgr.getContent(req.querystring.cid)));
+
+  next();
+});
+
 module.exports = server.exports();

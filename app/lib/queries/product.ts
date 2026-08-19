@@ -1,6 +1,7 @@
 import { useSfraRequest } from "./sfra";
-import type { IProductDetailData } from "@/generated/data";
+import type { IProductDetailData, ISizeChartData } from "@/generated/data";
 import { productShowQuickView } from "@/generated/routes/product-showquickview";
+import { productSizeChart } from "@/generated/routes/product-sizechart";
 import { useQuery } from "@tanstack/react-query";
 
 /** Product-ShowQuickView's payload: the same product the PDP renders, plus its link. */
@@ -42,5 +43,25 @@ export function useVariation(variationUrl: string | null) {
     enabled: Boolean(variationUrl),
     staleTime: 60_000,
     queryFn: () => request<VariationResponse>(variationUrl as string),
+  });
+}
+
+/**
+ * The sizing table behind a product's "Size Chart" link.
+ *
+ * `cid` is server-authored — it is the product's `sizeChartId`, which the base
+ * model reads off the category. Base fetched the asset on the first click and
+ * kept the markup for the rest of the page; the same shape here is a query
+ * disabled until the chart is opened, then cached indefinitely: a content
+ * asset changes on a merchandising edit, never per shopper.
+ */
+export function useSizeChart(cid: string, enabled: boolean) {
+  const request = useSfraRequest();
+
+  return useQuery({
+    queryKey: ["size-chart", cid],
+    enabled: enabled && Boolean(cid),
+    staleTime: Infinity,
+    queryFn: () => request<ISizeChartData>(productSizeChart({ cid })),
   });
 }
