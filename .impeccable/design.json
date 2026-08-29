@@ -1,0 +1,174 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-04T00:00:00Z",
+  "title": "Design System: Meridian",
+  "extensions": {
+    "colorMeta": {
+      "ink": {
+        "role": "primary",
+        "displayName": "Ink",
+        "canonical": "oklch(0.05 0 0)",
+        "tonalRamp": ["oklch(0.05 0 0)", "oklch(0.16 0 0)", "oklch(0.28 0 0)", "oklch(0.42 0 0)", "oklch(0.55 0 0)", "oklch(0.68 0 0)", "oklch(0.87 0 0)", "oklch(0.96 0 0)"]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "canonical": "oklch(1 0 0)",
+        "tonalRamp": ["oklch(0.28 0 0)", "oklch(0.42 0 0)", "oklch(0.55 0 0)", "oklch(0.68 0 0)", "oklch(0.87 0 0)", "oklch(0.94 0 0)", "oklch(0.96 0 0)", "oklch(1 0 0)"]
+      },
+      "ink-muted": {
+        "role": "neutral",
+        "displayName": "Ink Muted",
+        "canonical": "oklch(0.42 0 0)",
+        "tonalRamp": ["oklch(0.15 0 0)", "oklch(0.25 0 0)", "oklch(0.35 0 0)", "oklch(0.42 0 0)", "oklch(0.55 0 0)", "oklch(0.68 0 0)", "oklch(0.8 0 0)", "oklch(0.92 0 0)"]
+      },
+      "ground": {
+        "role": "neutral",
+        "displayName": "Ground",
+        "canonical": "oklch(0.96 0 0)",
+        "tonalRamp": ["oklch(0.16 0 0)", "oklch(0.28 0 0)", "oklch(0.42 0 0)", "oklch(0.55 0 0)", "oklch(0.72 0 0)", "oklch(0.87 0 0)", "oklch(0.94 0 0)", "oklch(0.96 0 0)"]
+      },
+      "ground-pressed": {
+        "role": "neutral",
+        "displayName": "Ground Pressed",
+        "canonical": "oklch(0.94 0 0)",
+        "tonalRamp": ["oklch(0.2 0 0)", "oklch(0.3 0 0)", "oklch(0.45 0 0)", "oklch(0.6 0 0)", "oklch(0.75 0 0)", "oklch(0.85 0 0)", "oklch(0.9 0 0)", "oklch(0.94 0 0)"]
+      },
+      "hairline": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "oklch(0.87 0 0)",
+        "tonalRamp": ["oklch(0.15 0 0)", "oklch(0.28 0 0)", "oklch(0.4 0 0)", "oklch(0.55 0 0)", "oklch(0.7 0 0)", "oklch(0.8 0 0)", "oklch(0.87 0 0)", "oklch(0.95 0 0)"]
+      },
+      "signal-red": {
+        "role": "destructive",
+        "displayName": "Signal Red",
+        "canonical": "oklch(0.55 0.2 26)",
+        "tonalRamp": ["oklch(0.2 0.12 26)", "oklch(0.3 0.15 26)", "oklch(0.4 0.18 26)", "oklch(0.55 0.2 26)", "oklch(0.62 0.19 26)", "oklch(0.72 0.14 26)", "oklch(0.84 0.08 26)", "oklch(0.94 0.03 26)"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display Caps", "purpose": "Architectural headlines: hero, section titles, category names, footer wordmark. Always uppercase, wdth 125." },
+      "label": { "displayName": "Label Caps", "purpose": "Nav, CTAs, section labels, product names. Uppercase, wdth 112, 0.14em tracking." },
+      "meta": { "displayName": "Meta Caps", "purpose": "Data only: counts, SKUs, prices, locales, breadcrumbs, code chrome. Uppercase mono." },
+      "body": { "displayName": "Body", "purpose": "Supporting prose at text-sm leading-relaxed on constrained measures." }
+    },
+    "shadows": [],
+    "motion": [
+      { "name": "motion-fast", "value": "150ms", "purpose": "Hover inversions, dot rotation, thumbnail border shifts." },
+      { "name": "motion-base", "value": "250ms", "purpose": "Default transitions: search field expansion, entrance fades, arrow slides." },
+      { "name": "motion-slow", "value": "400ms", "purpose": "Image hover scale, deferred-section entrances, hero rule draws." },
+      { "name": "motion-hero", "value": "700ms", "purpose": "Hero line reveal, category panel image scale." },
+      { "name": "motion-ease", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "The single easing curve for all motion; mirrored in app/lib/motion.ts for anime.js." },
+      { "name": "marquee", "value": "36s linear infinite", "purpose": "Typographic marquee strip; animation: none under prefers-reduced-motion." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "xl", "value": "1280px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Square ink-filled CTA with expanded caps label; hero and PDP actions.",
+      "html": "<button class=\"ds-btn-primary\">Explore Relojes</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; background: var(--primary, oklch(0.05 0 0)); color: var(--primary-foreground, oklch(1 0 0)); border: none; border-radius: 0; height: 3rem; padding: 0 2rem; font-family: 'Archivo Variable', Archivo, ui-sans-serif, system-ui, sans-serif; font-variation-settings: 'wdth' 112; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; font-size: 0.6875rem; cursor: pointer; transition: background 150ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-btn-primary:hover { background: color-mix(in oklch, var(--primary, oklch(0.05 0 0)) 90%, transparent); } .ds-btn-primary:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in oklch, var(--ring, oklch(0.05 0 0)) 50%, transparent); }"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Hairline-bordered square button for toolbar and load-more actions.",
+      "html": "<button class=\"ds-btn-outline\">Load more items</button>",
+      "css": ".ds-btn-outline { display: inline-flex; align-items: center; justify-content: center; gap: 0.375rem; background: var(--background, oklch(1 0 0)); color: var(--foreground, oklch(0.05 0 0)); border: 1px solid var(--border, oklch(0.87 0 0)); border-radius: 0; height: 2.75rem; padding: 0 2rem; font-family: 'Archivo Variable', Archivo, ui-sans-serif, system-ui, sans-serif; font-variation-settings: 'wdth' 112; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; font-size: 0.6875rem; cursor: pointer; transition: background 150ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-btn-outline:hover { background: var(--accent, oklch(0.94 0 0)); } .ds-btn-outline:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in oklch, var(--ring, oklch(0.05 0 0)) 50%, transparent); }"
+    },
+    {
+      "name": "Search Field",
+      "kind": "input",
+      "refersTo": "input-search",
+      "description": "Borderless search with a bottom hairline that darkens and widens on focus.",
+      "html": "<input class=\"ds-input-search\" type=\"search\" placeholder=\"Search\" aria-label=\"Search products\" />",
+      "css": ".ds-input-search { background: transparent; border: none; border-bottom: 1px solid var(--input, oklch(0.87 0 0)); border-radius: 0; height: 2.25rem; width: 10rem; padding: 0 0 0 1.5rem; color: var(--foreground, oklch(0.05 0 0)); font-family: 'Archivo Variable', Archivo, ui-sans-serif, system-ui, sans-serif; font-variation-settings: 'wdth' 112; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; font-size: 0.6875rem; transition: width 250ms cubic-bezier(0.16, 1, 0.3, 1), border-color 250ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-input-search::placeholder { color: var(--muted-foreground, oklch(0.42 0 0)); text-transform: uppercase; letter-spacing: 0.14em; } .ds-input-search:focus { outline: none; border-bottom-color: var(--foreground, oklch(0.05 0 0)); width: 14rem; }"
+    },
+    {
+      "name": "Header Nav Link",
+      "kind": "nav",
+      "description": "Label-caps category link; active state is full ink with a 1px underline on the header hairline.",
+      "html": "<nav class=\"ds-nav\"><a class=\"ds-nav-link ds-nav-link-active\" href=\"#\" aria-current=\"page\">Relojes</a><a class=\"ds-nav-link\" href=\"#\">Accesorios</a></nav>",
+      "css": ".ds-nav { display: flex; align-items: center; gap: 1.75rem; border-bottom: 1px solid var(--border, oklch(0.87 0 0)); padding: 0 0.25rem; } .ds-nav-link { position: relative; display: inline-block; padding: 0.5rem 0 1.1875rem; color: var(--muted-foreground, oklch(0.42 0 0)); text-decoration: none; font-family: 'Archivo Variable', Archivo, ui-sans-serif, system-ui, sans-serif; font-variation-settings: 'wdth' 112; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; font-size: 0.6875rem; transition: color 150ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-nav-link:hover { color: var(--foreground, oklch(0.05 0 0)); } .ds-nav-link-active { color: var(--foreground, oklch(0.05 0 0)); } .ds-nav-link-active::after { content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; background: var(--foreground, oklch(0.05 0 0)); }"
+    },
+    {
+      "name": "Product Tile",
+      "kind": "card",
+      "description": "Lookbook unit: bare 4:5 photograph on quiet ground, caps name and mono price; hover scales the image and inverts the name.",
+      "html": "<a class=\"ds-tile\" href=\"#\"><span class=\"ds-tile-media\"></span><span class=\"ds-tile-row\"><span class=\"ds-tile-name\">Field Watch 38</span><span class=\"ds-tile-rating\">4.5</span></span><span class=\"ds-tile-price\">$180.00</span></a>",
+      "css": ".ds-tile { display: flex; flex-direction: column; gap: 0.75rem; width: 240px; text-decoration: none; color: var(--foreground, oklch(0.05 0 0)); } .ds-tile-media { display: block; aspect-ratio: 4 / 5; background: var(--muted, oklch(0.96 0 0)); overflow: hidden; transition: transform 400ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-tile:hover .ds-tile-media { transform: scale(1.04); } .ds-tile-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.75rem; } .ds-tile-name { display: inline-block; margin-left: -0.25rem; padding: 0.125rem 0.25rem; font-family: 'Archivo Variable', Archivo, ui-sans-serif, system-ui, sans-serif; font-variation-settings: 'wdth' 112; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; font-size: 0.6875rem; transition: background 150ms, color 150ms; } .ds-tile:hover .ds-tile-name { background: var(--foreground, oklch(0.05 0 0)); color: var(--background, oklch(1 0 0)); } .ds-tile-rating, .ds-tile-price { font-family: 'Spline Sans Mono Variable', 'Spline Sans Mono', ui-monospace, monospace; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.6875rem; } .ds-tile-rating { color: var(--muted-foreground, oklch(0.42 0 0)); } .ds-tile:focus-visible { outline: 2px solid var(--ring, oklch(0.05 0 0)); outline-offset: 4px; }"
+    },
+    {
+      "name": "Section Head",
+      "kind": "custom",
+      "description": "Lookbook chapter head: hairline top rule, display-caps title, mono meta on the baseline.",
+      "html": "<header class=\"ds-section-head\"><h2 class=\"ds-section-title\">Collections</h2><span class=\"ds-section-meta\">2 lines</span></header>",
+      "css": ".ds-section-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 1rem; border-top: 1px solid var(--border, oklch(0.87 0 0)); padding-top: 1.25rem; min-width: 320px; } .ds-section-title { margin: 0; font-family: 'Archivo Variable', Archivo, ui-sans-serif, system-ui, sans-serif; font-variation-settings: 'wdth' 125; font-weight: 800; text-transform: uppercase; letter-spacing: -0.02em; line-height: 0.92; font-size: 2.5rem; color: var(--foreground, oklch(0.05 0 0)); } .ds-section-meta { padding-bottom: 0.25rem; font-family: 'Spline Sans Mono Variable', 'Spline Sans Mono', ui-monospace, monospace; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.6875rem; color: var(--muted-foreground, oklch(0.42 0 0)); }"
+    },
+    {
+      "name": "Variation Badge",
+      "kind": "chip",
+      "description": "Square variation-value chip; selected inverts to ink fill.",
+      "html": "<span class=\"ds-chip ds-chip-selected\">38mm</span> <span class=\"ds-chip\">42mm</span>",
+      "css": ".ds-chip { display: inline-flex; align-items: center; border: 1px solid var(--border, oklch(0.87 0 0)); border-radius: 0; background: var(--background, oklch(1 0 0)); color: var(--foreground, oklch(0.05 0 0)); padding: 0.375rem 0.75rem; font-family: 'Archivo Variable', Archivo, ui-sans-serif, system-ui, sans-serif; font-variation-settings: 'wdth' 112; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; font-size: 0.6875rem; } .ds-chip-selected { background: var(--primary, oklch(0.05 0 0)); color: var(--primary-foreground, oklch(1 0 0)); border-color: var(--primary, oklch(0.05 0 0)); }"
+    },
+    {
+      "name": "Inverted Category Panel",
+      "kind": "custom",
+      "description": "Depth by inversion: ink ground, display-caps category name as the image, label-caps action.",
+      "html": "<a class=\"ds-panel\" href=\"#\"><span class=\"ds-panel-name\">Relojes</span><span class=\"ds-panel-action\">View the collection →</span></a>",
+      "css": ".ds-panel { position: relative; display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; aspect-ratio: 16 / 10; width: 100%; min-width: 320px; padding: 2rem; background: var(--foreground, oklch(0.05 0 0)); color: #fff; text-decoration: none; overflow: hidden; } .ds-panel-name { font-family: 'Archivo Variable', Archivo, ui-sans-serif, system-ui, sans-serif; font-variation-settings: 'wdth' 125; font-weight: 800; text-transform: uppercase; letter-spacing: -0.02em; line-height: 0.92; font-size: 3rem; } .ds-panel-action { padding-bottom: 0.375rem; font-family: 'Archivo Variable', Archivo, ui-sans-serif, system-ui, sans-serif; font-variation-settings: 'wdth' 112; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; font-size: 0.6875rem; transition: transform 250ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-panel:hover .ds-panel-action { transform: translateX(4px); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Atelier Lookbook",
+    "overview": "Meridian is the reference storefront of the Inertia.js adapter for Salesforce B2C Commerce, dressed as a high-fashion design agency's lookbook: strict black and white, where type at architectural scale IS the interface. Headlines are not decoration above content — they are the content. Photography sits bare on quiet grounds with no card chrome; everything else is drawn with hairline rules and set in one of three typographic voices.\n\nThe system is deliberately flat. There is no elevation vocabulary at all — every shadow token is zeroed — and depth is conveyed exclusively by inversion: a surface becomes important by swapping ink and paper. Dark mode is not a second palette; it is the same world inverted.\n\nMotion is a closed inventory of eight devices (hero reveal, typographic marquee, entrance fades, hover inversion/scale, chapter reveal, mono ticker, live protocol trace, line current), each timed by the shared --motion-* tokens and silenced for reduced-motion visitors. Line current: soft segments of foreground light travel the hero's full-bleed drafting hairlines in both axes (line-current / line-current-x utilities, 9s/11s staggered loops) — paused while offscreen, absent under reduced motion. Chapter reveal: section heads replay the hero's masked line-rise + rule-draw once on first in-view; markup renders in final state, zero state applied only in-effect. Mono ticker: mono numerals move only because the data moves — stats count to their true value on first in-view, the clock ticks real seconds, the carousel counter reads the real index; SSR and reduced motion render final values. Live protocol trace: chips settle dim to full ink over --motion-base only when the real Inertia event they name occurs on this page load — never replayed, never simulated. Copy is truthful to the demo: mono captions carry real counts, real locales, real SKUs — never invented marketing.",
+    "keyCharacteristics": [
+      "Strict monochrome; the only chromatic value is a functional destructive red.",
+      "Expanded-caps Archivo (wdth 125) display type at architectural scale.",
+      "Zero border radius, zero shadows; separation by hairline rules only.",
+      "Depth by inversion: important surfaces swap ink and paper.",
+      "Mono (Spline Sans Mono) reserved for data: counts, SKUs, prices, code.",
+      "One easing curve, four durations, eight sanctioned motion devices."
+    ],
+    "rules": [
+      { "name": "The One Red Rule", "body": "The palette is achromatic. The only chroma permitted anywhere is Signal Red, and only with destructive/unavailable meaning. A second accent color is a violation of the world, not an extension of it.", "section": "colors" },
+      { "name": "The Inverted-Twin Rule", "body": "Dark mode is the same world inverted — the neutral ramp flips end for end. No dark-mode-only hues, no tinted dark surfaces.", "section": "colors" },
+      { "name": "The Three Voices Rule", "body": "All non-body text is one of display-caps, label-caps, or meta-caps. No ad-hoc uppercase, no fourth voice, no italics.", "section": "typography" },
+      { "name": "The Mono-Is-Data Rule", "body": "Spline Sans Mono appears only when the content is data: counts, SKUs, prices, locales, code. Never for headings or persuasion.", "section": "typography" },
+      { "name": "The Hairline Chapter Rule", "body": "Every major region is introduced by a 1px rule, not by a box. Structure is drawn with lines; containers never gain backgrounds to signal grouping. One line, never two: when the preceding region already ends in a full-width hairline (marquee border, carousel progress track), that line IS the next chapter's rule — the section omits its own (Section rule={false}).", "section": "layout" },
+      { "name": "The Inversion Rule", "body": "Emphasis is achieved by swapping foreground and background, never by lifting a surface. If a region needs weight, invert it.", "section": "elevation" },
+      { "name": "The Always-Black Band Rule", "body": "The developer/code band is hard-coded oklch(0.05 0 0) with white text and white/15–white/20 hairlines in both themes — it does not invert with dark mode. Code lives on black, always.", "section": "elevation" },
+      { "name": "The No-Chrome Rule", "body": "Images and tiles get no card wrapper, no border, no radius, no shadow. The photograph and its caption are the entire component.", "section": "shapes" }
+    ],
+    "dos": [
+      "Do set every heading, label, and data caption in one of the three voices (display-caps / label-caps / meta-caps) and keep body prose at text-sm leading-relaxed on a constrained measure.",
+      "Do draw structure with hairline rules (border = Hairline, white/15–white/20 on inverted grounds) and open every section with a top rule.",
+      "Do invert (Ink ↔ Paper) to create emphasis or depth.",
+      "Do time all motion with --motion-fast/base/slow/hero and --motion-ease only, and keep to the closed inventory: the Home hero reveal, the typographic marquee (36s linear), motion-safe tw-animate entrances, hover inversion/scale (link underlines may draw scaleX 0→1 from the left over --motion-base), the chapter reveal (once, on first in-view), the mono ticker (data-driven numerals only; SSR/reduced motion render final values), the live protocol trace (state changes only on real Inertia events, never simulated), and the line current (hero drafting-line light in both axes, staggered 9s/11s loops, paused offscreen, absent under reduced motion).",
+      "Do honor reduced motion everywhere: render markup in its final state, gate JS animation on prefersReducedMotion(), freeze the marquee, and prefix entrance utilities with motion-safe:.",
+      "Do load anime.js only through loadAnime() (dynamic import of app/lib/anime-lite.ts) inside effects — never at module scope; the SSR bundle must stay browser-API-free.",
+      "Do keep mono captions truthful to the demo catalog: real counts, real locale, real SKUs, demo stamps — never fabricated merchandising claims.",
+      "Do make deferred fallbacks mirror the real payload (skeleton rows per actual showcased category, titled with real names) so fills never relabel or reflow the page."
+    ],
+    "donts": [
+      "Don't introduce any color beyond the achromatic ramp and Signal Red; red only ever means destructive/unavailable.",
+      "Don't use shadows, glows, or elevation of any kind — the shadow tokens are zeroed by design; do not restore them locally.",
+      "Don't round a corner. --radius is 0rem and every alias resolves to it; no per-component radius overrides.",
+      "Don't wrap photography or tiles in card chrome (borders, backgrounds, frames); the image sits bare on Ground.",
+      "Don't use mono for headings or persuasion, or invent a fourth type voice / ad-hoc uppercase.",
+      "Don't add motion outside the closed inventory (no parallax, no scroll-jacking, no springy overshoot beyond the single ease) and never hand-write durations or cubic-beziers.",
+      "Don't let the code band participate in theme inversion — it is black with white text in both modes."
+    ]
+  }
+}

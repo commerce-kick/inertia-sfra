@@ -10,5 +10,17 @@
   {
     "id": "X-SF-CC-Inertia-Location",
     "value": ""
+  },
+  {
+    "id": "X-SF-CC-Inertia-Redirect",
+    "value": ""
+  },
+  {
+    "id": "X-SF-CC-Inertia-Devtools-Id",
+    "value": ""
+  },
+  {
+    "id": "X-SF-CC-Inertia-Devtools-Parent-Out",
+    "value": ""
   }
 ]

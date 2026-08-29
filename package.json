@@ -8,7 +8,8 @@
     "deploy": "npx b2c-tools code deploy",
     "build:ssr": "tsc --noEmit  --skipLibCheck && bun run scripts/generate-routes.js && vite build --ssr --config ssr.config.js",
     "type-check": "tsc --noEmit  --skipLibCheck",
-    "build:force": "vite build"
+    "build:force": "vite build",
+    "test": "bun test test/unit"
   },
   "private": true,
   "devDependencies": {
@@ -33,14 +34,18 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@fontsource-variable/archivo": "^5.3.0",
+    "@fontsource-variable/inter": "^5.3.0",
+    "@fontsource-variable/spline-sans-mono": "^5.3.0",
     "@hookform/resolvers": "^5.2.2",
-    "@inertiajs/react": "^2.3.4",
+    "@inertiajs/react": "^3.6.1",
     "@legendapp/state": "^3.0.0-beta.42",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/react-query": "^5.90.12",
     "@tanstack/react-query-devtools": "^5.91.1",
     "@tanstack/react-virtual": "^3.13.13",
     "@vitejs/plugin-react": "^5.1.2",
+    "animejs": "^4.5.0",
     "axios": "^1.13.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -52,6 +57,7 @@
     "laravel-vite-plugin": "^2.0.1",
     "lodash": "^4.17.21",
     "lucide-react": "^0.562.0",
+    "next-themes": "^0.4.6",
     "nuqs": "^2.8.5",
     "radix-ui": "^1.4.3",
     "react": "^19.2.3",

@@ -11,12 +11,32 @@
             <isprint value="${metaTag}" encoding="off" />
         </isloop>
     </isif>
-    
+
     <isinclude url="${URLUtils.url('Inertia-Head', 'component', pdict.page.component)}" />
 </head>
 
 <body>
-    <div id="app" data-page="${JSON.stringify(pdict.page)}"></div>
+    <!--
+    THESIS: A storefront as a fashion-house lookbook — type at architectural
+    scale IS the interface; refuses the card-grid, soft-shadow commerce default.
+    OWN-WORLD: Strict black & white, zero radius, no shadows; expanded-caps
+    Archivo display (wdth 125), tracked label caps for nav/CTAs, mono only for
+    data (counts, SKUs, prices, code); hairline rules; depth by inversion only.
+    STORY: A visitor is stopped by a viewport-filling headline, walks a
+    lookbook of bare imagery into a collection, and buys without chrome.
+    FIRST VIEWPORT: "TIME, / WELL CHOSEN." stacked at ~9rem expanded caps
+    over a hairline grid; label-caps CTA pair; UI copy is English.
+    FORM: User-pinned world (high-fashion design agency) — beats the roll.
+    FINISH: unreviewed and undocumented is unfinished; this build ends with the
+    finish review, the verdict, and DESIGN.md
+    -->
+    <iscomment>
+        The @inertiajs v3.6 client boots from this JSON script tag
+        (script[data-page="app"][type="application/json"]) and mounts into the
+        empty #app div. pageJson is pre-escaped by the adapter (angle brackets are JSON-escaped so a prop value can never break out of this script tag).
+    </iscomment>
+    <script data-page="app" type="application/json"><isprint value="${pdict.pageJson}" encoding="off"/></script>
+    <div id="app"></div>
 </body>
 
 </html>

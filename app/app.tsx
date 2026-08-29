@@ -1,49 +1,28 @@
-import './config';
+import "./config";
 import "./styles/globals.css";
 
 import { createInertiaApp } from "@inertiajs/react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { createRoot } from "react-dom/client";
-import { ThemeProvider } from "./components/theme-provider";
-import { Toaster } from "./components/ui/sonner";
-
-import Layout from "@/layouts/default";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { NuqsAdapter } from "nuqs/adapters/react";
+import { AppShell, resolvePage } from "./lib/create-app";
 
 createInertiaApp({
-  resolve: async (name) => {
-    const page = await resolvePageComponent(
-      `./pages/${name}.tsx`,
-      //@ts-ignore
-      import.meta.glob("./pages/**/*.tsx")
-    );
-
-    //@ts-ignore
-    page.default.layout =
-      //@ts-ignore
-      page.default.layout || ((page) => <Layout children={page} />);
-
-    return page;
-  },
+  // Explicit devtools contract: dev mode exposes window.__inertia_interceptors__,
+  // which the SFCC Inertia DevTools extension needs for request lineage. This is
+  // the adapter's default, pinned here so an upstream default change can't
+  // silently kill the extension.
+  dev: import.meta.env.DEV,
+  resolve: resolvePage,
   setup({ el, App, props }) {
     const root = createRoot(el);
     root.render(
-      <NuqsAdapter>
-        <ThemeProvider>
-          <QueryClientProvider client={new QueryClient()}>
-            <App {...props} />
-            <Toaster />
-            {import.meta.env.DEV && (
-              <ReactQueryDevtools initialIsOpen={false} />
-            )}
-          </QueryClientProvider>
-        </ThemeProvider>
-      </NuqsAdapter>
+      <AppShell>
+        <App {...props} />
+        {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}
+      </AppShell>
     );
   },
   progress: {
-    color: "#4B5563",
+    color: "#c8341f",
   },
 });
